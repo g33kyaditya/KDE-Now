@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=KDE Now
+Comment=Provides a common Plasmoid for displaying various kinds of Reservation
+
+Icon=klipper
+Type=Service
+X-KDE-ServiceTypes=Plasma/Applet
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-NotificationArea=false
+
+X-KDE-PluginInfo-Author=Aditya Dev Sharma
+X-KDE-PluginInfo-Email=aditya.sharma15696@gmail.com
+X-KDE-PluginInfo-Name=org.kde.plasma.kdenow
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-License=LGPL
