@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   id="svg3396"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="hotel_drawing.svg"
+   inkscape:export-filename="/home/g33kyaditya/GSoC/hotel_drawing.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <sodipodi:namedview
+     inkscape:document-units="mm"
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="-6.9103404"
+     inkscape:cy="510.35223"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <defs
+     id="defs3" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       y="-0.070510365"
+       x="-0.13834117"
+       height="298.34918"
+       width="212.06984"
+       id="rect3402"
+       style="fill:#c8beb7" />
+    <flowRoot
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       id="flowRoot3404"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3406"><rect
+           y="103.79078"
+           x="71.428574"
+           height="222.85715"
+           width="602.85712"
+           id="rect3408" /></flowRegion><flowPara
+         id="flowPara3410" /></flowRoot>    <flowRoot
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       id="flowRoot3443"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3445"><rect
+           y="446.64792"
+           x="51.42857"
+           height="140"
+           width="1177.1428"
+           id="rect3447" /></flowRegion><flowPara
+         id="flowPara3449" /></flowRoot>    <text
+       transform="scale(0.977949,1.0225482)"
+       sodipodi:linespacing="125%"
+       id="text3412"
+       y="19.950998"
+       x="9.0450888"
+       style="font-style:normal;font-weight:normal;font-size:12.05037785px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         id="tspan3418"
+         y="19.950998"
+         x="9.0450888"
+         sodipodi:role="line">Le Gavroche</tspan><tspan
+         id="tspan3422"
+         y="33.825367"
+         x="9.0450888"
+         sodipodi:role="line">43 Upper Brook Street</tspan><tspan
+         id="tspan3458"
+         y="47.699738"
+         x="9.0450888"
+         sodipodi:role="line">London</tspan><tspan
+         id="tspan3424"
+         y="61.574104"
+         x="9.0450888"
+         sodipodi:role="line" /><tspan
+         id="tspan3428"
+         y="75.448471"
+         x="9.0450888"
+         sodipodi:role="line" /><tspan
+         id="tspan3416"
+         y="89.322845"
+         x="9.0450888"
+         sodipodi:role="line">Reservation in 1 hour</tspan></text>
+    <image
+       sodipodi:absref="/home/g33kyaditya/GSoC/hotel_clipart.png"
+       xlink:href="hotel_clipart.png"
+       width="45.961899"
+       height="45.437775"
+       preserveAspectRatio="none"
+       style="image-rendering:optimizeSpeed"
+       id="image3487"
+       x="146.75557"
+       y="13.830317" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.28222221px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 12.901587,122.02221 191.10476,121.21587"
+       id="path3535"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3537"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3539"><rect
+           id="rect3541"
+           width="580"
+           height="134.28572"
+           x="62.857143"
+           y="460.93362" /></flowRegion><flowPara
+         id="flowPara3543" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:13.36069775px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="16.41316"
+       y="133.23961"
+       id="text3545"
+       sodipodi:linespacing="125%"
+       transform="scale(0.92688817,1.0788788)"><tspan
+         sodipodi:role="line"
+         id="tspan3547"
+         x="16.41316"
+         y="133.23961">Reservation Details</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3551"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3553"><rect
+           id="rect3555"
+           width="594.28571"
+           height="382.85715"
+           x="57.142857"
+           y="569.50507" /></flowRegion><flowPara
+         id="flowPara3557" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:11.93301487px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="340.22052"
+       y="176.11775"
+       id="text3559"
+       sodipodi:linespacing="125%"
+       transform="scale(0.97404691,1.0266446)"><tspan
+         sodipodi:role="line"
+         id="tspan3561"
+         x="340.22052"
+         y="176.11775">Name: John Smith</tspan><tspan
+         sodipodi:role="line"
+         x="340.22052"
+         y="191.03403"
+         id="tspan3586">Reservation Number: ABC156</tspan><tspan
+         sodipodi:role="line"
+         x="340.22052"
+         y="205.95029"
+         id="tspan3563">Check in: 29/04/16 8:00 PM</tspan><tspan
+         sodipodi:role="line"
+         x="340.22052"
+         y="220.86656"
+         id="tspan3565">Check out: 02/05/16 8:00 AM</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3567"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3569"><rect
+           id="rect3571"
+           width="245.71428"
+           height="62.857143"
+           x="48.57143"
+           y="209.50504" /></flowRegion><flowPara
+         id="flowPara3573" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="9.6761885"
+       y="53.482533"
+       id="text3575"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3577"
+         x="9.6761885"
+         y="53.482533" /><tspan
+         sodipodi:role="line"
+         x="9.6761885"
+         y="67.593643"
+         id="tspan3581">Ph: 415-771-1400</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3381"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3383"><rect
+           id="rect3385"
+           width="520"
+           height="65.714287"
+           x="51.42857"
+           y="546.64795" /></flowRegion><flowPara
+         id="flowPara3387"></flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3389"
+       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:transform-center-x="8.8698413"
+       inkscape:transform-center-y="-15.320635"
+       transform="translate(7.257143,5.6444445)"><flowRegion
+         id="flowRegion3391"><rect
+           id="rect3393"
+           width="189.49207"
+           height="24.190475"
+           x="16.126984"
+           y="210.72063" /></flowRegion><flowPara
+         id="flowPara3395">Sat April 30 2016 8:00 PM</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3403"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+       transform="scale(0.28222222,0.28222222)"><flowRegion
+         id="flowRegion3405"><rect
+           id="rect3407"
+           width="528.57141"
+           height="145.71428"
+           x="62.857143"
+           y="543.79077" /></flowRegion><flowPara
+         id="flowPara3409"></flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="16.126984"
+       y="164.75873"
+       id="text3411"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3413"
+         x="16.126984"
+         y="164.75873">John Smith</tspan><tspan
+         sodipodi:role="line"
+         x="16.126984"
+         y="178.86984"
+         id="tspan3415">Reservation Number: ABC156</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.28222221px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 13.114025,201.2106 59.868373,0"
+       id="path3465"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.28222221px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 133.42095,199.50007 61.5789,0"
+       id="path3467"
+       inkscape:connector-curvature="0" />
+    <a
+       style=""
+       id="a3471">
+      <flowRoot
+         transform="matrix(0.28222222,0,0,0.28222222,13.6842,0)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot3453"
+         xml:space="preserve"><flowRegion
+           id="flowRegion3455"><rect
+             y="680.6261"
+             x="228.29448"
+             height="56.568542"
+             width="246.47722"
+             id="rect3457" /></flowRegion><flowPara
+           id="flowPara3459">Check In</flowPara></flowRoot>    </a>
+    <a
+       style=""
+       transform="translate(211.82,76.20164)"
+       id="a3471-6" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3527"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="matrix(0.28222222,0,0,0.28222222,29.649101,-0.570175)"><flowRegion
+         id="flowRegion3529"><rect
+           id="rect3531"
+           width="418.20316"
+           height="76.771591"
+           x="157.5838"
+           y="868.51447" /></flowRegion><flowPara
+         id="flowPara3533">Check Out</flowPara></flowRoot>    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.28222221px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 70.131525,251.95617 -57.0175,0"
+       id="path3541"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.28222221px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 136.842,251.95617 59.2982,0"
+       id="path3543"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3545"
+       style="font-style:normal;font-weight:normal;font-size:11.28888893px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion3547"><rect
+           id="rect3549"
+           width="177.32442"
+           height="19.38595"
+           x="19.38595"
+           y="265.07019" /></flowRegion><flowPara
+         id="flowPara3551">Mon May 01 2016 8:00 AM</flowPara></flowRoot>  </g>
+</svg>
