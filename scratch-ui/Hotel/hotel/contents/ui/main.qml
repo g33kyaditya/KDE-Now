@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Vishesh Handa <vhanda@kde.org>
+ * Copyright (C) 2016 Aditya Dev Sharma <aditya.sharma15696@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
