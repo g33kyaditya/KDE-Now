@@ -29,12 +29,6 @@
 #include "emailsessionjob.h"
 #include "singletonfactory.h"
 #include "emailselectjob.h"
-/*#include "emailsearchjob.h"
-#include "emailfetchjob.h"
-*/
-
-//#include "processor.h"
-//#include "emailupdatejob.h"
 
 int main(int argc, char** argv)
 {
@@ -53,24 +47,25 @@ int main(int argc, char** argv)
         parser.showHelp(1);
     }
 
-    EmailSessionJob* sessionJob = SingletonFactory::instanceFor<EmailSessionJob>();
-    sessionJob->setHostName(parser.value("imapServer"));
-    sessionJob->setUserName(parser.value("username"));
-    sessionJob->setPassword(parser.value("password"));
-    sessionJob->setPort(parser.value("imapPort").toUShort());
+    EmailSessionJob* wrapperSessionJob = SingletonFactory::instanceFor<EmailSessionJob>();
+    wrapperSessionJob->setHostName(parser.value("imapServer"));
+    wrapperSessionJob->setUserName(parser.value("username"));
+    wrapperSessionJob->setPassword(parser.value("password"));
+    wrapperSessionJob->setPort(parser.value("imapPort").toUShort());
 
-    sessionJob->initiate();
+    wrapperSessionJob->initiate();
 
-    qDebug() << sessionJob->currentSession()<< "\n";
+    qDebug() << wrapperSessionJob->currentSession()<< "\n";
 
-    KIMAP::LoginJob* loginJob = new KIMAP::LoginJob(sessionJob->currentSession());
-    loginJob->setUserName(sessionJob->getUserName());
-    loginJob->setPassword(sessionJob->getPassword());
+    KIMAP::LoginJob* loginJob = new KIMAP::LoginJob(wrapperSessionJob->currentSession());
+    loginJob->setUserName(wrapperSessionJob->getUserName());
+    loginJob->setPassword(wrapperSessionJob->getPassword());
+    loginJob->setAuthenticationMode(KIMAP::LoginJob::Login);
     loginJob->setEncryptionMode(KIMAP::LoginJob::AnySslVersion);
 
-    EmailSelectJob *selectJob = new EmailSelectJob();
+    EmailSelectJob *wrapperSelectJob = new EmailSelectJob();
 
-    QObject::connect(loginJob, SIGNAL(finished(KJob*)), selectJob, SLOT(loginJobFinished(KJob*)));
+    QObject::connect(loginJob, &KJob::result, wrapperSelectJob, &EmailSelectJob::loginJobFinished);
     loginJob->start();
 
     return app.exec();

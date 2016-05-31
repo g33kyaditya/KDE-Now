@@ -26,6 +26,7 @@
 
 EmailSelectJob::EmailSelectJob(QObject* parent) : QObject(parent)
 {
+
 }
 
 void EmailSelectJob::loginJobFinished(KJob* job)
@@ -39,11 +40,10 @@ void EmailSelectJob::loginJobFinished(KJob* job)
     KIMAP::SelectJob* selectJob = new KIMAP::SelectJob(
         SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
 
-    KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(
-        SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
+    EmailSearchJob* wrapperSearchJob = new EmailSearchJob();
 
     selectJob->setMailBox("INBOX");
     selectJob->setOpenReadOnly(true);
-    connect(selectJob,SIGNAL(finished(KJob*)), searchJob, SLOT(selectJobFinished(KJob*)));
+    connect(selectJob, &KJob::result, wrapperSearchJob, &EmailSearchJob::selectJobFinished);
     selectJob->start();
 }

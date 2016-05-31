@@ -24,6 +24,9 @@
 #include <KIMAP/SearchJob>
 #include <KIMAP/ImapSet>
 
+#define CAST void (KIMAP::FetchJob::*)(const QString&, \
+        const QMap<qint64, qint64>&, const QMap<qint64, KIMAP::MessagePtr>&)
+
 EmailFetchJob::EmailFetchJob(QObject* parent) : QObject(parent)
 {
 
@@ -44,8 +47,7 @@ void EmailFetchJob::searchJobFinished(KJob* job)
     KIMAP::FetchJob* fetchJob = new KIMAP::FetchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
     fetchJob->setSequenceSet(set);
 
-    connect(fetchJob, SIGNAL(messagesReceived(QString,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessagePtr>)),
-            this, SLOT(slotMessagesReceived(QString,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessagePtr>)));
+    connect(fetchJob, static_cast<CAST>(&KIMAP::FetchJob::messagesReceived), this, &EmailFetchJob::slotMessagesReceived);
     fetchJob->start();
 }
 
@@ -53,6 +55,9 @@ void EmailFetchJob::slotMessagesReceived(const QString& mailBox,
                                          const QMap<qint64, qint64>& uids,
                                          const QMap<qint64, KIMAP::MessagePtr>& messages)
 {
+    Q_UNUSED(mailBox)
+    Q_UNUSED(uids)
+
     QMapIterator<qint64, KIMAP::MessagePtr> it(messages);
     while (it.hasNext()) {
         it.next();

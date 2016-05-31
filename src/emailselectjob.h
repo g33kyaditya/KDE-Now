@@ -31,7 +31,7 @@ class EmailSelectJob : public QObject
         explicit EmailSelectJob(QObject* parent = 0);
 
     public Q_SLOTS:
-        void loginJobFinished(KJob*);
+        void loginJobFinished(KJob* job);
 };
 
 #endif //EMAILSELECTJOB_H

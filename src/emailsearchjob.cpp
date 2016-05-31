@@ -42,8 +42,8 @@ void EmailSearchJob::selectJobFinished(KJob* job)
 
     KIMAP::Term term(KIMAP::Term::Since, QDate::currentDate().addMonths(-1));
     KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
-    KIMAP::FetchJob* fetchJob = new KIMAP::FetchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
+    EmailFetchJob* wrapperFetchJob = new EmailFetchJob();
     searchJob->setTerm(term);
-    connect(searchJob, SIGNAL(finsished(KJob*)), fetchJob, SLOT(searchJobFinished(KJob*)));
+    connect(searchJob, &KJob::result, wrapperFetchJob, &EmailFetchJob::searchJobFinished);
     searchJob->start();
 }
