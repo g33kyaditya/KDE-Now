@@ -25,6 +25,9 @@
 
 #include <KIMAP/Session>
 #include <KIMAP/LoginJob>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
 
 #include "emailsessionjob.h"
 #include "singletonfactory.h"
@@ -47,6 +50,11 @@ int main(int argc, char** argv)
         parser.showHelp(1);
     }
 
+    KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
+    KConfigGroup generalGroup(config, "General");
+    generalGroup.writeEntry("UIDNEXT", "FooBar");
+    generalGroup.config()->sync();
+
     EmailSessionJob* wrapperSessionJob = SingletonFactory::instanceFor<EmailSessionJob>();
     wrapperSessionJob->setHostName(parser.value("imapServer"));
     wrapperSessionJob->setUserName(parser.value("username"));
@@ -60,7 +68,6 @@ int main(int argc, char** argv)
     KIMAP::LoginJob* loginJob = new KIMAP::LoginJob(wrapperSessionJob->currentSession());
     loginJob->setUserName(wrapperSessionJob->getUserName());
     loginJob->setPassword(wrapperSessionJob->getPassword());
-    loginJob->setAuthenticationMode(KIMAP::LoginJob::Login);
     loginJob->setEncryptionMode(KIMAP::LoginJob::AnySslVersion);
 
     EmailSelectJob *wrapperSelectJob = new EmailSelectJob();

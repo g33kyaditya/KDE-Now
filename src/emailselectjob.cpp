@@ -36,6 +36,10 @@ void EmailSelectJob::loginJobFinished(KJob* job)
         qDebug() << loginJob->errorString();
         return;
     }
+    else {
+         qDebug() << "Login Job Done ";
+    }
+    loginJob->kill();
 
     KIMAP::SelectJob* selectJob = new KIMAP::SelectJob(
         SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());

@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_S
 find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick)
 find_package(KF5 5.2 REQUIRED COMPONENTS Plasma I18n Declarative)
 find_package(KF5 REQUIRED COMPONENTS IMAP Mime KIO)
+find_package(KF5Config REQUIRED)
 
 include(FeatureSummary)
 include(KDEInstallDirs)

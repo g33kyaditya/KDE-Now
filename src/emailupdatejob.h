@@ -17,55 +17,27 @@
  *
  */
 
+#ifndef EMAILUPDATEJOB_H
+#define EMAILUPDATEJOB_H
+
 #include "emailsessionjob.h"
+#include "emailselectjob.h"
 
-EmailSessionJob::EmailSessionJob(QObject* parent): QObject(parent)
-{
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
-}
+#include <KIMAP/IdleJob>
+#include <KIMAP/LoginJob>
 
-void EmailSessionJob::initiate()
-{
-    m_session = new KIMAP::Session(m_hostName, m_port, this);
-}
+class EmailUpdateJob : public QObject {
+        Q_OBJECT
+    public:
+        explicit EmailUpdateJob(QObject* parent = 0);
+        void updatesReceived();
 
-void EmailSessionJob::setHostName(const QString& hostName)
-{
-    m_hostName = hostName;
-}
+    public Q_SLOTS:
+        void update(KIMAP::IdleJob *job, const QString &mailBox, int messageCount, int recentCount);
 
-void EmailSessionJob::setUserName(const QString& userName)
-{
-    m_userName = userName;
-}
+};
 
-void EmailSessionJob::setPassword(const QString& password)
-{
-    m_password = password;
-}
-
-void EmailSessionJob::setPort(qint16 port)
-{
-    m_port = port;
-}
-
-KIMAP::Session* EmailSessionJob::currentSession()
-{
-    return m_session;
-}
-
-QString EmailSessionJob::getPassword() const
-{
-    return m_password;
-}
-
-QString EmailSessionJob::getUserName() const
-{
-    return m_userName;
-}
-
-void EmailSessionJob::close()
-{
-    m_session->close();
-}
-
+#endif // EMAILUPDATEJOB_H

@@ -35,6 +35,7 @@ class EmailSessionJob : public QObject
         void setPassword(const QString&);
         void setPort(qint16);
         void initiate();
+        void close();
 
         QString getUserName() const;
         QString getPassword() const;

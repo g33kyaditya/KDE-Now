@@ -21,6 +21,7 @@
 #define EMAILFETCHJOB_H
 
 #include <KIMAP/FetchJob>
+#include <KIMAP/Session>
 
 class EmailFetchJob : public QObject
 {
@@ -28,6 +29,7 @@ class EmailFetchJob : public QObject
 
     public:
         explicit EmailFetchJob(QObject* parent = 0);
+        void done(KIMAP::Session*);
 
     Q_SIGNALS:
         void fetchedEmail(KIMAP::MessagePtr email);
@@ -37,6 +39,8 @@ class EmailFetchJob : public QObject
         void slotMessagesReceived(const QString &mailBox, const QMap<qint64, qint64> &uids,
                               const QMap<qint64, KIMAP::MessagePtr> &messages);
 
+    private:
+        KIMAP::FetchJob* fetchJob;
 };
 
 #endif  //EMAILFETCHJOB_H

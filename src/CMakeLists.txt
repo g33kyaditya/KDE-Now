@@ -5,6 +5,7 @@ add_executable(kdenow
     emailselectjob.cpp
     emailsessionjob.cpp
     singletonfactory.cpp
+    emailupdatejob.cpp
 )
 
 target_link_libraries(kdenow
@@ -13,6 +14,7 @@ target_link_libraries(kdenow
     KF5::IMAP
     KF5::KIOCore
     KF5::CoreAddons
+    KF5::ConfigCore
 )
 
 install(TARGETS kdenow ${INSTALL_TARGETS_DEFAULT_ARGS})

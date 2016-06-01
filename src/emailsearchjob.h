@@ -27,9 +27,9 @@
 class EmailSearchJob : public QObject
 {
         Q_OBJECT
-
     public:
         explicit EmailSearchJob(QObject* parent = 0);
+        bool firstRun();
 
     public Q_SLOTS:
         void selectJobFinished(KJob*);

@@ -22,14 +22,30 @@
 #include "emailfetchjob.h"
 #include "emailsessionjob.h"
 
+#include <QtCore/QDate>
+
 #include <KIMAP/SearchJob>
 #include <KIMAP/SelectJob>
 #include <KIMAP/FetchJob>
-#include <QtCore/QDate>
+
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
 
 EmailSearchJob::EmailSearchJob(QObject* parent): QObject(parent)
 {
 
+}
+
+bool EmailSearchJob::firstRun()
+{
+    KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
+    KConfigGroup generalGroup(config, "General");
+    QString uidName = generalGroup.readEntry("UIDNEXT", QString());
+    if ("FooBar" == uidName) {
+        return true;
+    }
+    return false;
 }
 
 void EmailSearchJob::selectJobFinished(KJob* job)
@@ -39,11 +55,43 @@ void EmailSearchJob::selectJobFinished(KJob* job)
         qDebug() << selectJob->errorString();
         return;
     }
+    else {
+        qDebug() << "Select Job Done ";
+    }
 
-    KIMAP::Term term(KIMAP::Term::Since, QDate::currentDate().addMonths(-1));
-    KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
-    EmailFetchJob* wrapperFetchJob = new EmailFetchJob();
-    searchJob->setTerm(term);
-    connect(searchJob, &KJob::result, wrapperFetchJob, &EmailFetchJob::searchJobFinished);
-    searchJob->start();
+    if (firstRun()) {
+        qDebug() << "First Run";
+        qint64 nextUid = selectJob->nextUid();  //This will be the next UID of future EmailFetchJob
+        selectJob->kill();
+        KConfig config("kdenowrc", KConfig::NoGlobals);
+        KConfigGroup generalGroup(&config, "General");
+        generalGroup.writeEntry("UIDNEXT", QString::number(nextUid));
+        generalGroup.config()->sync();
+
+        KIMAP::Term term(KIMAP::Term::Since, QDate::currentDate().addMonths(-1));
+        KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
+        EmailFetchJob* wrapperFetchJob = new EmailFetchJob();
+        searchJob->setTerm(term);
+        connect(searchJob, &KJob::result, wrapperFetchJob, &EmailFetchJob::searchJobFinished);
+        searchJob->start();
+    }
+    else {
+        qDebug() << "Not First Run";
+        KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
+        KConfigGroup generalGroup(config, "General");
+        QString uidName = generalGroup.readEntry("UIDNEXT", QString());
+        qint64 uidNext = uidName.toULongLong();
+
+        KIMAP::ImapInterval interval;
+        interval.setBegin(uidNext);
+        KIMAP::ImapSet set;
+        set.add(interval);
+        KIMAP::Term term(KIMAP::Term::Uid, set);
+
+        KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
+        EmailFetchJob* wrapperFetchJob = new EmailFetchJob();
+        searchJob->setTerm(term);
+        connect(searchJob, &KJob::result, wrapperFetchJob, &EmailFetchJob::searchJobFinished);
+        searchJob->start();
+    }
 }

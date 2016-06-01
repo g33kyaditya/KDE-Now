@@ -20,9 +20,11 @@
 #include "singletonfactory.h"
 #include "emailfetchjob.h"
 #include "emailsessionjob.h"
+#include "emailupdatejob.h"
 
 #include <KIMAP/SearchJob>
 #include <KIMAP/ImapSet>
+#include <KIMAP/IdleJob>
 
 #define CAST void (KIMAP::FetchJob::*)(const QString&, \
         const QMap<qint64, qint64>&, const QMap<qint64, KIMAP::MessagePtr>&)
@@ -39,12 +41,15 @@ void EmailFetchJob::searchJobFinished(KJob* job)
         qDebug() << searchJob->errorString();
         return;
     }
+    else {
+        qDebug() << "Search Job Done";
+    }
 
-    //qDebug() << searchJob->results();
+    qDebug() << searchJob->results();
     KIMAP::ImapSet set;
     set.add(searchJob->results());
 
-    KIMAP::FetchJob* fetchJob = new KIMAP::FetchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
+    fetchJob = new KIMAP::FetchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
     fetchJob->setSequenceSet(set);
 
     connect(fetchJob, static_cast<CAST>(&KIMAP::FetchJob::messagesReceived), this, &EmailFetchJob::slotMessagesReceived);
@@ -57,14 +62,24 @@ void EmailFetchJob::slotMessagesReceived(const QString& mailBox,
 {
     Q_UNUSED(mailBox)
     Q_UNUSED(uids)
-
+    qDebug() << messages << "\n";
     QMapIterator<qint64, KIMAP::MessagePtr> it(messages);
     while (it.hasNext()) {
         it.next();
 
         emit fetchedEmail(it.value());
-        qDebug() << it.value() << "\n";
+        qDebug() << it.value()->subject()->asUnicodeString();
     }
 
-    //emit done(m_session);
+    done(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
+
+}
+
+void EmailFetchJob::done(KIMAP::Session* session)
+{
+    KIMAP::IdleJob *idleJob = new KIMAP::IdleJob(session);
+    EmailUpdateJob *updateJob = new EmailUpdateJob();
+    connect(idleJob, &KIMAP::IdleJob::mailBoxStats, updateJob, &EmailUpdateJob::update);
+    qDebug() << "IDLIing the Connection";
+    idleJob->start();
 }
