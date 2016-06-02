@@ -52,9 +52,12 @@ int main(int argc, char** argv)
 
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
     KConfigGroup generalGroup(config, "General");
-    generalGroup.writeEntry("UIDNEXT", "FooBar");
-    generalGroup.config()->sync();
-
+    QString state = generalGroup.readEntry("STATE", QString());
+    if (state != "Update") {
+        qDebug() << "FirstRun";
+        generalGroup.writeEntry("STATE", "FirstRun");
+        generalGroup.config()->sync();
+    }
     EmailSessionJob* wrapperSessionJob = SingletonFactory::instanceFor<EmailSessionJob>();
     wrapperSessionJob->setHostName(parser.value("imapServer"));
     wrapperSessionJob->setUserName(parser.value("username"));

@@ -41,8 +41,9 @@ bool EmailSearchJob::firstRun()
 {
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
     KConfigGroup generalGroup(config, "General");
-    QString uidName = generalGroup.readEntry("UIDNEXT", QString());
-    if ("FooBar" == uidName) {
+    QString state = generalGroup.readEntry("STATE", QString());
+    if (state == "FirstRun") {
+        qDebug() << "State I see now = " << state << "\n";
         return true;
     }
     return false;
@@ -63,8 +64,9 @@ void EmailSearchJob::selectJobFinished(KJob* job)
         qDebug() << "First Run";
         qint64 nextUid = selectJob->nextUid();  //This will be the next UID of future EmailFetchJob
         selectJob->kill();
-        KConfig config("kdenowrc", KConfig::NoGlobals);
-        KConfigGroup generalGroup(&config, "General");
+        KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
+        KConfigGroup generalGroup(config, "General");
+        generalGroup.writeEntry("STATE", "Update");
         generalGroup.writeEntry("UIDNEXT", QString::number(nextUid));
         generalGroup.config()->sync();
 
@@ -81,6 +83,10 @@ void EmailSearchJob::selectJobFinished(KJob* job)
         KConfigGroup generalGroup(config, "General");
         QString uidName = generalGroup.readEntry("UIDNEXT", QString());
         qint64 uidNext = uidName.toULongLong();
+        qint64 uidToBeSaved = selectJob->nextUid();
+        selectJob->kill();
+        generalGroup.writeEntry("UIDNEXT", QString::number(uidToBeSaved));
+        generalGroup.config()->sync();
 
         KIMAP::ImapInterval interval;
         interval.setBegin(uidNext);
