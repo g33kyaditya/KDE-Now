@@ -20,6 +20,10 @@
 #include "emailupdatejob.h"
 #include "singletonfactory.h"
 
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+
 EmailUpdateJob::EmailUpdateJob(QObject* parent)
     : QObject(parent)
 {
@@ -29,14 +33,28 @@ EmailUpdateJob::EmailUpdateJob(QObject* parent)
 void EmailUpdateJob::update(KIMAP::IdleJob *job, const QString &mailBox,
                             int messageCount, int recentCount)
 {
-    qDebug() << "Update !";
     Q_UNUSED(mailBox)
-    Q_UNUSED(messageCount)
     Q_UNUSED(recentCount)
+    qDebug() << "Update !";
 
-    job->stop();
-    SingletonFactory::instanceFor<EmailSessionJob>()->close();
-    updatesReceived();
+    KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
+    KConfigGroup generalGroup(config, "General");
+    qint64 currentMessageCount = generalGroup.readEntry("MESSAGE_COUNT", QString()).toULongLong();
+
+    if (messageCount < currentMessageCount) {
+        //User has deleted an email. Return
+        generalGroup.writeEntry("MESSAGE_COUNT", QString::number(messageCount));
+        generalGroup.config()->sync();
+        return;
+    }
+    else {
+        //New email has arrived, so fetch it
+        generalGroup.writeEntry("MESSAGE_COUNT", QString::number(messageCount));
+        generalGroup.config()->sync();
+        job->stop();
+        SingletonFactory::instanceFor<EmailSessionJob>()->close();
+        updatesReceived();
+    }
 }
 
 void EmailUpdateJob::updatesReceived()

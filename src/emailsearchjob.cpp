@@ -63,12 +63,13 @@ void EmailSearchJob::selectJobFinished(KJob* job)
     if (firstRun()) {
         qDebug() << "First Run";
         qint64 nextUid = selectJob->nextUid();  //This will be the next UID of future EmailFetchJob
-        selectJob->kill();
         KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
         KConfigGroup generalGroup(config, "General");
         generalGroup.writeEntry("STATE", "Update");
         generalGroup.writeEntry("UIDNEXT", QString::number(nextUid));
+        generalGroup.writeEntry("MESSAGE_COUNT", QString::number(selectJob->messageCount()));
         generalGroup.config()->sync();
+        selectJob->kill();
 
         KIMAP::Term term(KIMAP::Term::Since, QDate::currentDate().addMonths(-1));
         KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(SingletonFactory::instanceFor<EmailSessionJob>()->currentSession());
@@ -84,9 +85,10 @@ void EmailSearchJob::selectJobFinished(KJob* job)
         QString uidName = generalGroup.readEntry("UIDNEXT", QString());
         qint64 uidNext = uidName.toULongLong();
         qint64 uidToBeSaved = selectJob->nextUid();
-        selectJob->kill();
         generalGroup.writeEntry("UIDNEXT", QString::number(uidToBeSaved));
+        generalGroup.writeEntry("MESSAGE_COUNT", QString::number(selectJob->messageCount()));
         generalGroup.config()->sync();
+        selectJob->kill();
 
         KIMAP::ImapInterval interval;
         interval.setBegin(uidNext);
