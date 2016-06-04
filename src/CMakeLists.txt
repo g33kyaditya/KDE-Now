@@ -1,11 +1,8 @@
 add_executable(kdenow
     main.cpp
-    emailfetchjob.cpp
-    emailsearchjob.cpp
-    emailselectjob.cpp
-    emailsessionjob.cpp
-    singletonfactory.cpp
-    emailupdatejob.cpp
+    daemon.cpp
+    processor.cpp
+    parser.cpp
 )
 
 target_link_libraries(kdenow

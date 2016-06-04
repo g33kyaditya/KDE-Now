@@ -23,15 +23,11 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-#include <KIMAP/Session>
-#include <KIMAP/LoginJob>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 
-#include "emailsessionjob.h"
-#include "singletonfactory.h"
-#include "emailselectjob.h"
+#include "daemon.h"
 
 int main(int argc, char** argv)
 {
@@ -58,25 +54,12 @@ int main(int argc, char** argv)
         generalGroup.writeEntry("STATE", "FirstRun");
         generalGroup.config()->sync();
     }
-    EmailSessionJob* wrapperSessionJob = SingletonFactory::instanceFor<EmailSessionJob>();
-    wrapperSessionJob->setHostName(parser.value("imapServer"));
-    wrapperSessionJob->setUserName(parser.value("username"));
-    wrapperSessionJob->setPassword(parser.value("password"));
-    wrapperSessionJob->setPort(parser.value("imapPort").toUShort());
 
-    wrapperSessionJob->initiate();
-
-    qDebug() << wrapperSessionJob->currentSession()<< "\n";
-
-    KIMAP::LoginJob* loginJob = new KIMAP::LoginJob(wrapperSessionJob->currentSession());
-    loginJob->setUserName(wrapperSessionJob->getUserName());
-    loginJob->setPassword(wrapperSessionJob->getPassword());
-    loginJob->setEncryptionMode(KIMAP::LoginJob::AnySslVersion);
-
-    EmailSelectJob *wrapperSelectJob = new EmailSelectJob();
-
-    QObject::connect(loginJob, &KJob::result, wrapperSelectJob, &EmailSelectJob::loginJobFinished);
-    loginJob->start();
+    Daemon* daemon = new Daemon;
+    daemon->setHostName(parser.value("imapServer"));
+    daemon->setUsername(parser.value("username"));
+    daemon->setPassword(parser.value("password"));
+    daemon->setPort(parser.value("imapPort").toUShort());
 
     return app.exec();
 }
