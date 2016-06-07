@@ -259,5 +259,3 @@ void Daemon::onIdleChanged(KIMAP::IdleJob* job, const QString& mailBox,
         emit signalUpdateProcess();
     }
 }
-
-
