@@ -32,7 +32,7 @@ Parser::Parser(QObject* parent): QObject(parent)
 bool Parser::isValidJson(const QString& res)
 {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8());
-    if(jsonDoc.isNull()) {
+    if (jsonDoc.isNull()) {
         return false;
     }
     return true;
@@ -43,21 +43,21 @@ QList<QVariantMap> Parser::parse(QByteArray& htmlDoc)
     QList<QVariantMap> list;
     QVariantMap map;
     QXmlStreamReader xmlReader(htmlDoc);
-    while(xmlReader.tokenType() != QXmlStreamReader::EndDocument) {
-            if(xmlReader.tokenType() == QXmlStreamReader::StartElement) {
+    while (xmlReader.tokenType() != QXmlStreamReader::EndDocument) {
+            if (xmlReader.tokenType() == QXmlStreamReader::StartElement) {
                 //qDebug() << xml.name().toString();
-                if(xmlReader.name().toString() == "script") {
+                if (xmlReader.name().toString() == "script") {
                     qDebug() << xmlReader.readElementText(
                         QXmlStreamReader::IncludeChildElements);
                     QString res = xmlReader.readElementText(
                         QXmlStreamReader::IncludeChildElements);
-                    if(isValidJson(res)) {
+                    if (isValidJson(res)) {
                         QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8());
-                        if(jsonDoc.isArray()) {
+                        if (jsonDoc.isArray()) {
                             map = parseJsonAsArray(jsonDoc.array());
                             list.append(map);
                         }
-                        if(jsonDoc.isObject()) {
+                        if (jsonDoc.isObject()) {
                             map = parseJsonAsObject(jsonDoc.object());
                             list.append(map);
                         }
