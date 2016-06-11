@@ -117,30 +117,32 @@ void Processor::extractFlightData()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();
     QString name = m_map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    QString flightNameCode = m_map["reservationFor"].toMap().value("airline").toMap().value("iataCode").toString();
-    QString flightNumber = m_map["reservationFor"].toMap().value("flightNumber").toString();
+    QString flightNameCode = reservationForMap["airline"].toMap().value("iataCode").toString();
+    QString flightNumber = reservationForMap["flightNumber"].toString();
     QString flight = flightNameCode + flightNumber;
 
-    QString departureAirportName = m_map["departureAirport"].toMap().value("name").toString();
-    QString departureAirportCode = m_map["departureAirport"].toMap().value("iataCode").toString();
-    QDateTime departureTime = m_map["departureTime"].toDateTime();
+    QString departureAirportName = reservationForMap["departureAirport"].toMap().value("name").toString();
+    QString departureAirportCode = reservationForMap["departureAirport"].toMap().value("iataCode").toString();
+    QDateTime departureTime = reservationForMap["departureTime"].toDateTime();
 
-    QString arrivalAirportName = m_map["arrivalAirport"].toMap().value("name").toString();
-    QString arrivalAirportCode = m_map["arrivalAirport"].toMap().value("iataCode").toString();
-    QDateTime arrivalTime = m_map["arrivalTime"].toDateTime();
+    QString arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
+    QString arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
+    QDateTime arrivalTime = reservationForMap["arrivalTime"].toDateTime();
 }
 
 void Processor::extractEventData()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();
     QString name = m_map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    QString eventName = m_map["reservationFor"].toMap().value("name").toString();
-    QDateTime startDate = m_map["reservationFor"].toMap().value("startDate").toDateTime();
+    QString eventName = reservationForMap["name"].toString();
+    QDateTime startDate = reservationForMap["startDate"].toDateTime();
 
-    QVariantMap addressMap = m_map["reservationFor"].toMap().value("location").toMap().value("address").toMap();
-    QString location = m_map["reservationFor"].toMap().value("location").toMap().value("name").toString();
+    QVariantMap addressMap = reservationForMap["location"].toMap().value("address").toMap();
+    QString location = reservationForMap["location"].toMap().value("name").toString();
     QString streetAddress = addressMap["streetAddress"].toString();
     QString addressLocality = addressMap["addressLocality"].toString();
 }
@@ -149,13 +151,14 @@ void Processor::extractHotelData()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();
     QString name = m_map["underName"].toMap().value("name").toString();
-    QString telephone = m_map["telephone"].toString();
+    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
     QDateTime checkinDate = m_map["checkinDate"].toDateTime();
     QDateTime checkoutDate = m_map["checkoutDate"].toDateTime();
 
-    QVariantMap addressMap = m_map["reservationFor"].toMap().value("address").toMap();
-    QString hotelName = m_map["reservationFor"].toMap().value("name").toString();
+    QString telephone = reservationForMap["telephone"].toString();
+    QVariantMap addressMap = reservationForMap["address"].toMap();
+    QString hotelName = reservationForMap["name"].toString();
     QString streetAddress = addressMap["streetAddress"].toString();
     QString addressLocality = addressMap["addressLocality"].toString();
     QString addressRegion = addressMap["addressRegion"].toString();
@@ -165,12 +168,13 @@ void Processor::extractRestaurantData()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();
     QString name = m_map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
     QDateTime startTime = m_map["startTime"].toDateTime();
     int partySize = m_map["partySize"].toInt();
 
-    QVariantMap addressMap = m_map["reservationFor"].toMap().value("address").toMap();
-    QString restaurantName = m_map["reservationFor"].toMap().value("name").toString();
+    QVariantMap addressMap = reservationForMap["address"].toMap();
+    QString restaurantName = reservationForMap["name"].toString();
     QString streetAddress = addressMap["streetAddress"].toString();
     QString addressLocality = addressMap["addressLocality"].toString();
     QString addressRegion = addressMap["addressRegion"].toString();
