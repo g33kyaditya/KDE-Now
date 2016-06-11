@@ -49,3 +49,4 @@ class Processor : public QObject
 };
 
 #endif //PROCESSOR_H
+
