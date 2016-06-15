@@ -8,6 +8,8 @@ find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick)
 find_package(KF5 5.2 REQUIRED COMPONENTS Plasma I18n Declarative)
 find_package(KF5 REQUIRED COMPONENTS IMAP Mime KIO)
 find_package(KF5Config REQUIRED)
+find_package(KF5CoreAddons REQUIRED)
+find_package(KF5Service REQUIRED)
 
 include(FeatureSummary)
 include(KDEInstallDirs)
@@ -23,7 +25,7 @@ include_directories(
 )
 
 add_subdirectory(src)
-
+add_subdirectory(reservations)
 
 # Space for other includes like src, libs etc
 
