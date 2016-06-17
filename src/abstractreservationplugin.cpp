@@ -19,18 +19,18 @@
 
 #include "abstractreservationplugin.h"
 
-class AbstractReservationPlugin::Private
+class AbstractReservationPluginPrivate
 {
     public:
-        Private() : m_map(0) {}
+        AbstractReservationPluginPrivate() : m_map(QVariantMap()) {}
         QVariantMap m_map;
-        QString m_plugin;
+        QString m_plugin_name;
 };
 
 AbstractReservationPlugin::AbstractReservationPlugin(QObject* parent, const QVariantList&):
-                           QThread(parent), d(new Private)
+                                                    d(new AbstractReservationPluginPrivate)
 {
-    moveToThread(this);
+
 }
 
 AbstractReservationPlugin::~AbstractReservationPlugin()
@@ -45,10 +45,10 @@ void AbstractReservationPlugin::setDataMap(QVariantMap& map)
 
 void AbstractReservationPlugin::setPluginName(QString& plugin)
 {
-    d->m_plugin = plugin;
+    d->m_plugin_name = plugin;
 }
 
 QString AbstractReservationPlugin::plugin() const
 {
-    return d->m_plugin;
+    return d->m_plugin_name;
 }
