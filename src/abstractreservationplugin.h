@@ -20,10 +20,11 @@
 #ifndef ABSTRACTRESERVATIONPLUGIN_H
 #define ABSTRACTRESERVATIONPLUGIN_H
 
-#include <QtCore/QThread>
-#include <KService/KPluginInfo>
+#include <QtCore/QVariantMap>
 
-class AbstractReservationPlugin : public QThread
+class AbstractReservationPluginPrivate;
+
+class AbstractReservationPlugin : public QObject
 {
         Q_OBJECT
 
@@ -36,8 +37,7 @@ class AbstractReservationPlugin : public QThread
         QString plugin() const;
 
     private:
-        class Private;
-        Private * const d;
+        AbstractReservationPluginPrivate * const d;
 };
 
 #endif //ABSTRACTRESERVATIONPLUGIN_H
