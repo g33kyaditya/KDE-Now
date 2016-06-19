@@ -4,6 +4,7 @@ add_executable(kdenow
     processor.cpp
     parser.cpp
     abstractreservationplugin.cpp
+    pluginsloader.cpp
 )
 
 target_link_libraries(kdenow
