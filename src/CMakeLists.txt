@@ -4,6 +4,7 @@ add_executable(kdenow
     processor.cpp
     parser.cpp
     abstractreservationplugin.cpp
+    pluginsloader.cpp
 )
 
 target_link_libraries(kdenow
@@ -12,7 +13,6 @@ target_link_libraries(kdenow
     KF5::IMAP
     KF5::KIOCore
     KF5::CoreAddons
-    KF5::ConfigCore
     KF5::Service
 )
 
