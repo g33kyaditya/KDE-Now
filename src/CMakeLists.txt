@@ -5,6 +5,8 @@ add_executable(kdenow
     parser.cpp
     abstractreservationplugin.cpp
     pluginsloader.cpp
+    singletonfactory.cpp
+    datamap.cpp
 )
 
 target_link_libraries(kdenow
@@ -14,6 +16,10 @@ target_link_libraries(kdenow
     KF5::KIOCore
     KF5::CoreAddons
     KF5::Service
+)
+
+set_target_properties(
+    kdenow PROPERTIES ENABLE_EXPORTS ON
 )
 
 install(TARGETS kdenow ${INSTALL_TARGETS_DEFAULT_ARGS})

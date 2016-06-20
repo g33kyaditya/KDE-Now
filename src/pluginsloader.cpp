@@ -19,6 +19,7 @@
 
 #include "pluginsloader.h"
 #include "abstractreservationplugin.h"
+#include "singletonfactory.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QCoreApplication>
@@ -48,8 +49,8 @@ void PluginsLoader::load()
             AbstractReservationPlugin* extractorPlugin =
             factory->create<AbstractReservationPlugin>(0, args);
             if (extractorPlugin) {
-                extractorPlugin->setDataMap(m_map);
-                //extractorPlugin()->start(); Will define it as a function, that will call the extracting method in the plugin
+                extractorPlugin->setDataMap(SingletonFactory::instanceFor<DataMap>());
+                extractorPlugin->start();
                 connect(QCoreApplication::instance(), &QObject::destroyed, extractorPlugin, &QCoreApplication::quit);
                 qDebug() << "Created instance for extractor plugin" << info.name();
             }

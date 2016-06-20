@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Aditya Dev Sharma <aditya.sharma156696@gmail.com>
+ * Copyright (C) 2016  Aditya Dev Sharma <aditya.sharma15696@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,28 +17,6 @@
  *
  */
 
-#ifndef ABSTRACTRESERVATIONPLUGIN_H
-#define ABSTRACTRESERVATIONPLUGIN_H
+#include "singletonfactory.h"
 
-#include "datamap.h"
-
-#include <QtCore/QVariantMap>
-
-class AbstractReservationPluginPrivate;
-
-class AbstractReservationPlugin : public QObject
-{
-        Q_OBJECT
-
-    public:
-        explicit AbstractReservationPlugin(QObject* parent = 0,
-                                           const QVariantList& = QVariantList());
-        ~AbstractReservationPlugin();
-        void setDataMap(DataMap* map);
-        virtual void start() = 0;
-
-    private:
-        AbstractReservationPluginPrivate * const d;
-};
-
-#endif //ABSTRACTRESERVATIONPLUGIN_H
+QHash<QString, QObject*>SingletonFactory::m_totalInstances;

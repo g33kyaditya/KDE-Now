@@ -19,6 +19,9 @@
 
 #include "processor.h"
 #include "parser.h"
+#include "datamap.h"
+#include "pluginsloader.h"
+#include "singletonfactory.h"
 
 #include <QtCore/QVariant>
 #include <QtCore/QFile>
@@ -94,7 +97,12 @@ void Processor::extract()
 
 void Processor::extractNeededData()
 {
-    QString type = m_map["@type"].toString();
+    DataMap* map = SingletonFactory::instanceFor<DataMap>();
+    map->setMap(m_map);
+    PluginsLoader loader;
+    loader.load();
+
+    /*QString type = m_map["@type"].toString();
         if (type == "FlightReservation") {
             extractFlightData();
         }
@@ -110,26 +118,7 @@ void Processor::extractNeededData()
         else {
             qDebug() << "Unidentified Schema";
             return;
-        }
-}
-
-void Processor::extractFlightData()
-{
-    QString reservationNumber = m_map["reservationNumber"].toString();
-    QString name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
-
-    QString flightNameCode = reservationForMap["airline"].toMap().value("iataCode").toString();
-    QString flightNumber = reservationForMap["flightNumber"].toString();
-    QString flight = flightNameCode + flightNumber;
-
-    QString departureAirportName = reservationForMap["departureAirport"].toMap().value("name").toString();
-    QString departureAirportCode = reservationForMap["departureAirport"].toMap().value("iataCode").toString();
-    QDateTime departureTime = reservationForMap["departureTime"].toDateTime();
-
-    QString arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
-    QString arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
-    QDateTime arrivalTime = reservationForMap["arrivalTime"].toDateTime();
+        }*/
 }
 
 void Processor::extractEventData()

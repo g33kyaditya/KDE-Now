@@ -17,28 +17,23 @@
  *
  */
 
-#ifndef ABSTRACTRESERVATIONPLUGIN_H
-#define ABSTRACTRESERVATIONPLUGIN_H
+#ifndef FLIGHTRESERVATION_H
+#define FLIGHTRESERVATION_H
 
-#include "datamap.h"
+#include "src/abstractreservationplugin.h"
 
-#include <QtCore/QVariantMap>
-
-class AbstractReservationPluginPrivate;
-
-class AbstractReservationPlugin : public QObject
+class FlightReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
-
     public:
-        explicit AbstractReservationPlugin(QObject* parent = 0,
-                                           const QVariantList& = QVariantList());
-        ~AbstractReservationPlugin();
-        void setDataMap(DataMap* map);
-        virtual void start() = 0;
+        void setPluginName(const QString& pluginName);
+        void start();
+        QString plugin() const;
+        void extract();
 
     private:
-        AbstractReservationPluginPrivate * const d;
+        QString m_pluginName;
+        QVariantMap m_map;
 };
 
-#endif //ABSTRACTRESERVATIONPLUGIN_H
+#endif //FLIGHTRESERVATION_H

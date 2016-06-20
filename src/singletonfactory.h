@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Aditya Dev Sharma <aditya.sharma156696@gmail.com>
+ * Copyright (C) 2016  Aditya Dev Sharma <aditya.sharma15696@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,28 +17,29 @@
  *
  */
 
-#ifndef ABSTRACTRESERVATIONPLUGIN_H
-#define ABSTRACTRESERVATIONPLUGIN_H
+#ifndef SINGLETONFACTORY_H
+#define SINGLETONFACTORY_H
 
-#include "datamap.h"
+#include <typeinfo>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
 
-#include <QtCore/QVariantMap>
-
-class AbstractReservationPluginPrivate;
-
-class AbstractReservationPlugin : public QObject
+class SingletonFactory
 {
-        Q_OBJECT
+public:
+    template <class T> static T* instanceFor()
+    {
+        const QString typeName(typeid(T).name());
 
-    public:
-        explicit AbstractReservationPlugin(QObject* parent = 0,
-                                           const QVariantList& = QVariantList());
-        ~AbstractReservationPlugin();
-        void setDataMap(DataMap* map);
-        virtual void start() = 0;
+        if (!m_totalInstances.contains(typeName)) {
+            //Create a new instance of that type, insert in Map
+            m_totalInstances.insert(typeName, static_cast< QObject* >(new T()));
+        }
 
-    private:
-        AbstractReservationPluginPrivate * const d;
+        return static_cast< T* >(m_totalInstances.value(typeName));
+    }
+private:
+    static QHash<QString, QObject*> m_totalInstances;
 };
 
-#endif //ABSTRACTRESERVATIONPLUGIN_H
+#endif // SINGLETONFACTORY_H

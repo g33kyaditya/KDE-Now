@@ -22,33 +22,22 @@
 class AbstractReservationPluginPrivate
 {
     public:
-        AbstractReservationPluginPrivate() : m_map(QVariantMap()) {}
-        QVariantMap m_map;
-        QString m_plugin_name;
+        AbstractReservationPluginPrivate(): m_dataMap(0) {}
+        DataMap* m_dataMap;
 };
 
-AbstractReservationPlugin::AbstractReservationPlugin(QObject* parent, const QVariantList&):
-                                                    d(new AbstractReservationPluginPrivate)
+AbstractReservationPlugin::AbstractReservationPlugin(QObject* parent, const QVariantList&)
+                          : d(new AbstractReservationPluginPrivate)
 {
 
 }
 
 AbstractReservationPlugin::~AbstractReservationPlugin()
 {
-
+    delete d;
 }
 
-void AbstractReservationPlugin::setDataMap(QVariantMap& map)
+void AbstractReservationPlugin::setDataMap(DataMap* map)
 {
-    d->m_map = map;
-}
-
-void AbstractReservationPlugin::setPluginName(QString& plugin)
-{
-    d->m_plugin_name = plugin;
-}
-
-QString AbstractReservationPlugin::plugin() const
-{
-    return d->m_plugin_name;
+    d->m_dataMap = map;
 }

@@ -32,8 +32,6 @@ class PluginsLoader : public QObject
     public Q_SLOTS:
         void load();
 
-    private:
-        QVariantMap m_map;
 };
 
 #endif //PLUGINSLOADER_H
