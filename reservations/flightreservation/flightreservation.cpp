@@ -73,3 +73,4 @@ void FlightReservation::extract()
 }
 
 #include "flightreservation.moc"
+
