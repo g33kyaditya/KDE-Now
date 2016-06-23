@@ -51,18 +51,18 @@ void PluginsLoader::load()
             qDebug() << "KPluginFactory could not load the plugin " << service->library();
             continue;
         }
-        else {
+        /*else {
             qDebug() << service->library();
-        }
+        }*/
 
         AbstractReservationPlugin* plugin = factory->create<AbstractReservationPlugin>();
         if (plugin) {
-            qDebug() << "Loaded the plugin " << service->name();
+            //qDebug() << "Loaded the plugin " << service->name();
             plugin->setDataMap(SingletonFactory::instanceFor<DataMap>());
             plugin->start();
         }
         else {
-            qDebug() << "Did not load the plugin " << service->name();
+            //qDebug() << "Did not load the plugin " << service->name();
             continue;
         }
     }

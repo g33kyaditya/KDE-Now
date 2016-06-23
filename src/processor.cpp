@@ -24,7 +24,6 @@
 #include "singletonfactory.h"
 
 #include <QtCore/QVariant>
-#include <QtCore/QFile>
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonObject>
 
@@ -70,7 +69,6 @@ bool Processor::isIdentifiedSchema(QList<QVariantMap>& listOfMap)
 
 void Processor::extract()
 {
-    //qDebug() << "Inside extract() processor.cpp";
     KMime::Content *bodyContent = m_messagePtr->mainBodyPart("text/html");
     if (!bodyContent) {
         qDebug() << "Could not find text/html in mainBodyPart";
@@ -82,12 +80,7 @@ void Processor::extract()
         return;
     }
 
-    QFile file("/home/g33kyaditya/GSoC/email.html");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Cannot Open File";
-    }
     QByteArray htmlDoc = bodyContent->decodedContent();
-    htmlDoc = file.readAll();
     //qDebug() << htmlDoc;
     Parser parser;
     QList<QVariantMap> listOfMap;
@@ -99,7 +92,7 @@ void Processor::extract()
     }
 
     if (!isIdentifiedSchema(listOfMap)) {
-        qDebug() << "Not a recognized schema (Flight, Hotel, Event, Food)Reservation";
+        //qDebug() << "Not a recognized schema (Flight, Hotel, Event, Food)Reservation";
         return;
     }
 
@@ -115,24 +108,6 @@ void Processor::extractNeededData()
     map->setMap(m_map);
     PluginsLoader loader;
     loader.load();
-
-    /*QString type = m_map["@type"].toString();
-        if (type == "FlightReservation") {
-            extractFlightData();
-        }
-        else if (type == "EventReservation") {
-            extractEventData();
-        }
-        else if (type == "LodgingReservation") {
-            extractHotelData();
-        }
-        else if (type == "FoodEstablishmentReservation") {
-            extractRestaurantData();
-        }
-        else {
-            qDebug() << "Unidentified Schema";
-            return;
-        }*/
 }
 
 void Processor::extractEventData()

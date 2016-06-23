@@ -70,16 +70,6 @@ void FlightReservation::extract()
     QString arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
     QString arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
     QDateTime arrivalTime = reservationForMap["arrivalTime"].toDateTime();
-
-    qDebug() << reservationNumber;
-    qDebug() << name;
-    qDebug() << flight;
-    qDebug() << departureAirportName;
-    qDebug() << departureAirportCode;
-    qDebug() << departureTime;
-    qDebug() << arrivalAirportName;
-    qDebug() << arrivalAirportCode;
-    qDebug() << arrivalTime;
 }
 
 #include "flightreservation.moc"
