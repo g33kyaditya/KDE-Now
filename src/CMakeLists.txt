@@ -31,14 +31,10 @@ generate_export_header(kdenowcore
     EXPORT_MACRO_NAME KDENOWCORE_EXPORT
 )
 
-set_target_properties(
-    kdenowd PROPERTIES ENABLE_EXPORTS ON
-)
-
 target_include_directories(kdenowcore PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 install(TARGETS kdenowd ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS kdenowcore EXPORT kdenowLibraryTargets
+install(TARGETS kdenowcore EXPORT KDENowCoreTargets
         ${INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)
-
+install(EXPORT KDENowCoreTargets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 install(FILES data/servicetypes/kdenow_plugins.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
