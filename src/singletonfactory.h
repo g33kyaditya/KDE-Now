@@ -20,11 +20,13 @@
 #ifndef SINGLETONFACTORY_H
 #define SINGLETONFACTORY_H
 
+#include "kdenowcore_export.h"
+
 #include <typeinfo>
 #include <QtCore/QObject>
 #include <QtCore/QHash>
 
-class SingletonFactory
+class KDENOWCORE_EXPORT SingletonFactory
 {
 public:
     template <class T> static T* instanceFor()

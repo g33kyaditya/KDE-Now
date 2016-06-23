@@ -213,8 +213,8 @@ void Daemon::onFetchJobFinished(const QString& mailBox, const QMap< qint64, qint
     while (it.hasNext()) {
         it.next();
 
-        emit fetchedEmail(it.value());
         qDebug() << it.value()->subject()->asUnicodeString();
+        emit fetchedEmail(it.value());
     }
 
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");

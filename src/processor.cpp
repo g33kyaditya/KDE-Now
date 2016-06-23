@@ -52,6 +52,7 @@ bool Processor::isIdentifiedSchema(QList<QVariantMap>& listOfMap)
     QVariantMap map;
     for (it = listOfMap.begin(); it != listOfMap.end(); ++it) {
         map = *it;
+        qDebug() << "Map in list = " << map;
         QString type = map["@type"].toString();
         if (!(type == "FlightReservation" || type == "EventReservation" ||
            type == "LodgingReservation" || type == "FoodEstablishmentReservation")) {
@@ -69,6 +70,7 @@ bool Processor::isIdentifiedSchema(QList<QVariantMap>& listOfMap)
 
 void Processor::extract()
 {
+    //qDebug() << "Inside extract() processor.cpp";
     KMime::Content *bodyContent = m_messagePtr->mainBodyPart("text/html");
     if (!bodyContent) {
         qDebug() << "Could not find text/html in mainBodyPart";
@@ -80,17 +82,29 @@ void Processor::extract()
         return;
     }
 
+    QFile file("/home/g33kyaditya/GSoC/email.html");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Cannot Open File";
+    }
     QByteArray htmlDoc = bodyContent->decodedContent();
+    htmlDoc = file.readAll();
     //qDebug() << htmlDoc;
     Parser parser;
     QList<QVariantMap> listOfMap;
     listOfMap = parser.parse(htmlDoc);
+    //qDebug() << "\n\nlistOfMap = " << listOfMap;
+    if (listOfMap.isEmpty()) {
+        qDebug() << "listOfMap is empty";
+        return;
+    }
+
     if (!isIdentifiedSchema(listOfMap)) {
         qDebug() << "Not a recognized schema (Flight, Hotel, Event, Food)Reservation";
         return;
     }
 
     m_map = listOfMap.at(0);
+    //qDebug() << m_map;
     //Extracting all needed data from QVariantMap
     extractNeededData();
 }
@@ -161,6 +175,7 @@ void Processor::extractRestaurantData()
 
     QDateTime startTime = m_map["startTime"].toDateTime();
     int partySize = m_map["partySize"].toInt();
+    Q_UNUSED(partySize)
 
     QVariantMap addressMap = reservationForMap["address"].toMap();
     QString restaurantName = reservationForMap["name"].toString();

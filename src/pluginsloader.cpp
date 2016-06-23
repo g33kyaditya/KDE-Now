@@ -23,10 +23,10 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QCoreApplication>
-#include <KService/KPluginInfo>
-#include <KService/KPluginTrader>
+#include <KService/KServiceTypeTrader>
 #include <KCoreAddons/KPluginLoader>
 #include <KCoreAddons/KPluginFactory>
+#include <KService/KPluginInfo>
 
 PluginsLoader::PluginsLoader(QObject* parent): QObject(parent)
 {
@@ -35,28 +35,35 @@ PluginsLoader::PluginsLoader(QObject* parent): QObject(parent)
 
 void PluginsLoader::load()
 {
-    KPluginInfo::List pluginInfo = KPluginTrader::self()->query("plasma/kdenow/reservations");
-    if (pluginInfo.isEmpty()) {
-        qWarning() << "Extractor Plugins Not Found";
+    KService::List offers = KServiceTypeTrader::self()->query("KDENow/Plugin");
+    if (offers.isEmpty()) {
+        qDebug() << "None plugins found";
+        return;
     }
 
-    foreach(const KPluginInfo& info, pluginInfo) {
-        KPluginLoader loader(info.libraryPath());
-        KPluginFactory* factory = loader.factory();
+    KService::List::const_iterator it;
+    for (it = offers.begin(); it != offers.end(); ++it) {
+        QString error;
+        KService::Ptr service = *it;
+        KPluginFactory* factory = KPluginLoader(service->library()).factory();
 
-        const QVariantList args = QVariantList() << loader.metaData().toVariantMap();
-        if (factory) {
-            AbstractReservationPlugin* extractorPlugin =
-            factory->create<AbstractReservationPlugin>(0, args);
-            if (extractorPlugin) {
-                extractorPlugin->setDataMap(SingletonFactory::instanceFor<DataMap>());
-                extractorPlugin->start();
-                connect(QCoreApplication::instance(), &QObject::destroyed, extractorPlugin, &QCoreApplication::quit);
-                qDebug() << "Created instance for extractor plugin" << info.name();
-            }
-            else {
-                qDebug() << "Could not create instance for the extractor plugin " << info.name();
-            }
+        if (!factory) {
+            qDebug() << "KPluginFactory could not load the plugin " << service->library();
+            continue;
+        }
+        else {
+            qDebug() << service->library();
+        }
+
+        AbstractReservationPlugin* plugin = factory->create<AbstractReservationPlugin>();
+        if (plugin) {
+            qDebug() << "Loaded the plugin " << service->name();
+            plugin->setDataMap(SingletonFactory::instanceFor<DataMap>());
+            plugin->start();
+        }
+        else {
+            qDebug() << "Did not load the plugin " << service->name();
+            continue;
         }
     }
 }

@@ -20,9 +20,11 @@
 #ifndef DATAMAP_H
 #define DATAMAP_H
 
+#include "kdenowcore_export.h"
+
 #include <QtCore/QVariantMap>
 
-class DataMap : public QObject
+class KDENOWCORE_EXPORT DataMap : public QObject
 {
         Q_OBJECT
 

@@ -45,12 +45,11 @@ QList<QVariantMap> Parser::parse(QByteArray& htmlDoc)
     QXmlStreamReader xmlReader(htmlDoc);
     while (xmlReader.tokenType() != QXmlStreamReader::EndDocument) {
             if (xmlReader.tokenType() == QXmlStreamReader::StartElement) {
-                //qDebug() << xml.name().toString();
+                //qDebug() << xmlReader.name().toString();
                 if (xmlReader.name().toString() == "script") {
-                    qDebug() << xmlReader.readElementText(
-                        QXmlStreamReader::IncludeChildElements);
                     QString res = xmlReader.readElementText(
                         QXmlStreamReader::IncludeChildElements);
+                    qDebug() << res;
                     if (isValidJson(res)) {
                         QJsonDocument jsonDoc = QJsonDocument::fromJson(res.toUtf8());
                         if (jsonDoc.isArray()) {

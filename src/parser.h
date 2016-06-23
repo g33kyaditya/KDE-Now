@@ -20,6 +20,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "kdenowcore_export.h"
+
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QJsonArray>
@@ -27,7 +29,7 @@
 #include <QtCore/QVariantMap>
 #include <QtCore/QJsonDocument>
 
-class Parser : public QObject
+class KDENOWCORE_EXPORT Parser : public QObject
 {
         Q_OBJECT
 

@@ -20,14 +20,26 @@
 #include "flightreservation.h"
 #include "src/singletonfactory.h"
 #include "src/datamap.h"
-#include <KCoreAddons/KPluginFactory>
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <KCoreAddons/KPluginFactory>
 
-void FlightReservation::setPluginName(const QString& pluginName)
+K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
+                            "flightreservation.json",
+                            registerPlugin< FlightReservation >();
+                          )
+
+
+FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
+                                    : AbstractReservationPlugin(parent, args)
 {
-    m_pluginName = pluginName;
+
+}
+
+FlightReservation::~FlightReservation()
+{
+
 }
 
 QString FlightReservation::plugin() const
@@ -38,15 +50,7 @@ QString FlightReservation::plugin() const
 void FlightReservation::start()
 {
     m_map = SingletonFactory::instanceFor<DataMap>()->map();
-    QString type = m_map["@type"].toString();
-    if (type == "FlightReservation") {
-        setPluginName("FlightReservation");
-        extract();
-    }
-    else {
-        qDebug() << "Not a Flight Reservation";
-        return;
-    }
+    extract();
 }
 
 void FlightReservation::extract()
@@ -66,6 +70,16 @@ void FlightReservation::extract()
     QString arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
     QString arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
     QDateTime arrivalTime = reservationForMap["arrivalTime"].toDateTime();
+
+    qDebug() << reservationNumber;
+    qDebug() << name;
+    qDebug() << flight;
+    qDebug() << departureAirportName;
+    qDebug() << departureAirportCode;
+    qDebug() << departureTime;
+    qDebug() << arrivalAirportName;
+    qDebug() << arrivalAirportCode;
+    qDebug() << arrivalTime;
 }
 
 #include "flightreservation.moc"

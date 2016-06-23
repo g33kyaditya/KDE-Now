@@ -26,7 +26,8 @@ class FlightReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
     public:
-        void setPluginName(const QString& pluginName);
+        explicit FlightReservation(QObject* parent = 0, const QVariantList& args = QVariantList());
+        ~FlightReservation();
         void start();
         QString plugin() const;
         void extract();

@@ -21,19 +21,20 @@
 #define ABSTRACTRESERVATIONPLUGIN_H
 
 #include "datamap.h"
+#include "kdenowcore_export.h"
 
 #include <QtCore/QVariantMap>
 
-class AbstractReservationPluginPrivate;
+struct AbstractReservationPluginPrivate;
 
-class AbstractReservationPlugin : public QObject
+class KDENOWCORE_EXPORT AbstractReservationPlugin : public QObject
 {
         Q_OBJECT
 
     public:
         explicit AbstractReservationPlugin(QObject* parent = 0,
-                                           const QVariantList& = QVariantList());
-        ~AbstractReservationPlugin();
+                                           const QVariantList& args = QVariantList());
+        virtual ~AbstractReservationPlugin();
         void setDataMap(DataMap* map);
         virtual void start() = 0;
 

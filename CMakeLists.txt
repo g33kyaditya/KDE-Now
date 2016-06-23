@@ -18,6 +18,7 @@ include(KDECompilerSettings)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 
+
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
@@ -28,9 +29,5 @@ add_subdirectory(src)
 add_subdirectory(reservations)
 
 # Space for other includes like src, libs etc
-
-
-
-
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

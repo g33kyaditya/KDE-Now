@@ -20,6 +20,8 @@
 #ifndef DAEMON_H
 #define DAEMON_H
 
+#include "kdenowcore_export.h"
+
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 #include <QtCore/QString>
@@ -31,7 +33,7 @@
 #include <KIMAP/IdleJob>
 
 
-class Daemon : public QObject
+class KDENOWCORE_EXPORT Daemon : public QObject
 {
         Q_OBJECT
 

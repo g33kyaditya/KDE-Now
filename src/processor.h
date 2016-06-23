@@ -19,12 +19,14 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
+#include "kdenowcore_export.h"
+
 #include <QtCore/QList>
 #include <QtCore/QVariantMap>
 
 #include <KIMAP/FetchJob>   //For KIMAP::MessagePtr
 
-class Processor : public QObject
+class KDENOWCORE_EXPORT Processor : public QObject
 {
         Q_OBJECT
 

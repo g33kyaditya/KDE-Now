@@ -1,18 +1,11 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
-Name=FlightReservationExtractor
-Name[ca]=FlightReservationExtractor
-Name[nl]=FlightReservationExtractor
-Name[pt]=FlightReservationExtractor
-Name[pt_BR]=FlightReservationExtractor
-Name[x-test]=xxFlightReservationExtractorxx
-
-X-KDE-ServiceTypes=Plasma/KDENow/Reservations
-
-X-KDE-PluginInfo-Name=flightreservation
+X-KDE-Library=kdenow_flightreservation
 X-KDE-PluginInfo-Author=Aditya Dev Sharma
 X-KDE-PluginInfo-Email=aditya.sharma15696@gmail.com
-X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Name=FlightReservation
+X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=GPL
-X-KDE-PluginInfo-EnabledByDefault=true
-X-KDE-Library=kdenow_flightreservation
+ServiceTypes=KDENow/Plugin
+Name=Flight Extractor

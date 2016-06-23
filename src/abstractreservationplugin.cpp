@@ -19,15 +19,15 @@
 
 #include "abstractreservationplugin.h"
 
-class AbstractReservationPluginPrivate
+struct AbstractReservationPluginPrivate
 {
-    public:
-        AbstractReservationPluginPrivate(): m_dataMap(0) {}
-        DataMap* m_dataMap;
+    DataMap* m_dataMap;
+    QString m_pluginName;
 };
 
 AbstractReservationPlugin::AbstractReservationPlugin(QObject* parent, const QVariantList&)
-                          : d(new AbstractReservationPluginPrivate)
+                          : QObject(parent)
+                          , d(new AbstractReservationPluginPrivate)
 {
 
 }
