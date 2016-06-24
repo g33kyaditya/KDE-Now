@@ -2,7 +2,7 @@ set(hotelreservation_SRCS
     hotelreservation.cpp
 )
 
-add_library(kdenow_hotelreservation MODULE ${flightreservation_SRCS})
+add_library(kdenow_hotelreservation MODULE ${hotelreservation_SRCS})
 set_target_properties(kdenow_hotelreservation PROPERTIES PREFIX "")
 
 target_link_libraries(kdenow_hotelreservation
