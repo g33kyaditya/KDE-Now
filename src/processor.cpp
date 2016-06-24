@@ -109,20 +109,3 @@ void Processor::extractNeededData()
     PluginsLoader loader;
     loader.load();
 }
-
-void Processor::extractRestaurantData()
-{
-    QString reservationNumber = m_map["reservationNumber"].toString();
-    QString name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
-
-    QDateTime startTime = m_map["startTime"].toDateTime();
-    int partySize = m_map["partySize"].toInt();
-    Q_UNUSED(partySize)
-
-    QVariantMap addressMap = reservationForMap["address"].toMap();
-    QString restaurantName = reservationForMap["name"].toString();
-    QString streetAddress = addressMap["streetAddress"].toString();
-    QString addressLocality = addressMap["addressLocality"].toString();
-    QString addressRegion = addressMap["addressRegion"].toString();
-}
