@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+X-KDE-Library=kdenow_hotelreservation
+X-KDE-PluginInfo-Author=Aditya Dev Sharma
+X-KDE-PluginInfo-Email=aditya.sharma15696@gmail.com
+X-KDE-PluginInfo-Name=HotelReservation
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=GPL
+ServiceTypes=KDENow/Plugin
+Name=Hotel Extractor

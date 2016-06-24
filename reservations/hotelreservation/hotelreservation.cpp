@@ -17,7 +17,7 @@
  *
  */
 
-#include "flightreservation.h"
+#include "hotelreservation.h"
 #include "src/singletonfactory.h"
 #include "src/datamap.h"
 
@@ -26,51 +26,49 @@
 #include <KCoreAddons/KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
-                            "flightreservation.json",
-                            registerPlugin< FlightReservation >();
+                            "hotelreservation.json",
+                            registerPlugin< HotelReservation >();
                           )
 
 
-FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
+HotelReservation::HotelReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
-    m_pluginName = "Flight Data Extractor";
+    m_pluginName = "Hotel Data Extractor";
 }
 
-FlightReservation::~FlightReservation()
+HotelReservation::~HotelReservation()
 {
 
 }
 
-QString FlightReservation::plugin() const
+QString HotelReservation::plugin() const
 {
     return m_pluginName;
 }
 
-void FlightReservation::start()
+void HotelReservation::start()
 {
     m_map = SingletonFactory::instanceFor<DataMap>()->map();
     extract();
 }
 
-void FlightReservation::extract()
+void HotelReservation::extract()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();
     QString name = m_map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    QString flightNameCode = reservationForMap["airline"].toMap().value("iataCode").toString();
-    QString flightNumber = reservationForMap["flightNumber"].toString();
-    QString flight = flightNameCode + flightNumber;
+    QDateTime checkinDate = m_map["checkinDate"].toDateTime();
+    QDateTime checkoutDate = m_map["checkoutDate"].toDateTime();
 
-    QString departureAirportName = reservationForMap["departureAirport"].toMap().value("name").toString();
-    QString departureAirportCode = reservationForMap["departureAirport"].toMap().value("iataCode").toString();
-    QDateTime departureTime = reservationForMap["departureTime"].toDateTime();
-
-    QString arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
-    QString arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
-    QDateTime arrivalTime = reservationForMap["arrivalTime"].toDateTime();
+    QString telephone = reservationForMap["telephone"].toString();
+    QVariantMap addressMap = reservationForMap["address"].toMap();
+    QString hotelName = reservationForMap["name"].toString();
+    QString streetAddress = addressMap["streetAddress"].toString();
+    QString addressLocality = addressMap["addressLocality"].toString();
+    QString addressRegion = addressMap["addressRegion"].toString();
 }
 
-#include "flightreservation.moc"
+#include "hotelreservation.moc"
 

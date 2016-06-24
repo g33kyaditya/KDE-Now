@@ -125,23 +125,6 @@ void Processor::extractEventData()
     QString addressLocality = addressMap["addressLocality"].toString();
 }
 
-void Processor::extractHotelData()
-{
-    QString reservationNumber = m_map["reservationNumber"].toString();
-    QString name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
-
-    QDateTime checkinDate = m_map["checkinDate"].toDateTime();
-    QDateTime checkoutDate = m_map["checkoutDate"].toDateTime();
-
-    QString telephone = reservationForMap["telephone"].toString();
-    QVariantMap addressMap = reservationForMap["address"].toMap();
-    QString hotelName = reservationForMap["name"].toString();
-    QString streetAddress = addressMap["streetAddress"].toString();
-    QString addressLocality = addressMap["addressLocality"].toString();
-    QString addressRegion = addressMap["addressRegion"].toString();
-}
-
 void Processor::extractRestaurantData()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();
