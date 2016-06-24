@@ -110,21 +110,6 @@ void Processor::extractNeededData()
     loader.load();
 }
 
-void Processor::extractEventData()
-{
-    QString reservationNumber = m_map["reservationNumber"].toString();
-    QString name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
-
-    QString eventName = reservationForMap["name"].toString();
-    QDateTime startDate = reservationForMap["startDate"].toDateTime();
-
-    QVariantMap addressMap = reservationForMap["location"].toMap().value("address").toMap();
-    QString location = reservationForMap["location"].toMap().value("name").toString();
-    QString streetAddress = addressMap["streetAddress"].toString();
-    QString addressLocality = addressMap["addressLocality"].toString();
-}
-
 void Processor::extractRestaurantData()
 {
     QString reservationNumber = m_map["reservationNumber"].toString();

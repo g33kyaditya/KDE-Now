@@ -1,4 +1,4 @@
 add_subdirectory(flightreservation)
 add_subdirectory(hotelreservation)
-#add_subdirectory(eventreservation)
+add_subdirectory(eventreservation)
 #add_subdirectory(restaurantreservation)
