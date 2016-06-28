@@ -39,8 +39,9 @@ K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
 FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
-    m_pluginName = "Flight Data Extractor";
+    m_pluginName = "flightDataExtractor";
     connect(this, &FlightReservation::extractedData, this, &FlightReservation::cacheData);
+    m_db = new QSqlDatabase;
 }
 
 FlightReservation::~FlightReservation()
@@ -82,18 +83,44 @@ void FlightReservation::extract()
 
 void FlightReservation::cacheData()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "flight");
-    db.setDatabaseName("kdenowdb");
 
-    if (!db.open()) {
+    if (m_db == nullptr) {
+        initDatabase();
+    }
+
+    QSqlQuery updateQuery(*m_db);
+    QString queryString = "insert into Flight values (:id, :reservationNumber, :name, :flight, :departureAirportName, :departureAirportCode, :departureTime, :arrivalAirportName, :arrivalAirportCode, :arrivalTime)";
+    updateQuery.prepare(queryString);
+    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
+    updateQuery.bindValue(":name", m_name);
+    updateQuery.bindValue(":flight", m_flight);
+    updateQuery.bindValue(":departureAirportName", m_departureAirportName);
+    updateQuery.bindValue(":departureAirportCode", m_departureAirportCode);
+    updateQuery.bindValue(":departureTime", m_departureTime.toString());
+    updateQuery.bindValue(":arrivalAirportName", m_arrivalAirportName);
+    updateQuery.bindValue(":arrivalAirportCode", m_arrivalAirportCode);
+    updateQuery.bindValue(":arrivalTime", m_arrivalTime.toString());
+
+    if (!updateQuery.exec()) {
+        qDebug() << updateQuery.lastError();
+        return;
+    }
+}
+
+void FlightReservation::initDatabase()
+{
+    m_db->addDatabase("QSQLITE", m_pluginName);
+    m_db->setDatabaseName("kdenowdb");
+
+    if (!m_db->open()) {
         qWarning() << "Unable to open database";
-        qWarning() << db.lastError();
+        qWarning() << m_db->lastError();
     }
     else {
         qDebug() << "Database opened successfully";
     }
 
-    QSqlQuery addQuery(db);
+    QSqlQuery addQuery(*m_db);
     QString queryString = "create table if not exists Flight(id integer primary key autoincrement, reservationNumber varchar, name varchar, flight varchar, departureAirportName varchar, departureAirportCode varchar, departureTime varchar, arrivalAirportName varchar, arrivalAirportCode varchar, arrivalTime varchar)";
 
     if (!addQuery.exec(queryString)) {
@@ -103,19 +130,7 @@ void FlightReservation::cacheData()
     else {
         qDebug() << "Opened/Created successfully";
     }
-
-    QSqlQuery updateQuery(db);
-    queryString = "insert into Flight values (:id, :reservationNumber, :name, :flight, :departureAirportName, :departureAirportCode, :departureTime, :arrivalAirportName, :arrivalAirportCode, :arrivalTime)";
-    updateQuery.prepare(queryString);
-    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
-    updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":flight", m_flight);
-    updateQuery.bindValue(":departureAirportName", m_departureAirportName);
-    updateQuery.bindValue(":departureAirportCode", m_departureAirportCode);
-    updateQuery.bindValue(":departureTime", m_departureTime);
-    updateQuery.bindValue(":arrivalAirportName", m_arrivalAirportName);
-    updateQuery.bindValue(":arrivalAirportCode", m_arrivalAirportCode);
-    updateQuery.bindValue(":arrivalTime", m_arrivalTime);
 }
+
 
 #include "flightreservation.moc"
