@@ -22,6 +22,8 @@
 
 #include "src/abstractreservationplugin.h"
 
+#include <QtCore/QDateTime>
+
 class FlightReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
@@ -32,9 +34,25 @@ class FlightReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract();
 
+    Q_SIGNALS:
+        void extractedData();
+
+    public Q_SLOTS:
+        void cacheData();
+
     private:
         QString m_pluginName;
         QVariantMap m_map;
+
+        QString m_reservationNumber;
+        QString m_name;
+        QString m_flight;
+        QString m_departureAirportName;
+        QString m_departureAirportCode;
+        QDateTime m_departureTime;
+        QString m_arrivalAirportName;
+        QString m_arrivalAirportCode;
+        QDateTime m_arrivalTime;
 };
 
 #endif //FLIGHTRESERVATION_H

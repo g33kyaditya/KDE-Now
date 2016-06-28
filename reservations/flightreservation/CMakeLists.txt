@@ -7,6 +7,7 @@ set_target_properties(kdenow_flightreservation PROPERTIES PREFIX "")
 
 target_link_libraries(kdenow_flightreservation
     kdenowcore
+    Qt5::Sql
 )
 
 kcoreaddons_desktop_to_json(kdenow_flightreservation flightreservation.desktop)
