@@ -43,7 +43,7 @@ QList<QVariantMap> Parser::parse(QByteArray& htmlDoc)
     QList<QVariantMap> list;
     QVariantMap map;
     QXmlStreamReader xmlReader(htmlDoc);
-    while (xmlReader.tokenType() != QXmlStreamReader::EndDocument) {
+    while (!xmlReader.atEnd()) {
             if (xmlReader.tokenType() == QXmlStreamReader::StartElement) {
                 //qDebug() << xmlReader.name().toString();
                 if (xmlReader.name().toString() == "script") {
