@@ -23,7 +23,6 @@
 #include "src/abstractreservationplugin.h"
 
 #include <QtCore/QDateTime>
-#include <QtSql/QSqlDatabase>
 
 class FlightReservation : public AbstractReservationPlugin
 {
@@ -34,7 +33,6 @@ class FlightReservation : public AbstractReservationPlugin
         void start();
         QString plugin() const;
         void extract();
-        void initDatabase();
 
     Q_SIGNALS:
         void extractedData();
@@ -45,8 +43,6 @@ class FlightReservation : public AbstractReservationPlugin
     private:
         QString m_pluginName;
         QVariantMap m_map;
-
-        QSqlDatabase* m_db;
 
         QString m_reservationNumber;
         QString m_name;
