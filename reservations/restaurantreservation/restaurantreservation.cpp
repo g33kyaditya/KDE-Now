@@ -23,6 +23,8 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
 #include <KCoreAddons/KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
@@ -34,7 +36,8 @@ K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
 RestaurantReservation::RestaurantReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
-    m_pluginName = "Restaurant Data Extractor";
+    m_pluginName = "restaurantDataExtractor";
+    connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::cacheData);
 }
 
 RestaurantReservation::~RestaurantReservation()
@@ -55,19 +58,72 @@ void RestaurantReservation::start()
 
 void RestaurantReservation::extract()
 {
-    QString reservationNumber = m_map["reservationNumber"].toString();
-    QString name = m_map["underName"].toMap().value("name").toString();
+    m_reservationNumber = m_map["reservationNumber"].toString();
+    m_name = m_map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    QDateTime startTime = m_map["startTime"].toDateTime();
-    int partySize = m_map["partySize"].toInt();
+    m_startTime = m_map["startTime"].toDateTime();
+    m_partySize = m_map["partySize"].toInt();
 
     QVariantMap addressMap = reservationForMap["address"].toMap();
-    QString restaurantName = reservationForMap["name"].toString();
-    QString streetAddress = addressMap["streetAddress"].toString();
-    QString addressLocality = addressMap["addressLocality"].toString();
-    QString addressRegion = addressMap["addressRegion"].toString();
+    m_restaurantName = reservationForMap["name"].toString();
+    m_streetAddress = addressMap["streetAddress"].toString();
+    m_addressLocality = addressMap["addressLocality"].toString();
+    m_addressRegion = addressMap["addressRegion"].toString();
+
+    emit extractedData();
+}
+
+void RestaurantReservation::cacheData()
+{
+    if (m_db.connectionName().isEmpty()) {
+        initDatabase();
+    }
+
+    QSqlQuery updateQuery(m_db);
+    QString queryString = "insert into Restaurant values (:id, :reservationNumber, :name, :startTime, :partySize, :restaurantName, :streetAddress, :addressLocality, :addressRegion)";
+    updateQuery.prepare(queryString);
+    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
+    updateQuery.bindValue(":name", m_name);
+    updateQuery.bindValue(":startTime", m_startTime.toString());
+    updateQuery.bindValue(":partySize", m_partySize);
+    updateQuery.bindValue(":restaurantName", m_restaurantName);
+    updateQuery.bindValue(":streetAddress", m_streetAddress);
+    updateQuery.bindValue(":addressLocality", m_addressLocality);
+    updateQuery.bindValue(":addressRegion", m_addressRegion);
+
+    if (!updateQuery.exec(queryString)) {
+        qWarning() << "Unable to add entries into Database for Restaurant Table";
+        qWarning() << updateQuery.lastError();
+    }
+    else {
+        qDebug() << "Updated Table Successfully";
+    }
+}
+
+void RestaurantReservation::initDatabase()
+{
+    m_db = QSqlDatabase::addDatabase("QSQLITE", m_pluginName);
+    m_db.setDatabaseName("kdenowdb");
+
+    if (!m_db.open()) {
+        qWarning() << "Unable to open database";
+        qWarning() << m_db.lastError();
+    }
+    else {
+        qDebug() << "Database opened successfully";
+    }
+
+    QSqlQuery addQuery(m_db);
+    QString queryString = "create table if not exists Restaurant(id integer primary key autoincrement, reservationNumber varchar, name varchar, startTime varchar, partySize integer, restaurantName varchar, streetAddress varchar, addressLocality varchar, addressRegion varchar)";
+
+    if (!addQuery.exec(queryString)) {
+        qWarning() << "Unable to create table";
+        qWarning() << addQuery.lastError();
+    }
+    else {
+        qDebug() << "Opened/Created successfully";
+    }
 }
 
 #include "restaurantreservation.moc"
-
