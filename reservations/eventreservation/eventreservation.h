@@ -22,6 +22,9 @@
 
 #include "src/abstractreservationplugin.h"
 
+#include <QtCore/QDateTime>
+#include <QtSql/QSqlDatabase>
+
 class EventReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
@@ -31,10 +34,27 @@ class EventReservation : public AbstractReservationPlugin
         void start();
         QString plugin() const;
         void extract();
+        void initDatabase();
+
+    Q_SIGNALS:
+        void extractedData();
+
+    public Q_SLOTS:
+        void cacheData();
 
     private:
         QString m_pluginName;
         QVariantMap m_map;
+
+        QSqlDatabase m_db;
+
+        QString m_reservationNumber;
+        QString m_name;
+        QString m_eventName;
+        QDateTime m_startDate;
+        QString m_location;
+        QString m_streetAddress;
+        QString m_addressLocality;
 };
 
 #endif //EVENTRESERVATION_H

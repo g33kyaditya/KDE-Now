@@ -7,6 +7,7 @@ set_target_properties(kdenow_restaurantreservation PROPERTIES PREFIX "")
 
 target_link_libraries(kdenow_restaurantreservation
     kdenowcore
+    Qt5::Sql
 )
 
 kcoreaddons_desktop_to_json(kdenow_restaurantreservation restaurantreservation.desktop)

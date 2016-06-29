@@ -22,6 +22,9 @@
 
 #include "src/abstractreservationplugin.h"
 
+#include <QtCore/QDateTime>
+#include <QtSql/QSqlDatabase>
+
 class RestaurantReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
@@ -32,10 +35,28 @@ class RestaurantReservation : public AbstractReservationPlugin
         void start();
         QString plugin() const;
         void extract();
+        void initDatabase();
+
+    Q_SIGNALS:
+        void extractedData();
+
+    public Q_SLOTS:
+        void cacheData();
 
     private:
         QString m_pluginName;
         QVariantMap m_map;
+
+        QSqlDatabase m_db;
+
+        QString m_reservationNumber;
+        QString m_name;
+        QDateTime m_startTime;
+        int m_partySize;
+        QString m_restaurantName;
+        QString m_streetAddress;
+        QString m_addressLocality;
+        QString m_addressRegion;
 };
 
 #endif //RESTAURANTRESERVATION_H
