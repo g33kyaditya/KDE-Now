@@ -86,8 +86,8 @@ void HotelReservation::cacheData()
     updateQuery.prepare(queryString);
     updateQuery.bindValue(":reservationNumber", m_reservationNumber);
     updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":checkinDate", m_checkinDate);
-    updateQuery.bindValue(":checkoutDate", m_checkoutDate);
+    updateQuery.bindValue(":checkinDate", m_checkinDate.toString());
+    updateQuery.bindValue(":checkoutDate", m_checkoutDate.toString());
     updateQuery.bindValue(":telephone", m_telephone);
     updateQuery.bindValue(":hotelName", m_hotelName);
     updateQuery.bindValue(":streetAddress", m_streetAddress);
