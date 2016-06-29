@@ -23,7 +23,6 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
-#include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <KCoreAddons/KPluginFactory>
@@ -100,7 +99,7 @@ void FlightReservation::cacheData()
     updateQuery.bindValue(":arrivalTime", m_arrivalTime.toString());
 
     if (!updateQuery.exec(queryString)) {
-        qWarning() << "Unable to add entries into Database";
+        qWarning() << "Unable to add entries into Database for Flight Table";
         qWarning() << updateQuery.lastError();
     }
     else {
