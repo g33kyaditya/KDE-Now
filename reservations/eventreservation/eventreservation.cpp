@@ -23,6 +23,8 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
 #include <KCoreAddons/KPluginFactory>
 
 K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
@@ -34,7 +36,8 @@ K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
 EventReservation::EventReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
-    m_pluginName = "Event Data Extractor";
+    m_pluginName = "eventDataExtractor";
+    connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
 }
 
 EventReservation::~EventReservation()
@@ -55,18 +58,70 @@ void EventReservation::start()
 
 void EventReservation::extract()
 {
-    QString reservationNumber = m_map["reservationNumber"].toString();
-    QString name = m_map["underName"].toMap().value("name").toString();
+    m_reservationNumber = m_map["reservationNumber"].toString();
+    m_name = m_map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    QString eventName = reservationForMap["name"].toString();
-    QDateTime startDate = reservationForMap["startDate"].toDateTime();
+    m_eventName = reservationForMap["name"].toString();
+    m_startDate = reservationForMap["startDate"].toDateTime();
 
     QVariantMap addressMap = reservationForMap["location"].toMap().value("address").toMap();
-    QString location = reservationForMap["location"].toMap().value("name").toString();
-    QString streetAddress = addressMap["streetAddress"].toString();
-    QString addressLocality = addressMap["addressLocality"].toString();
+    m_location = reservationForMap["location"].toMap().value("name").toString();
+    m_streetAddress = addressMap["streetAddress"].toString();
+    m_addressLocality = addressMap["addressLocality"].toString();
+
+    emit extractedData();
+}
+
+void EventReservation::cacheData()
+{
+    if (m_db.connectionName().isEmpty()) {
+        initDatabase();
+    }
+
+    QSqlQuery updateQuery(m_db);
+    QString queryString = "insert into Event values (:id, :reservationNumber, :name, :eventName, :startDate, :location, :streetAddress, :addressLocality)";
+    updateQuery.prepare(queryString);
+    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
+    updateQuery.bindValue(":name", m_name);
+    updateQuery.bindValue(":eventName", m_eventName);
+    updateQuery.bindValue(":startDate", m_startDate.toString());
+    updateQuery.bindValue(":location", m_location);
+    updateQuery.bindValue(":streetAddress", m_streetAddress);
+    updateQuery.bindValue(":addressLocality", m_addressLocality);
+
+    if (!updateQuery.exec(queryString)) {
+        qWarning() << "Unable to add entries into Database for Event Table";
+        qWarning() << updateQuery.lastError();
+    }
+    else {
+        qDebug() << "Updated Table Successfully";
+    }
+}
+
+void EventReservation::initDatabase()
+{
+    m_db = QSqlDatabase::addDatabase("QSQLITE", m_pluginName);
+    m_db.setDatabaseName("kdenowdb");
+
+    if (!m_db.open()) {
+        qWarning() << "Unable to open database";
+        qWarning() << m_db.lastError();
+    }
+    else {
+        qDebug() << "Database opened successfully";
+    }
+
+    QSqlQuery addQuery(m_db);
+    QString queryString = "create table if not exists Event(id integer primary key autoincrement, reservationNumber varchar, name varchar, eventName varchar, startDate varchar, location varchar, streetAddress varchar, addressLocality varchar)";
+
+    if (!addQuery.exec(queryString)) {
+        qWarning() << "Unable to create table";
+        qWarning() << addQuery.lastError();
+    }
+    else {
+        qDebug() << "Opened/Created successfully";
+    }
 }
 
 #include "eventreservation.moc"
-
