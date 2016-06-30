@@ -18,6 +18,7 @@
  */
 
 #include "flightreservation.h"
+#include "flightinterface.h"
 #include "src/singletonfactory.h"
 #include "src/datamap.h"
 
@@ -40,6 +41,7 @@ FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
 {
     m_pluginName = "flightDataExtractor";
     connect(this, &FlightReservation::extractedData, this, &FlightReservation::cacheData);
+    connect(this, &FlightReservation::addedToDatabase, this, &FlightReservation::setDBusData);
 }
 
 FlightReservation::~FlightReservation()
@@ -98,12 +100,13 @@ void FlightReservation::cacheData()
     updateQuery.bindValue(":arrivalAirportCode", m_arrivalAirportCode);
     updateQuery.bindValue(":arrivalTime", m_arrivalTime.toString());
 
-    if (!updateQuery.exec(queryString)) {
+    if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Flight Table";
         qWarning() << updateQuery.lastError();
     }
     else {
         qDebug() << "Updated Table Successfully";
+        emit addedToDatabase();
     }
 }
 
@@ -130,6 +133,22 @@ void FlightReservation::initDatabase()
     else {
         qDebug() << "Opened/Created successfully";
     }
+}
+
+void FlightReservation::setDBusData()
+{
+    m_dbusMap.insert("reservationNumber", m_reservationNumber);
+    m_dbusMap.insert("name", m_name);
+    m_dbusMap.insert("flight", m_flight);
+    m_dbusMap.insert("departureAirportName", m_departureAirportName);
+    m_dbusMap.insert("departureAirportCode", m_departureAirportCode);
+    m_dbusMap.insert("departureTime", m_departureTime.toString());
+    m_dbusMap.insert("arrivalAirportName", m_arrivalAirportName);
+    m_dbusMap.insert("arrivalAirportCode", m_arrivalAirportCode);
+    m_dbusMap.insert("arrivalTime", m_arrivalTime.toString());
+
+    FlightInterface iface;
+    iface.setMap(m_dbusMap);
 }
 
 

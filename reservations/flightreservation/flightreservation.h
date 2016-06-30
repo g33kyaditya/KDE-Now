@@ -23,6 +23,7 @@
 #include "src/abstractreservationplugin.h"
 
 #include <QtCore/QDateTime>
+#include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
 class FlightReservation : public AbstractReservationPlugin
@@ -38,9 +39,11 @@ class FlightReservation : public AbstractReservationPlugin
 
     Q_SIGNALS:
         void extractedData();
+        void addedToDatabase();
 
     public Q_SLOTS:
         void cacheData();
+        void setDBusData();
 
     private:
         QString m_pluginName;
@@ -57,6 +60,8 @@ class FlightReservation : public AbstractReservationPlugin
         QString m_arrivalAirportName;
         QString m_arrivalAirportCode;
         QDateTime m_arrivalTime;
+
+        QVariantMap m_dbusMap;
 };
 
 #endif //FLIGHTRESERVATION_H
