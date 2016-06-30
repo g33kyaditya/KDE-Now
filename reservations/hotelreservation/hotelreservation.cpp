@@ -94,7 +94,7 @@ void HotelReservation::cacheData()
     updateQuery.bindValue(":addressLocality", m_addressLocality);
     updateQuery.bindValue(":addressRegion", m_addressRegion);
 
-    if (!updateQuery.exec(queryString)) {
+    if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Hotel Table";
         qWarning() << updateQuery.lastError();
     }
