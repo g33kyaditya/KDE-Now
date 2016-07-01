@@ -90,7 +90,7 @@ void EventReservation::cacheData()
     updateQuery.bindValue(":streetAddress", m_streetAddress);
     updateQuery.bindValue(":addressLocality", m_addressLocality);
 
-    if (!updateQuery.exec(queryString)) {
+    if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Event Table";
         qWarning() << updateQuery.lastError();
     }
