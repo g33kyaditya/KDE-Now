@@ -20,6 +20,7 @@
 #include "eventreservation.h"
 #include "src/singletonfactory.h"
 #include "src/datamap.h"
+#include "eventadaptor.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
@@ -36,8 +37,13 @@ K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
 EventReservation::EventReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
+    new EventAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/Event", this);
+    dbus.registerService("org.kde.kdenow.event");
     m_pluginName = "eventDataExtractor";
     connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
+    connect(this, &EventReservation::addedToDatabase, this, &EventReservation::setDBusData);
 }
 
 EventReservation::~EventReservation()
@@ -96,6 +102,7 @@ void EventReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
+        emit addedToDatabase();
     }
 }
 
@@ -122,6 +129,22 @@ void EventReservation::initDatabase()
     else {
         qDebug() << "Opened/Created successfully";
     }
+}
+
+void EventReservation::setDBusData()
+{
+    m_dbusMap.insert("reservationNumber", m_reservationNumber);
+    m_dbusMap.insert("name", m_name);
+    m_dbusMap.insert("eventName", m_eventName);
+    m_dbusMap.insert("startDate", m_startDate.toString());
+    m_dbusMap.insert("location", m_location);
+    m_dbusMap.insert("streetAddress", m_streetAddress);
+    m_dbusMap.insert("addressLocality", m_addressLocality);
+}
+
+QVariantMap EventReservation::getMap()
+{
+    return m_dbusMap;
 }
 
 #include "eventreservation.moc"

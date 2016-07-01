@@ -23,11 +23,13 @@
 #include "src/abstractreservationplugin.h"
 
 #include <QtCore/QDateTime>
+#include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
 class EventReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
+        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow.event");
     public:
         explicit EventReservation(QObject* parent = 0, const QVariantList& args = QVariantList());
         ~EventReservation();
@@ -38,9 +40,14 @@ class EventReservation : public AbstractReservationPlugin
 
     Q_SIGNALS:
         void extractedData();
+        void addedToDatabase();
 
     public Q_SLOTS:
+        QVariantMap getMap();
+
+    private Q_SLOTS:
         void cacheData();
+        void setDBusData();
 
     private:
         QString m_pluginName;
@@ -55,6 +62,8 @@ class EventReservation : public AbstractReservationPlugin
         QString m_location;
         QString m_streetAddress;
         QString m_addressLocality;
+
+        QVariantMap m_dbusMap;
 };
 
 #endif //EVENTRESERVATION_H
