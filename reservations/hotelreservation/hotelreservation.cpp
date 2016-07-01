@@ -20,6 +20,7 @@
 #include "hotelreservation.h"
 #include "src/singletonfactory.h"
 #include "src/datamap.h"
+#include "hoteladaptor.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
@@ -36,8 +37,13 @@ K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
 HotelReservation::HotelReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
+    new HotelAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/Hotel", this);
+    dbus.registerService("org.kde.kdenow.hotel");
     m_pluginName = "hotelDataExtractor";
     connect(this, &HotelReservation::extractedData, this, &HotelReservation::cacheData);
+    connect(this, &HotelReservation::addedToDatabase, this, &HotelReservation::setDBusData);
 }
 
 HotelReservation::~HotelReservation()
@@ -100,6 +106,7 @@ void HotelReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
+        emit addedToDatabase();
     }
 }
 
@@ -126,6 +133,24 @@ void HotelReservation::initDatabase()
     else {
         qDebug() << "Opened/Created successfully";
     }
+}
+
+void HotelReservation::setDBusData()
+{
+    m_dbusMap.insert("reservationNumber", m_reservationNumber);
+    m_dbusMap.insert("name", m_name);
+    m_dbusMap.insert("checkinDate", m_checkinDate.toString());
+    m_dbusMap.insert("checkoutDate", m_checkoutDate.toString());
+    m_dbusMap.insert("telephone", m_telephone);
+    m_dbusMap.insert("hotelName", m_hotelName);
+    m_dbusMap.insert("streetAddress", m_streetAddress);
+    m_dbusMap.insert("addressLocality", m_addressLocality);
+    m_dbusMap.insert("addressRegion", m_addressRegion);
+}
+
+QVariantMap HotelReservation::getMap()
+{
+    return m_dbusMap;
 }
 
 

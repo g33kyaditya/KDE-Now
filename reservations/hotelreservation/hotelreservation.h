@@ -28,6 +28,7 @@
 class HotelReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
+        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow.hotel");
     public:
         explicit HotelReservation(QObject* parent = 0, const QVariantList& args = QVariantList());
         ~HotelReservation();
@@ -38,9 +39,14 @@ class HotelReservation : public AbstractReservationPlugin
 
     Q_SIGNALS:
         void extractedData();
+        void addedToDatabase();
 
     public Q_SLOTS:
+        QVariantMap getMap();
+
+    private Q_SLOTS:
         void cacheData();
+        void setDBusData();
 
     private:
         QString m_pluginName;
@@ -57,6 +63,8 @@ class HotelReservation : public AbstractReservationPlugin
         QString m_streetAddress;
         QString m_addressLocality;
         QString m_addressRegion;
+
+        QVariantMap m_dbusMap;
 };
 
 #endif //HOTELRESERVATION_H
