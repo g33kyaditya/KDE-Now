@@ -1,18 +1,18 @@
 set(flightreservation_SRCS
     flightreservation.cpp
-    flightinterface.cpp
 )
 
 set(dbus_SRCS org.kde.kdenow.flight.xml)
 
-qt5_generate_dbus_interface(flightinterface.h
+qt5_generate_dbus_interface(flightreservation.h
                             org.kde.kdenow.flight.xml
+                            OPTIONS -M
                             )
 
 qt5_add_dbus_adaptor(dbus_SRCS
                      ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kdenow.flight.xml
-                     flightinterface.h
-                     FlightInterface
+                     flightreservation.h
+                     FlightReservation
                     )
 
 add_library(kdenow_flightreservation MODULE ${flightreservation_SRCS} ${dbus_SRCS})

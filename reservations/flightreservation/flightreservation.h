@@ -29,6 +29,7 @@
 class FlightReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
+        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow.flight");
     public:
         explicit FlightReservation(QObject* parent = 0, const QVariantList& args = QVariantList());
         ~FlightReservation();
@@ -42,8 +43,11 @@ class FlightReservation : public AbstractReservationPlugin
         void addedToDatabase();
 
     public Q_SLOTS:
-        void cacheData();
-        void setDBusData();
+        QVariantMap getMap();
+
+    private Q_SLOTS:
+         void cacheData();
+         void setDBusData();
 
     private:
         QString m_pluginName;
