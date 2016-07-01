@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8.12)
 find_package(ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick Sql)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Qml Quick Sql DBus)
 find_package(KF5 5.2 REQUIRED COMPONENTS Plasma I18n Declarative)
 find_package(KF5 REQUIRED COMPONENTS IMAP Mime KIO)
 find_package(KF5Config REQUIRED)

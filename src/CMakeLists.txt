@@ -31,7 +31,7 @@ generate_export_header(kdenowcore
     EXPORT_MACRO_NAME KDENOWCORE_EXPORT
 )
 
-target_include_directories(kdenowcore PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+#target_include_directories(kdenowcore PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 install(TARGETS kdenowd ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdenowcore EXPORT KDENowCoreTargets

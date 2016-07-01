@@ -23,11 +23,13 @@
 #include "src/abstractreservationplugin.h"
 
 #include <QtCore/QDateTime>
+#include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
 class FlightReservation : public AbstractReservationPlugin
 {
         Q_OBJECT
+        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow.flight");
     public:
         explicit FlightReservation(QObject* parent = 0, const QVariantList& args = QVariantList());
         ~FlightReservation();
@@ -38,9 +40,14 @@ class FlightReservation : public AbstractReservationPlugin
 
     Q_SIGNALS:
         void extractedData();
+        void addedToDatabase();
 
     public Q_SLOTS:
-        void cacheData();
+        QVariantMap getMap();
+
+    private Q_SLOTS:
+         void cacheData();
+         void setDBusData();
 
     private:
         QString m_pluginName;
@@ -57,6 +64,8 @@ class FlightReservation : public AbstractReservationPlugin
         QString m_arrivalAirportName;
         QString m_arrivalAirportCode;
         QDateTime m_arrivalTime;
+
+        QVariantMap m_dbusMap;
 };
 
 #endif //FLIGHTRESERVATION_H
