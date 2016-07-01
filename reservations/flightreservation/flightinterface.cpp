@@ -27,7 +27,7 @@ FlightInterface::FlightInterface(QObject* parent): QObject(parent)
     new FlightAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     bool obOk = dbus.registerObject("/Flight", this);
-    bool serOk= dbus.registerService("org.kde.kdenow.Flight");
+    bool serOk= dbus.registerService("org.kde.kdenow.flight");
     if (!obOk) {
         qDebug() << "Could not register Object";
     }
@@ -42,11 +42,11 @@ FlightInterface::FlightInterface(QObject* parent): QObject(parent)
     }
 }
 
-void FlightInterface::setMap(QVariantMap& map)
+void FlightInterface::setMap()
 {
-    m_map = map;
-    qDebug() << m_map;
+    m_map.insert("Foo", "Bar");
 }
+
 
 QVariantMap FlightInterface::getMap()
 {

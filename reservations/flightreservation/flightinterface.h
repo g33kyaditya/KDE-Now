@@ -26,11 +26,11 @@
 class FlightInterface : public QObject
 {
         Q_OBJECT
-        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow.Flight");
+        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow.flight");
 
     public:
-        explicit FlightInterface(QObject* parent = 0);
-        void setMap(QVariantMap& map);
+        FlightInterface(QObject* parent = 0);
+        void setMap();
 
     public Q_SLOTS:
         QVariantMap getMap();
@@ -39,4 +39,4 @@ class FlightInterface : public QObject
         QVariantMap m_map;
 };
 
-#endif //DBUSINTERFACE_H
+#endif //FLIGHTINTERFACE_H

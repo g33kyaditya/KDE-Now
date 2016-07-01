@@ -139,16 +139,16 @@ void FlightReservation::setDBusData()
 {
     m_dbusMap.insert("reservationNumber", m_reservationNumber);
     m_dbusMap.insert("name", m_name);
-    m_dbusMap.insert("flight", m_flight);
+    /*m_dbusMap.insert("flight", m_flight);
     m_dbusMap.insert("departureAirportName", m_departureAirportName);
     m_dbusMap.insert("departureAirportCode", m_departureAirportCode);
     m_dbusMap.insert("departureTime", m_departureTime.toString());
     m_dbusMap.insert("arrivalAirportName", m_arrivalAirportName);
     m_dbusMap.insert("arrivalAirportCode", m_arrivalAirportCode);
     m_dbusMap.insert("arrivalTime", m_arrivalTime.toString());
-
+    */
     FlightInterface iface;
-    iface.setMap(m_dbusMap);
+    iface.setMap();
 }
 
 
