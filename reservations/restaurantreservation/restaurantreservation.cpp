@@ -20,6 +20,7 @@
 #include "restaurantreservation.h"
 #include "src/singletonfactory.h"
 #include "src/datamap.h"
+#include "restaurantadaptor.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
@@ -36,8 +37,13 @@ K_PLUGIN_FACTORY_WITH_JSON( KdeNowPluginFactory,
 RestaurantReservation::RestaurantReservation(QObject* parent, const QVariantList& args)
                                     : AbstractReservationPlugin(parent, args)
 {
+    new RestaurantAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/Restaurant", this);
+    dbus.registerService("org.kde.kdenow.restaurant");
     m_pluginName = "restaurantDataExtractor";
     connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::cacheData);
+    connect(this, &RestaurantReservation::addedToDatabase, this, &RestaurantReservation::setDBusData);
 }
 
 RestaurantReservation::~RestaurantReservation()
@@ -98,6 +104,7 @@ void RestaurantReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
+        emit addedToDatabase();
     }
 }
 
@@ -124,6 +131,23 @@ void RestaurantReservation::initDatabase()
     else {
         qDebug() << "Opened/Created successfully";
     }
+}
+
+void RestaurantReservation::setDBusData()
+{
+    m_dbusData.insert("reservationNumber", m_reservationNumber);
+    m_dbusData.insert("name", m_name);
+    m_dbusData.insert("startTime", m_startTime.toString());
+    m_dbusData.insert("partySize", m_partySize);
+    m_dbusData.insert("restaurantName", m_restaurantName);
+    m_dbusData.insert("streetAddress", m_streetAddress);
+    m_dbusData.insert("addressLocality", m_addressLocality);
+    m_dbusData.insert("addressRegion", m_addressRegion);
+}
+
+QVariantMap RestaurantReservation::getMap()
+{
+    return m_dbusData;
 }
 
 #include "restaurantreservation.moc"
