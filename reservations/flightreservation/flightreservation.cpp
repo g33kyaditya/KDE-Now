@@ -46,6 +46,7 @@ FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
     m_pluginName = "flightDataExtractor";
     connect(this, &FlightReservation::extractedData, this, &FlightReservation::cacheData);
     connect(this, &FlightReservation::addedToDatabase, this, &FlightReservation::setDBusData);
+    m_map = SingletonFactory::instanceFor<DataMap>()->map();
 }
 
 FlightReservation::~FlightReservation()
@@ -60,8 +61,13 @@ QString FlightReservation::plugin() const
 
 void FlightReservation::start()
 {
-    m_map = SingletonFactory::instanceFor<DataMap>()->map();
-    extract();
+    if (m_map["@type"] == "FlightReservation") {
+        extract();
+    }
+    else {
+        qDebug() << "Not a Flight Reservation JSON";
+        return;
+    }
 }
 
 void FlightReservation::extract()
