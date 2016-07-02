@@ -44,6 +44,7 @@ RestaurantReservation::RestaurantReservation(QObject* parent, const QVariantList
     m_pluginName = "restaurantDataExtractor";
     connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::cacheData);
     connect(this, &RestaurantReservation::addedToDatabase, this, &RestaurantReservation::setDBusData);
+    m_map = SingletonFactory::instanceFor<DataMap>()->map();
 }
 
 RestaurantReservation::~RestaurantReservation()
@@ -58,8 +59,13 @@ QString RestaurantReservation::plugin() const
 
 void RestaurantReservation::start()
 {
-    m_map = SingletonFactory::instanceFor<DataMap>()->map();
-    extract();
+    if (m_map["@type"] == "FoodEstablishmentReservation") {
+        extract();
+    }
+    else {
+        qDebug() << "Not a Restaurant Reservation JSON";
+        return;
+    }
 }
 
 void RestaurantReservation::extract()
