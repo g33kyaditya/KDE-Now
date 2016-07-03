@@ -56,9 +56,6 @@ class KDENOWCORE_EXPORT Daemon : public QObject
         void fetchedEmail(KIMAP::MessagePtr message);
         void signalUpdateProcess();
 
-    public Q_SLOTS:
-        QString daemonIsRunning();
-
     private Q_SLOTS:
         void onLoginJobFinished(KJob* job);
         void onSelectJobFinished(KJob* job);

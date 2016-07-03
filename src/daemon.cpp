@@ -265,10 +265,3 @@ void Daemon::onIdleChanged(KIMAP::IdleJob* job, const QString& mailBox,
         emit signalUpdateProcess();
     }
 }
-
-QString Daemon::daemonIsRunning()
-{
-    QString print;
-    print = "DaemonIsRunning";
-    return print;
-}
