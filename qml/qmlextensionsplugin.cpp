@@ -22,7 +22,7 @@
 #include "eventreservation.h"
 #include "flightreservation.h"
 #include "hotelreservation.h"
-//#include "restaurantreservation.h"
+#include "restaurantreservation.h"
 
 #include <QtQml/qqml.h>
 
@@ -36,6 +36,6 @@ void QmlExtensionsPlugin::registerTypes(const char *uri)
     qmlRegisterType<EventReservation>(uri, 0, 1, "EventReservation");
     qmlRegisterType<FlightReservation>(uri, 0, 1, "FlightReservation");
     qmlRegisterType<HotelReservation>(uri, 0, 1, "HotelReservation");
-    //qmlRegisterType<RestaurantReservation>(uri, 0, 1, "RestaurantReservation")
+    qmlRegisterType<RestaurantReservation>(uri, 0, 1, "RestaurantReservation");
 }
 

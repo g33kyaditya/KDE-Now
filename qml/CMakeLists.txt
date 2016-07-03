@@ -3,7 +3,7 @@ set (qml_plugins_SRCS
     eventreservation.cpp
     flightreservation.cpp
     hotelreservation.cpp
-    #restaurantreservation.cpp
+    restaurantreservation.cpp
 )
 
 add_library(kdenowqmlplugin SHARED ${qml_plugins_SRCS})
