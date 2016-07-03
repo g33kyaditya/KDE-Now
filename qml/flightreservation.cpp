@@ -31,11 +31,11 @@ FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 
     QDBusReply<QVariantMap> reply = interface->call("getMap");
     if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow.flight";
+        qDebug() << "Valid Reply received from org.kde.kdenow /Flight";
         qDebug() << reply.value();
     }
     else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow.flight";
+        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Flight";
         return;
     }
 
