@@ -1,6 +1,6 @@
 set (qml_plugins_SRCS
     qmlextensionsplugin.cpp
-    #eventreservation.cpp
+    eventreservation.cpp
     flightreservation.cpp
     #hotelreservation.cpp
     #restaurantreservation.cpp
