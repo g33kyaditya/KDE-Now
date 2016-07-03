@@ -27,7 +27,7 @@
 FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 {
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow.flight", "/Flight");
+    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Flight");
 
     QDBusReply<QVariantMap> reply = interface->call("getMap");
     if (reply.isValid()) {
