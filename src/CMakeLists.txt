@@ -1,5 +1,3 @@
-add_definitions(-DKDE_INSTALL_USE_QT_SYS_PATHS="ON")
-
 add_executable(kdenowd
     main.cpp
 )
