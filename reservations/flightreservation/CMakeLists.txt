@@ -27,7 +27,6 @@ target_include_directories(kdenow_flightreservation
 target_link_libraries(kdenow_flightreservation
     kdenowcore
     Qt5::Sql
-    Qt5::DBus
 )
 
 kcoreaddons_desktop_to_json(kdenow_flightreservation flightreservation.desktop)

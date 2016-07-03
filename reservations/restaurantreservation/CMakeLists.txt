@@ -27,7 +27,6 @@ target_include_directories(kdenow_restaurantreservation
 target_link_libraries(kdenow_restaurantreservation
     kdenowcore
     Qt5::Sql
-    Qt5::DBus
 )
 
 kcoreaddons_desktop_to_json(kdenow_restaurantreservation restaurantreservation.desktop)

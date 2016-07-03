@@ -36,6 +36,7 @@
 class KDENOWCORE_EXPORT Daemon : public QObject
 {
         Q_OBJECT
+        Q_CLASSINFO("D-Bus Interface", "org.kde.kdenow");
 
     public:
         Daemon(QObject* parent = 0);
@@ -56,8 +57,7 @@ class KDENOWCORE_EXPORT Daemon : public QObject
         void signalUpdateProcess();
 
     public Q_SLOTS:
-        void start();
-        //void startIdle();
+        QString daemonIsRunning();
 
     private Q_SLOTS:
         void onLoginJobFinished(KJob* job);
@@ -67,6 +67,8 @@ class KDENOWCORE_EXPORT Daemon : public QObject
                               const QMap<qint64, KIMAP::MessagePtr> &messages);
         void onIdleChanged(KIMAP::IdleJob *job, const QString &mailBox,
                             int messageCount, int recentCount);
+        void start();
+        //void startIdle();
 
     private:
         KIMAP::Session* m_session;

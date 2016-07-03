@@ -19,8 +19,10 @@
 
 #include "daemon.h"
 #include "processor.h"
+#include "kdenowadaptor.h"
 
 #include <QtCore/QString>
+#include <QtDBus/QDBusConnection>
 
 #include <KConfigCore/KSharedConfig>
 #include <KConfigCore/KConfigGroup>
@@ -31,6 +33,10 @@
 
 Daemon::Daemon(QObject* parent): QObject(parent)
 {
+    new KdenowAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/KDENow", this);
+    dbus.registerService("org.kde.kdenow");
     QTimer::singleShot(0, this, &Daemon::start);
     connect(this, &Daemon::signalUpdateProcess, this, &Daemon::start);
 }
@@ -258,4 +264,11 @@ void Daemon::onIdleChanged(KIMAP::IdleJob* job, const QString& mailBox,
         m_session->close();
         emit signalUpdateProcess();
     }
+}
+
+QString Daemon::daemonIsRunning()
+{
+    QString print;
+    print = "DaemonIsRunning";
+    return print;
 }

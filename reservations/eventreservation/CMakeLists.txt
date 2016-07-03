@@ -27,7 +27,6 @@ target_include_directories(kdenow_eventreservation
 target_link_libraries(kdenow_eventreservation
     kdenowcore
     Qt5::Sql
-    Qt5::DBus
 )
 
 kcoreaddons_desktop_to_json(kdenow_eventreservation eventreservation.desktop)
