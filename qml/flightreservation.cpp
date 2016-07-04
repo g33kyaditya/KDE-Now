@@ -27,9 +27,14 @@
 FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 {
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Flight");
+    m_interface = new QDBusInterface("org.kde.kdenow", "/Flight");
+    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
+                 "update", this, SLOT(onMapReceived()));
+}
 
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
+void FlightReservation::onMapReceived()
+{
+    QDBusReply<QVariantMap> reply = m_interface->call("getMap");
     if (reply.isValid()) {
         qDebug() << "Valid Reply received from org.kde.kdenow /Flight";
         qDebug() << reply.value();
@@ -38,7 +43,6 @@ FlightReservation::FlightReservation(QObject* parent): QObject(parent)
         qDebug() << "Did not receive a valid reply from org.kde.kdenow /Flight";
         return;
     }
-
     m_map = reply.value();
 }
 

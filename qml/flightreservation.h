@@ -24,6 +24,8 @@
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QVariantMap>
+#include <QtDBus/QDBusReply>
+#include <QtDBus/QDBusInterface>
 
 class FlightReservation : public QObject
 {
@@ -50,8 +52,12 @@ class FlightReservation : public QObject
         QString arrivalAirportCode() const;
         QDateTime arrivalTime() const;
 
+    public Q_SLOTS:
+        void onMapReceived();
+
     private:
         QVariantMap m_map;
+        QDBusInterface* m_interface;
 };
 
 #endif //FLIGHTRESERVATION_H
