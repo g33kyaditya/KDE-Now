@@ -24,7 +24,6 @@
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QVariantMap>
-#include <QtDBus/QDBusReply>
 #include <QtDBus/QDBusInterface>
 
 class FlightReservation : public QObject
