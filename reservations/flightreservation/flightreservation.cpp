@@ -157,7 +157,6 @@ void FlightReservation::setDBusData()
     m_dbusMap.insert("arrivalAirportCode", m_arrivalAirportCode);
     m_dbusMap.insert("arrivalTime", m_arrivalTime.toString());
 
-    emit addFlightCard();
     emit update();
 }
 
