@@ -42,6 +42,7 @@ class FlightReservation : public AbstractReservationPlugin
         void extractedData();
         void addedToDatabase();
         Q_SCRIPTABLE void update();
+        Q_SCRIPTABLE addFlightCard();
 
     public Q_SLOTS:
         QVariantMap getMap();
