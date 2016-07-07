@@ -46,6 +46,9 @@ class EventReservation : public QObject
         QString streetAddress() const;
         QString addressLocality() const;
 
+    public Q_SLOTS:
+        void setMap(QVariantMap& map);
+
     private:
         QVariantMap m_map;
 };
