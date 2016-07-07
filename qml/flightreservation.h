@@ -50,6 +50,9 @@ class FlightReservation : public QObject
         QString arrivalAirportCode() const;
         QDateTime arrivalTime() const;
 
+    public Q_SLOTS:
+        void setMap(QVariantMap& map);
+
     private:
         QVariantMap m_map;
 };

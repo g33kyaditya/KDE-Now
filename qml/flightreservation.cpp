@@ -29,6 +29,12 @@ FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 
 }
 
+void FlightReservation::setMap(QVariantMap& map)
+{
+    m_map = map;
+}
+
+
 QString FlightReservation::reservationNumber() const
 {
     return m_map.value("reservationNumber").toString();
