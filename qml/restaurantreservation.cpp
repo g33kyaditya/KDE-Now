@@ -19,26 +19,9 @@
 
 #include "restaurantreservation.h"
 
-#include <QtCore/QDebug>
-#include <QtDBus/QDBusReply>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusConnection>
-
 RestaurantReservation::RestaurantReservation(QObject* parent): QObject(parent)
 {
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Restaurant");
 
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Restaurant";
-        qDebug() << reply.value();
-    }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Restaurant";
-        return;
-    }
-
-    m_map = reply.value();
 }
 
 QString RestaurantReservation::reservationNumber() const

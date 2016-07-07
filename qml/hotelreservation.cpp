@@ -19,26 +19,9 @@
 
 #include "hotelreservation.h"
 
-#include <QtCore/QDebug>
-#include <QtDBus/QDBusReply>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusConnection>
-
 HotelReservation::HotelReservation(QObject* parent) : QObject(parent)
 {
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Hotel");
 
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Hotel";
-        qDebug() << reply.value();
-    }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Hotel";
-        return;
-    }
-
-    m_map = reply.value();
 }
 
 QString HotelReservation::reservationNumber() const

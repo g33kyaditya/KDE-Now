@@ -19,11 +19,6 @@
 
 #include "flightreservation.h"
 
-#include <QtCore/QDebug>
-#include <QtDBus/QDBusReply>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusConnection>
-
 FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 {
 

@@ -19,26 +19,9 @@
 
 #include "eventreservation.h"
 
-#include <QtCore/QDebug>
-#include <QtDBus/QDBusReply>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusConnection>
-
 EventReservation::EventReservation(QObject* parent): QObject(parent)
 {
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Event");
 
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Event";
-        qDebug() << reply.value();
-    }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Event";
-        return;
-    }
-
-    m_map = reply.value();
 }
 
 QString EventReservation::reservationNumber() const
