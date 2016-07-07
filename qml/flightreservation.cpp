@@ -26,39 +26,7 @@
 
 FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 {
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    m_interface = new QDBusInterface("org.kde.kdenow", "/Flight");
-    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
-                 "update", this, SLOT(onMapReceived()));
 
-    //Call a method, to start the kdenwod daemon
-    QDBusReply<QVariantMap> reply = m_interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Flight";
-        qDebug() << reply.value();
-    }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Flight";
-        return;
-    }
-
-    m_map = reply.value();
-}
-
-void FlightReservation::onMapReceived()
-{
-    //Get the new data
-    QDBusReply<QVariantMap> reply = m_interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Flight";
-        qDebug() << reply.value();
-    }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Flight";
-        return;
-    }
-
-    m_map = reply.value();
 }
 
 QString FlightReservation::reservationNumber() const

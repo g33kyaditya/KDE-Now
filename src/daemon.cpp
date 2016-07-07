@@ -265,3 +265,10 @@ void Daemon::onIdleChanged(KIMAP::IdleJob* job, const QString& mailBox,
         emit signalUpdateProcess();
     }
 }
+
+QString Daemon::startDaemon()
+{
+    QString ret;
+    ret = "Started Daemon...";
+    return ret;
+}

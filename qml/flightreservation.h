@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ *0
  */
 
 #ifndef FLIGHTRESERVATION_H
@@ -24,7 +24,6 @@
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QVariantMap>
-#include <QtDBus/QDBusInterface>
 
 class FlightReservation : public QObject
 {
@@ -51,12 +50,8 @@ class FlightReservation : public QObject
         QString arrivalAirportCode() const;
         QDateTime arrivalTime() const;
 
-    public Q_SLOTS:
-        void onMapReceived();
-
     private:
         QVariantMap m_map;
-        QDBusInterface* m_interface;
 };
 
 #endif //FLIGHTRESERVATION_H

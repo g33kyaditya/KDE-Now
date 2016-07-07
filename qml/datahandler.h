@@ -17,27 +17,31 @@
  *
  */
 
-#include "qmlextensionsplugin.h"
+#ifndef DATAHANDLER_H
+#define DATAHANDLER_H
 
-#include "datahandler.h"
-#include "eventreservation.h"
-#include "flightreservation.h"
-#include "hotelreservation.h"
-#include "restaurantreservation.h"
+#include <QtCore/QVariantMap>
 
-#include <QtQml/qqml.h>
-
-void QmlExtensionsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
+class DataHandler : public QObject
 {
+        Q_OBJECT
 
-}
+    public:
+        explicit DataHandler(QObject* parent = 0);
 
-void QmlExtensionsPlugin::registerTypes(const char *uri)
-{
-    qmlRegisterType<DataHandler>(uri, 0, 1, "DataHandler");
-    qmlRegisterType<EventReservation>(uri, 0, 1, "EventReservation");
-    qmlRegisterType<FlightReservation>(uri, 0, 1, "FlightReservation");
-    qmlRegisterType<HotelReservation>(uri, 0, 1, "HotelReservation");
-    qmlRegisterType<RestaurantReservation>(uri, 0, 1, "RestaurantReservation");
-}
+    Q_SIGNALS:
+        //These signals will be seen by Plasmoid's signal handler
+        void eventDataReceived();
+        void flightDataReceived();
+        void hotelDataReceived();
+        void restaurantDataReceived();
 
+    public Q_SLOTS:
+        void onEventMapReceived();
+        void onFlightMapReceived();
+        void onHotelMapReceived();
+        void onRestaurantMapReceived();
+};
+
+
+#endif //DATAHANDLER_H

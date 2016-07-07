@@ -1,5 +1,6 @@
 set (qml_plugins_SRCS
     qmlextensionsplugin.cpp
+    datahandler.cpp
     eventreservation.cpp
     flightreservation.cpp
     hotelreservation.cpp
