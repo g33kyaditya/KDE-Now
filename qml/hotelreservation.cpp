@@ -24,6 +24,11 @@ HotelReservation::HotelReservation(QObject* parent) : QObject(parent)
 
 }
 
+void HotelReservation::setMap(QVariantMap& map)
+{
+    m_map = map;
+}
+
 QString HotelReservation::reservationNumber() const
 {
     return m_map.value("reservationNumber").toString();

@@ -24,6 +24,11 @@ EventReservation::EventReservation(QObject* parent): QObject(parent)
 
 }
 
+void EventReservation::setMap(QVariantMap& map)
+{
+    m_map = map;
+}
+
 QString EventReservation::reservationNumber() const
 {
     return m_map.value("reservationNumber").toString();

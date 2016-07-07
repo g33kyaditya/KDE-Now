@@ -24,6 +24,11 @@ RestaurantReservation::RestaurantReservation(QObject* parent): QObject(parent)
 
 }
 
+void RestaurantReservation::setMap(QVariantMap& map)
+{
+    m_map = map;
+}
+
 QString RestaurantReservation::reservationNumber() const
 {
     return m_map.value("reservationNumber").toString();
