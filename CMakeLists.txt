@@ -28,6 +28,7 @@ include_directories(
 add_subdirectory(src)
 add_subdirectory(reservations)
 add_subdirectory(qml)
+add_subdirectory(plasmoids)
 
 # Space for other includes like src, libs etc
 
