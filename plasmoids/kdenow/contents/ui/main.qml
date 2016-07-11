@@ -20,7 +20,6 @@ Item {
         onRestaurantDataReceived: prepareRestaurantCard(m_map)
     }
 
-
     PlasmaExtras.ScrollArea {
         anchors.fill: parent
         ListView {
