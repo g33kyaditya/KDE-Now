@@ -51,5 +51,26 @@ Item {
         }
         plasmoidModel.append(card)
     }
+
+    function prepareFlightCard(map) {
+        KDENow.FlightReservation {
+            id: reservation
+        }
+        reservation.setMap(map)
+
+        KDENow.FlightInformation {
+            id: card
+            reservationNumber: reservation.reservationNumber
+            name: reservation.name
+            flight: reservation.flight
+            departureAirportName: reservation.departureAirportName
+            departureAirportCode: reservation.departureAirportCode
+            departureTime: reservation.departureTime
+            arrivalAirportName: reservation.arrivalAirportName
+            arrivalAirportCode: reservation.arrivalAirportCode
+            arrivalTime: reservation.arrivalTime
+        }
+        plasmoidModel.append(card)
+    }
 }
 
