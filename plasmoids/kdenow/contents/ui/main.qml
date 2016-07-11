@@ -94,6 +94,24 @@ Item {
         plasmoidModel.append(card)
     }
 
-    
+    function prepareRestaurantCard(map) {
+        KDENow.RestaurantReservation {
+            id: reservation
+        }
+        reservation.setMap(map)
+
+        KDENow.RestaurantInformation {
+            id: card
+            reservationNumber: reservation.reservationNumber
+            name: reservation.name
+            startTime: reservation.startTime
+            partySize: reservation.partySize
+            restaurantName: reservation.restaurantName
+            streetAddress: reservation.streetAddress
+            addressLocality: reservation.addressLocality
+            addressRegion: reservation.addressRegion
+        }
+        plasmoidModel.append(card)
+    }
 }
 
