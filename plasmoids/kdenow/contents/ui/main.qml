@@ -72,5 +72,28 @@ Item {
         }
         plasmoidModel.append(card)
     }
+
+    function prepareHotelCard(map) {
+        KDENow.HotelReservation {
+            id: reservation
+        }
+        reservation.setMap(map)
+
+        KDENow.HotelInformation {
+            id: card
+            reservationNumber: reservation.reservationNumber
+            name: reservation.name
+            checkinDate: reservation.checkinDate
+            checkoutDate: reservation.checkoutDate
+            telephone: reservation.telephone
+            hotelName: reservation.hotelName
+            streetAddress: reservation.streetAddress
+            addressLocality: reservation.addressLocality
+            addressRegion: reservation.addressRegion
+        }
+        plasmoidModel.append(card)
+    }
+
+    
 }
 
