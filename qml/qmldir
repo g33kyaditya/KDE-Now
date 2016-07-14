@@ -1,4 +1,4 @@
-module org.kde.now
+module org.kde.kdenow
 plugin kdenowqmlplugin
 
 EventInformation 0.1 EventInformation.qml

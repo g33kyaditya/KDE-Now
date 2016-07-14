@@ -1,1 +1,1 @@
-plasma_install_package(kdenow org.kde.plasma.kdenow)
+plasma_install_package(kdenow org.kde.kdenow)

@@ -29,7 +29,7 @@
 
 void QmlExtensionsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
-
+    QQmlExtensionPlugin::initializeEngine(engine, uri);
 }
 
 void QmlExtensionsPlugin::registerTypes(const char *uri)
@@ -40,4 +40,3 @@ void QmlExtensionsPlugin::registerTypes(const char *uri)
     qmlRegisterType<HotelReservation>(uri, 0, 1, "HotelReservation");
     qmlRegisterType<RestaurantReservation>(uri, 0, 1, "RestaurantReservation");
 }
-

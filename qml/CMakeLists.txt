@@ -14,12 +14,12 @@ target_link_libraries(kdenowqmlplugin
     Qt5::DBus
 )
 
-install (TARGETS kdenowqmlplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/now)
-install (FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/now)
+install (TARGETS kdenowqmlplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow)
+install (FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow)
 install (FILES EventInformation.qml
                Event.jpg
                HotelInformation.qml
                Hotel.jpg
                ph.png
-         DESTINATION ${QML_INSTALL_DIR}/org/kde/now
+         DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow
          )

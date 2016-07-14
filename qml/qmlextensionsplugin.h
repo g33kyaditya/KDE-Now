@@ -28,8 +28,8 @@ class QmlExtensionsPlugin : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    virtual void initializeEngine(QQmlEngine *engine, const char *uri);
-    virtual void registerTypes(const char *uri);
+    virtual void initializeEngine(QQmlEngine *engine, const char *uri) override;
+    virtual void registerTypes(const char *uri) override;
 };
 
 #endif // QMLEXTENSIONSPLUGIN_H
