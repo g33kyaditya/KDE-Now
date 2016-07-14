@@ -6,7 +6,7 @@ set(dbus_SRCS org.kde.kdenow.event.xml)
 
 qt5_generate_dbus_interface(eventreservation.h
                             org.kde.kdenow.event.xml
-                            OPTIONS -M
+                            OPTIONS -M -s
                             )
 
 qt5_add_dbus_adaptor(dbus_SRCS

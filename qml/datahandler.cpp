@@ -29,15 +29,6 @@ DataHandler::DataHandler(QObject* parent): QObject(parent)
     QDBusConnection dbus = QDBusConnection::sessionBus();
     QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/KDENow");
 
-    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
-                 "update", this, SLOT(onEventMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
-                 "update", this, SLOT(onFlightMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
-                 "update", this, SLOT(onHotelMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
-                 "update", this, SLOT(onRestaurantMapReceived()));
-
     //Call a method, to start the kdenowd daemon if it hasn't yet started
     QDBusReply<QString> reply = interface->call("startDaemon");
     if (reply.isValid()) {
@@ -48,6 +39,15 @@ DataHandler::DataHandler(QObject* parent): QObject(parent)
         qDebug() << "Did not receive a valid reply from org.kde.kdenow /KDENow";
         return;
     }
+
+    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
+                 "update", this, SLOT(onEventMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
+                 "update", this, SLOT(onFlightMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
+                 "update", this, SLOT(onHotelMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
+                 "update", this, SLOT(onRestaurantMapReceived()));
 }
 
 void DataHandler::onEventMapReceived()

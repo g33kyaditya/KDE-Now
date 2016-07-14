@@ -6,7 +6,7 @@ set(dbus_SRCS org.kde.kdenow.restaurant.xml)
 
 qt5_generate_dbus_interface(restaurantreservation.h
                             org.kde.kdenow.restaurant.xml
-                            OPTIONS -M
+                            OPTIONS -M -s
                             )
 
 qt5_add_dbus_adaptor(dbus_SRCS

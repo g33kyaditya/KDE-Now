@@ -41,6 +41,7 @@ class RestaurantReservation : public AbstractReservationPlugin
     Q_SIGNALS:
         void extractedData();
         void addedToDatabase();
+        Q_SCRIPTABLE void update();
 
     public Q_SLOTS:
         QVariantMap getMap();

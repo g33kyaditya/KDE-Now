@@ -149,6 +149,8 @@ void RestaurantReservation::setDBusData()
     m_dbusData.insert("streetAddress", m_streetAddress);
     m_dbusData.insert("addressLocality", m_addressLocality);
     m_dbusData.insert("addressRegion", m_addressRegion);
+
+    emit update();
 }
 
 QVariantMap RestaurantReservation::getMap()

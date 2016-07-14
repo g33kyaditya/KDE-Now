@@ -146,6 +146,8 @@ void EventReservation::setDBusData()
     m_dbusMap.insert("location", m_location);
     m_dbusMap.insert("streetAddress", m_streetAddress);
     m_dbusMap.insert("addressLocality", m_addressLocality);
+
+    emit update();
 }
 
 QVariantMap EventReservation::getMap()

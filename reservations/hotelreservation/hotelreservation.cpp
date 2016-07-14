@@ -152,6 +152,8 @@ void HotelReservation::setDBusData()
     m_dbusMap.insert("streetAddress", m_streetAddress);
     m_dbusMap.insert("addressLocality", m_addressLocality);
     m_dbusMap.insert("addressRegion", m_addressRegion);
+
+    emit update();
 }
 
 QVariantMap HotelReservation::getMap()
