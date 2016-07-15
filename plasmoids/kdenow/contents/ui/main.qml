@@ -1,12 +1,15 @@
-import QtQuick 2.0
+import QtQuick 2.1
+import QtQuick.Layouts 1.1
 import QtQml.Models 2.1
+
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.kde.kdenow 0.1 as KDENow
 
-Item {
+ColumnLayout {
+    id: root
     Layout.minimumWidth: 300
     Layout.maximumWidth: 300
     Layout.minimumHeight: 600
@@ -33,25 +36,24 @@ Item {
     }
 
     function prepareEventCard(map) {
-        KDENow.EventReservation {
-            id: reservation
-        }
+        var reservation = eventReservationComponent.createObject(root)
         reservation.setMap(map)
 
-        KDENow.EventInformation {
-            id: card
-            reservationNumber: reservation.reservationNumber
-            name: reservation.name
-            eventName: reservation.eventName
-            startDate: reservation.startDate
-            location: reservation.location
-            streetAddress: reservation.streetAddress
-            addressLocality: reservation.addressLocality
-        }
+        var card = eventCardComponent.createObject(root,
+            {
+                "reservationNumber": reservation.reservationNumber,
+                "name": reservation.name,
+                /*"eventName": reservation.eventName,
+                "startDate": reservation.startDate,
+                "location": reservation.location,
+                "streetAddress": reservation.streetAddress,
+                "addressLocality": reservation.addressLocality,*/
+            }
+        )
         plasmoidModel.append(card)
     }
 
-    function prepareFlightCard(map) {
+    /*function prepareFlightCard(map) {
         KDENow.FlightReservation {
             id: reservation
         }
@@ -111,6 +113,35 @@ Item {
             addressRegion: reservation.addressRegion
         }
         plasmoidModel.append(card)
-    }
-}
+    }*/
 
+    Component {
+        id: eventReservationComponent
+        KDENow.EventReservation {
+        }
+    }
+
+    Component {
+        id: eventCardComponent
+        KDENow.EventInformation {
+        }
+    }
+
+    /*Component {
+        id: flightCardComponent
+        KDENow.FlightInformation {
+        }
+    }
+
+    Component {
+        id: hotelCardComponent
+        KDENow.HotelInformation {
+        }
+    }
+
+    Component {
+        id: restaurantCardComponent
+        KDENow.RestaurantInformation {
+        }
+    }*/
+}   //End KDE Now
