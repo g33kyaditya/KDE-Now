@@ -17,10 +17,10 @@ ColumnLayout {
 
     KDENow.DataHandler {
         id: dataHandler
-        onEventDataReceived: prepareEventCard(m_map)
-        onFlightDataReceived: prepareFlightCard(m_map)
-        onHotelDataReceived: prepareHotelCard(m_map)
-        onRestaurantDataReceived: prepareRestaurantCard(m_map)
+        onEventDataReceived: prepareEventCard(map)
+        onFlightDataReceived: prepareFlightCard(map)
+        onHotelDataReceived: prepareHotelCard(map)
+        onRestaurantDataReceived: prepareRestaurantCard(map)
     }
 
     PlasmaExtras.ScrollArea {
@@ -43,11 +43,11 @@ ColumnLayout {
             {
                 "reservationNumber": reservation.reservationNumber,
                 "name": reservation.name,
-                /*"eventName": reservation.eventName,
+                "eventName": reservation.eventName,
                 "startDate": reservation.startDate,
                 "location": reservation.location,
                 "streetAddress": reservation.streetAddress,
-                "addressLocality": reservation.addressLocality,*/
+                "addressLocality": reservation.addressLocality,
             }
         )
         plasmoidModel.append(card)

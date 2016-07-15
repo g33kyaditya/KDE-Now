@@ -24,7 +24,7 @@ EventReservation::EventReservation(QObject* parent): QObject(parent)
 
 }
 
-void EventReservation::setMap(QVariantMap& map)
+void EventReservation::setMap(QVariantMap map)
 {
     m_map = map;
 }
