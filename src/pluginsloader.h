@@ -20,6 +20,9 @@
 #ifndef PLUGINSLOADER_H
 #define PLUGINSLOADER_H
 
+#include "abstractreservationplugin.h"
+
+#include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QVariantMap>
 
@@ -30,7 +33,7 @@ class PluginsLoader : public QObject
         explicit PluginsLoader(QObject* parent = 0);
 
     public Q_SLOTS:
-        void load();
+        QList< AbstractReservationPlugin* > load();
 
 };
 

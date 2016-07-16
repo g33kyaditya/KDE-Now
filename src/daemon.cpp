@@ -19,6 +19,7 @@
 
 #include "daemon.h"
 #include "processor.h"
+#include "singletonfactory.h"
 #include "kdenowadaptor.h"
 
 #include <QtCore/QString>
@@ -39,6 +40,8 @@ Daemon::Daemon(QObject* parent): QObject(parent)
     dbus.registerService("org.kde.kdenow");
     QTimer::singleShot(0, this, &Daemon::start);
     connect(this, &Daemon::signalUpdateProcess, this, &Daemon::start);
+    Processor *processor = SingletonFactory::instanceFor<Processor>();
+    connect(this, &Daemon::fetchedEmail, processor, &Processor::process);
 }
 
 void Daemon::setHostName(const QString& hostName)
@@ -211,9 +214,6 @@ void Daemon::onFetchJobFinished(const QString& mailBox, const QMap< qint64, qint
     Q_UNUSED(mailBox)
     Q_UNUSED(uids)
     qDebug() << messages << "\n";
-
-    Processor *processor = new Processor();
-    connect(this, &Daemon::fetchedEmail, processor, &Processor::process);
 
     QMapIterator<qint64, KIMAP::MessagePtr> it(messages);
     while (it.hasNext()) {
