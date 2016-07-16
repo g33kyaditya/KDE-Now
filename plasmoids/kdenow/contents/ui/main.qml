@@ -17,10 +17,22 @@ ColumnLayout {
 
     KDENow.DataHandler {
         id: dataHandler
-        onEventDataReceived: prepareEventCard(map)
-        onFlightDataReceived: prepareFlightCard(map)
-        onHotelDataReceived: prepareHotelCard(map)
-        onRestaurantDataReceived: prepareRestaurantCard(map)
+        onEventDataReceived: {
+            var map = dataHandler.getMap()
+            prepareEventCard(map)
+        }
+        onFlightDataReceived: {
+            var map = dataHandler.getMap()
+            prepareFlightCard(map)
+        }
+        onHotelDataReceived: {
+            var map = dataHandler.getMap()
+            prepareHotelCard(map)
+        }
+        onRestaurantDataReceived: {
+            var map = dataHandler.getMap()
+            prepareRestaurantCard(map)
+        }
     }
 
     PlasmaExtras.ScrollArea {

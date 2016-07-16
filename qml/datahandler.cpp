@@ -64,7 +64,7 @@ void DataHandler::onEventMapReceived()
     }
 
     m_map = reply.value();
-    emit eventDataReceived(m_map);
+    emit eventDataReceived();
 }
 
 void DataHandler::onFlightMapReceived()
@@ -81,7 +81,7 @@ void DataHandler::onFlightMapReceived()
     }
 
     m_map = reply.value();
-    emit flightDataReceived(m_map);
+    emit flightDataReceived();
 }
 
 void DataHandler::onHotelMapReceived()
@@ -98,7 +98,7 @@ void DataHandler::onHotelMapReceived()
     }
 
     m_map = reply.value();
-    emit hotelDataReceived(m_map);
+    emit hotelDataReceived();
 }
 
 void DataHandler::onRestaurantMapReceived()
@@ -115,5 +115,10 @@ void DataHandler::onRestaurantMapReceived()
     }
 
     m_map = reply.value();
-    emit restaurantDataReceived(m_map);
+    emit restaurantDataReceived();
+}
+
+QVariantMap DataHandler::getMap()
+{
+    return m_map;
 }

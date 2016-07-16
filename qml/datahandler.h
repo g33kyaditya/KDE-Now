@@ -31,16 +31,17 @@ class DataHandler : public QObject
 
     Q_SIGNALS:
         //These signals will be seen by Plasmoid's signal handler
-        void eventDataReceived(QVariantMap& map);
-        void flightDataReceived(QVariantMap& map);
-        void hotelDataReceived(QVariantMap& map);
-        void restaurantDataReceived(QVariantMap& map);
+        void eventDataReceived();
+        void flightDataReceived();
+        void hotelDataReceived();
+        void restaurantDataReceived();
 
     public Q_SLOTS:
         void onEventMapReceived();
         void onFlightMapReceived();
         void onHotelMapReceived();
         void onRestaurantMapReceived();
+        Q_INVOKABLE QVariantMap getMap();
 
     private:
         QVariantMap m_map;
