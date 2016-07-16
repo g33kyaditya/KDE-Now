@@ -18,11 +18,9 @@
  */
 
 #include "pluginsloader.h"
-#include "abstractreservationplugin.h"
 #include "singletonfactory.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QCoreApplication>
 #include <KService/KServiceTypeTrader>
 #include <KCoreAddons/KPluginLoader>
 #include <KCoreAddons/KPluginFactory>
@@ -33,12 +31,13 @@ PluginsLoader::PluginsLoader(QObject* parent): QObject(parent)
 
 }
 
-void PluginsLoader::load()
+QList< AbstractReservationPlugin* > PluginsLoader::load()
 {
+    QList< AbstractReservationPlugin* > list = QList< AbstractReservationPlugin *>();
     KService::List offers = KServiceTypeTrader::self()->query("KDENow/Plugin");
     if (offers.isEmpty()) {
         qDebug() << "None plugins found";
-        return;
+        return list;
     }
 
     KService::List::const_iterator it;
@@ -58,6 +57,7 @@ void PluginsLoader::load()
         AbstractReservationPlugin* plugin = factory->create<AbstractReservationPlugin>();
         if (plugin) {
             //qDebug() << "Loaded the plugin " << service->name();
+            list.append(plugin);
             plugin->setDataMap(SingletonFactory::instanceFor<DataMap>());
             plugin->start();
         }
@@ -66,4 +66,5 @@ void PluginsLoader::load()
             continue;
         }
     }
+    return list;
 }

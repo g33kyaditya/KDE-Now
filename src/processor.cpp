@@ -106,6 +106,17 @@ void Processor::extractNeededData()
 {
     DataMap* map = SingletonFactory::instanceFor<DataMap>();
     map->setMap(m_map);
-    PluginsLoader loader;
-    loader.load();
+    if (m_pluginList.isEmpty()) {
+        PluginsLoader loader;
+        m_pluginList = loader.load();
+        if (m_pluginList.isEmpty()) {
+            qDebug() << "None of the plugins added to list";
+        }
+    }
+    else {
+        foreach (AbstractReservationPlugin* plugin, m_pluginList) {
+            plugin->setDataMap(map);
+            plugin->start();
+        }
+    }
 }

@@ -20,6 +20,7 @@
 #define PROCESSOR_H
 
 #include "kdenowcore_export.h"
+#include "abstractreservationplugin.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVariantMap>
@@ -48,6 +49,7 @@ class KDENOWCORE_EXPORT Processor : public QObject
 
         KIMAP::MessagePtr m_messagePtr;
         QVariantMap m_map;
+        QList< AbstractReservationPlugin* > m_pluginList;
 };
 
 #endif //PROCESSOR_H
