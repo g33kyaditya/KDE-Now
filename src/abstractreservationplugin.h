@@ -38,8 +38,8 @@ class KDENOWCORE_EXPORT AbstractReservationPlugin : public QObject
         void setDataMap(DataMap* map);
         virtual void start() = 0;
 
-    private:
-        AbstractReservationPluginPrivate * const d;
+    protected:
+        DataMap* m_dataMap;
 };
 
 #endif //ABSTRACTRESERVATIONPLUGIN_H

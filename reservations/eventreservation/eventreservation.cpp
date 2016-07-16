@@ -18,7 +18,6 @@
  */
 
 #include "eventreservation.h"
-#include "src/singletonfactory.h"
 #include "src/datamap.h"
 #include "eventadaptor.h"
 
@@ -44,7 +43,6 @@ EventReservation::EventReservation(QObject* parent, const QVariantList& args)
     m_pluginName = "eventDataExtractor";
     connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
     connect(this, &EventReservation::addedToDatabase, this, &EventReservation::setDBusData);
-    m_map = SingletonFactory::instanceFor<DataMap>()->map();
 }
 
 EventReservation::~EventReservation()
@@ -59,6 +57,7 @@ QString EventReservation::plugin() const
 
 void EventReservation::start()
 {
+    m_map = m_dataMap->map();
     if (m_map["@type"] == "EventReservation") {
         extract();
     }
