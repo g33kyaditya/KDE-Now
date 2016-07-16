@@ -66,64 +66,61 @@ ColumnLayout {
     }
 
     /*function prepareFlightCard(map) {
-        KDENow.FlightReservation {
-            id: reservation
-        }
+        var reservation = flightReservationComponent.createObject(root)
         reservation.setMap(map)
 
-        KDENow.FlightInformation {
-            id: card
-            reservationNumber: reservation.reservationNumber
-            name: reservation.name
-            flight: reservation.flight
-            departureAirportName: reservation.departureAirportName
-            departureAirportCode: reservation.departureAirportCode
-            departureTime: reservation.departureTime
-            arrivalAirportName: reservation.arrivalAirportName
-            arrivalAirportCode: reservation.arrivalAirportCode
-            arrivalTime: reservation.arrivalTime
-        }
+        var card = flightCardComponent.createObject(root,
+            {
+                "reservationNumber": reservation.reservationNumber,
+                "name": reservation.name,
+                "flight": reservation.flight,
+                "departureAirportName": reservation.departureAirportName,
+                "departureAirportCode": reservation.departureAirportCode,
+                "departureTime": reservation.departureTime,
+                "arrivalAirportName": reservation.arrivalAirportName,
+                "arrivalAirportCode": reservation.arrivalAirportCode,
+                "arrivalTime": reservation.arrivalTime,
+            }
+        )
         plasmoidModel.append(card)
-    }
+    }*/
 
     function prepareHotelCard(map) {
-        KDENow.HotelReservation {
-            id: reservation
-        }
+        var reservation = hotelReservationComponent.createObject(root)
         reservation.setMap(map)
 
-        KDENow.HotelInformation {
-            id: card
-            reservationNumber: reservation.reservationNumber
-            name: reservation.name
-            checkinDate: reservation.checkinDate
-            checkoutDate: reservation.checkoutDate
-            telephone: reservation.telephone
-            hotelName: reservation.hotelName
-            streetAddress: reservation.streetAddress
-            addressLocality: reservation.addressLocality
-            addressRegion: reservation.addressRegion
-        }
+        var card = hotelCardComponent.createObject(root,
+            {
+                "reservationNumber": reservation.reservationNumber,
+                "name": reservation.name,
+                "checkinDate": reservation.checkinDate,
+                "checkoutDate": reservation.checkoutDate,
+                "telephone": reservation.telephone,
+                "hotelName": reservation.hotelName,
+                "streetAddress": reservation.streetAddress,
+                "addressLocality": reservation.addressLocality,
+                "addressRegion": reservation.addressRegion,
+            }
+        )
         plasmoidModel.append(card)
     }
 
-    function prepareRestaurantCard(map) {
-        KDENow.RestaurantReservation {
-            id: reservation
-        }
+    /*function prepareRestaurantCard(map) {
+        var reservation = restaurantReservationComponent.createObject(root)
         reservation.setMap(map)
 
-        KDENow.RestaurantInformation {
-            id: card
-            reservationNumber: reservation.reservationNumber
-            name: reservation.name
-            startTime: reservation.startTime
-            partySize: reservation.partySize
-            restaurantName: reservation.restaurantName
-            streetAddress: reservation.streetAddress
-            addressLocality: reservation.addressLocality
-            addressRegion: reservation.addressRegion
-        }
+        var card = restaurantCardComponent(root,
+            {
+                "reservationNumber": reservation.reservationNumber,
+                "name": reservation.name,
+                "startTime": reservation.startTime,
+                "partySize": reservation.partySize,
+                "restaurantName": reservation.restaurantName,
+                "streetAddress": reservation.streetAddress,
+                "addressLocality": reservation.addressLocality,
+                "addressRegion": reservation.addressRegion,
+            }
+        )
         plasmoidModel.append(card)
     }*/
 
@@ -132,6 +129,24 @@ ColumnLayout {
         KDENow.EventReservation {
         }
     }
+
+    /*Component {
+        id: flightReservationComponent
+        KDENow.FlightReservation {
+        }
+    }*/
+
+    Component {
+        id: hotelReservationComponent
+        KDENow.HotelReservation {
+        }
+    }
+
+    /*Component {
+        id: restaurantReservationComponent
+        KDENow.RestaurantReservation {
+        }
+    }*/
 
     Component {
         id: eventCardComponent
@@ -143,7 +158,7 @@ ColumnLayout {
         id: flightCardComponent
         KDENow.FlightInformation {
         }
-    }
+    }*/
 
     Component {
         id: hotelCardComponent
@@ -151,7 +166,7 @@ ColumnLayout {
         }
     }
 
-    Component {
+    /*Component {
         id: restaurantCardComponent
         KDENow.RestaurantInformation {
         }
