@@ -112,11 +112,10 @@ void Processor::extractNeededData()
         if (m_pluginList.isEmpty()) {
             qDebug() << "None of the plugins added to list";
         }
+        return;
     }
-    else {
-        foreach (AbstractReservationPlugin* plugin, m_pluginList) {
-            plugin->setDataMap(map);
-            plugin->start();
-        }
+    foreach (AbstractReservationPlugin* plugin, m_pluginList) {
+        plugin->setDataMap(map);
+        plugin->start();
     }
 }

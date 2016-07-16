@@ -58,8 +58,6 @@ QList< AbstractReservationPlugin* > PluginsLoader::load()
         if (plugin) {
             //qDebug() << "Loaded the plugin " << service->name();
             list.append(plugin);
-            plugin->setDataMap(SingletonFactory::instanceFor<DataMap>());
-            plugin->start();
         }
         else {
             //qDebug() << "Did not load the plugin " << service->name();
