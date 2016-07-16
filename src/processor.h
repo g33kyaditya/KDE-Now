@@ -50,6 +50,7 @@ class KDENOWCORE_EXPORT Processor : public QObject
         KIMAP::MessagePtr m_messagePtr;
         QVariantMap m_map;
         QList< AbstractReservationPlugin* > m_pluginList;
+        bool pluginsLoaded;
 };
 
 #endif //PROCESSOR_H

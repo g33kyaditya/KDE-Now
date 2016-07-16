@@ -29,7 +29,7 @@
 
 Processor::Processor(QObject* parent): QObject(parent)
 {
-
+    pluginsLoaded = false;
 }
 
 void Processor::process(KIMAP::MessagePtr messagePtr)
@@ -106,13 +106,10 @@ void Processor::extractNeededData()
 {
     DataMap* map = SingletonFactory::instanceFor<DataMap>();
     map->setMap(m_map);
-    if (m_pluginList.isEmpty()) {
+    if (!pluginsLoaded) {
         PluginsLoader loader;
         m_pluginList = loader.load();
-        if (m_pluginList.isEmpty()) {
-            qDebug() << "None of the plugins added to list";
-        }
-        return;
+        pluginsLoaded = true;
     }
     foreach (AbstractReservationPlugin* plugin, m_pluginList) {
         plugin->setDataMap(map);
