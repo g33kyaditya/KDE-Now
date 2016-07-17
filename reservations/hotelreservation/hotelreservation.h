@@ -22,7 +22,7 @@
 
 #include "src/abstractreservationplugin.h"
 
-#include <QtCore/QDateTime>
+#include <QtCore/QDate>
 #include <QtSql/QSqlDatabase>
 
 class HotelReservation : public AbstractReservationPlugin
@@ -57,8 +57,8 @@ class HotelReservation : public AbstractReservationPlugin
 
         QString m_reservationNumber;
         QString m_name;
-        QDateTime m_checkinDate;
-        QDateTime m_checkoutDate;
+        QDate m_checkinDate;
+        QDate m_checkoutDate;
         QString m_telephone;
         QString m_hotelName;
         QString m_streetAddress;

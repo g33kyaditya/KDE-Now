@@ -55,9 +55,14 @@ QString FlightReservation::departureAirportCode() const
     return m_map.value("departureAirportCode").toString();
 }
 
-QDateTime FlightReservation::departureTime() const
+QString FlightReservation::departureDate() const
 {
-    return m_map.value("departureTime").toDateTime();
+    return m_map.value("departureDate").toString();
+}
+
+QString FlightReservation::departureTime() const
+{
+    return m_map.value("departureTime").toString();
 }
 
 QString FlightReservation::arrivalAirportName() const
@@ -70,7 +75,12 @@ QString FlightReservation::arrivalAirportCode() const
     return m_map.value("arrivalAirportCode").toString();
 }
 
-QDateTime FlightReservation::arrivalTime() const
+QString FlightReservation::arrivalDate() const
 {
-    return m_map.value("arrivalTime").toDateTime();
+    return m_map.value("arrivalDate").toString();
+}
+
+QString FlightReservation::arrivalTime() const
+{
+    return m_map.value("arrivalTime").toString();
 }

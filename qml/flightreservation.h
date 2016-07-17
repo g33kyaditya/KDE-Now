@@ -33,10 +33,12 @@ class FlightReservation : public QObject
         Q_PROPERTY(QString flight READ flight)
         Q_PROPERTY(QString departureAirportName READ departureAirportName)
         Q_PROPERTY(QString departureAirportCode READ departureAirportCode)
-        Q_PROPERTY(QDateTime departureTime READ departureTime)
+        Q_PROPERTY(QString departureDate READ departureDate)
+        Q_PROPERTY(QString departureTime READ departureTime)
         Q_PROPERTY(QString arrivalAirportName READ arrivalAirportName)
         Q_PROPERTY(QString arrivalAirportCode READ arrivalAirportCode)
-        Q_PROPERTY(QDateTime arrivalTime READ arrivalTime)
+        Q_PROPERTY(QString arrivalDate READ arrivalDate)
+        Q_PROPERTY(QString arrivalTime READ arrivalTime)
 
     public:
         explicit FlightReservation(QObject* parent = 0);
@@ -45,10 +47,12 @@ class FlightReservation : public QObject
         QString flight() const;
         QString departureAirportName() const;
         QString departureAirportCode() const;
-        QDateTime departureTime() const;
+        QString departureDate() const;
+        QString departureTime() const;
         QString arrivalAirportName() const;
         QString arrivalAirportCode() const;
-        QDateTime arrivalTime() const;
+        QString arrivalDate() const;
+        QString arrivalTime() const;
 
     public Q_SLOTS:
         void setMap(QVariantMap map);

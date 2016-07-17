@@ -39,14 +39,14 @@ QString HotelReservation::name() const
     return m_map.value("name").toString();
 }
 
-QDateTime HotelReservation::checkinDate() const
+QString HotelReservation::checkinDate() const
 {
-    return m_map.value("checkinDate").toDateTime();
+    return m_map.value("checkinDate").toString();
 }
 
-QDateTime HotelReservation::checkoutDate() const
+QString HotelReservation::checkoutDate() const
 {
-    return m_map.value("checkoutDate").toDateTime();
+    return m_map.value("checkoutDate").toString();
 }
 
 QString HotelReservation::telephone() const

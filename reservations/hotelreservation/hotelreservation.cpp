@@ -74,8 +74,10 @@ void HotelReservation::extract()
     m_name = m_map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    m_checkinDate = m_map["checkinDate"].toDateTime();
-    m_checkoutDate = m_map["checkoutDate"].toDateTime();
+    QDateTime checkinDateTime = m_map["checkinDate"].toDateTime();
+    m_checkinDate = checkinDateTime.date();
+    QDateTime checkoutDateTime = m_map["checkoutDate"].toDateTime();
+    m_checkoutDate = checkoutDateTime.date();
 
     m_telephone = reservationForMap["telephone"].toString();
     QVariantMap addressMap = reservationForMap["address"].toMap();

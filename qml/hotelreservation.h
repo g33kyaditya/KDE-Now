@@ -30,8 +30,8 @@ class HotelReservation : public QObject
         Q_OBJECT
         Q_PROPERTY(QString reservationNumber READ reservationNumber)
         Q_PROPERTY(QString name READ name)
-        Q_PROPERTY(QDateTime checkinDate READ checkinDate)
-        Q_PROPERTY(QDateTime checkoutDate READ checkoutDate)
+        Q_PROPERTY(QString checkinDate READ checkinDate)
+        Q_PROPERTY(QString checkoutDate READ checkoutDate)
         Q_PROPERTY(QString telephone READ telephone)
         Q_PROPERTY(QString hotelName READ hotelName)
         Q_PROPERTY(QString streetAddress READ streetAddress)
@@ -42,8 +42,8 @@ class HotelReservation : public QObject
         explicit HotelReservation(QObject* parent = 0);
         QString reservationNumber() const;
         QString name() const;
-        QDateTime checkinDate() const;
-        QDateTime checkoutDate() const;
+        QString checkinDate() const;
+        QString checkoutDate() const;
         QString telephone() const;
         QString hotelName() const;
         QString streetAddress() const;

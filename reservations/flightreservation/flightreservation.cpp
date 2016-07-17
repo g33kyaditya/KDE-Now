@@ -82,11 +82,15 @@ void FlightReservation::extract()
 
     m_departureAirportName = reservationForMap["departureAirport"].toMap().value("name").toString();
     m_departureAirportCode = reservationForMap["departureAirport"].toMap().value("iataCode").toString();
-    m_departureTime = reservationForMap["departureTime"].toDateTime();
+    QDateTime departureDateTime = reservationForMap["departureTime"].toDateTime();
+    m_departureDate = departureDateTime.date();
+    m_departureTime = departureDateTime.time();
 
     m_arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
     m_arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
-    m_arrivalTime = reservationForMap["arrivalTime"].toDateTime();
+    QDateTime arrivalDateTime = reservationForMap["arrivalTime"].toDateTime();
+    m_arrivalDate = arrivalDateTime.date();
+    m_arrivalTime = arrivalDateTime.time();
 
     emit extractedData();
 }
@@ -152,9 +156,11 @@ void FlightReservation::setDBusData()
     m_dbusMap.insert("flight", m_flight);
     m_dbusMap.insert("departureAirportName", m_departureAirportName);
     m_dbusMap.insert("departureAirportCode", m_departureAirportCode);
+    m_dbusMap.insert("departureDate", m_departureDate.toString());
     m_dbusMap.insert("departureTime", m_departureTime.toString());
     m_dbusMap.insert("arrivalAirportName", m_arrivalAirportName);
     m_dbusMap.insert("arrivalAirportCode", m_arrivalAirportCode);
+    m_dbusMap.insert("arrivalDate", m_arrivalDate.toString());
     m_dbusMap.insert("arrivalTime", m_arrivalTime.toString());
 
     emit update();
