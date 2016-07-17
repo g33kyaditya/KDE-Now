@@ -41,8 +41,9 @@ EventReservation::EventReservation(QObject* parent, const QVariantList& args)
     dbus.registerObject("/Event", this);
     dbus.registerService("org.kde.kdenow.event");
     m_pluginName = "eventDataExtractor";
-    connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
-    connect(this, &EventReservation::addedToDatabase, this, &EventReservation::setDBusData);
+    //connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
+    connect(this, &EventReservation::extractedData, this, &EventReservation::setDBusData);
+    //connect(this, &EventReservation::addedToDatabase, this, &EventReservation::setDBusData);
 }
 
 EventReservation::~EventReservation()
@@ -74,7 +75,9 @@ void EventReservation::extract()
     QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
     m_eventName = reservationForMap["name"].toString();
-    m_startDate = reservationForMap["startDate"].toDateTime();
+    QDateTime startDateTime = reservationForMap["startDate"].toDateTime();
+    m_startDate = startDateTime.date();
+    m_startTime = startDateTime.time();
 
     QVariantMap addressMap = reservationForMap["location"].toMap().value("address").toMap();
     m_location = reservationForMap["location"].toMap().value("name").toString();
@@ -142,6 +145,7 @@ void EventReservation::setDBusData()
     m_dbusMap.insert("name", m_name);
     m_dbusMap.insert("eventName", m_eventName);
     m_dbusMap.insert("startDate", m_startDate.toString());
+    m_dbusMap.insert("startTime", m_startTime.toString());
     m_dbusMap.insert("location", m_location);
     m_dbusMap.insert("streetAddress", m_streetAddress);
     m_dbusMap.insert("addressLocality", m_addressLocality);

@@ -22,7 +22,8 @@
 
 #include "src/abstractreservationplugin.h"
 
-#include <QtCore/QDateTime>
+#include <QtCore/QDate>
+#include <QtCore/QTime>
 #include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
@@ -59,7 +60,8 @@ class EventReservation : public AbstractReservationPlugin
         QString m_reservationNumber;
         QString m_name;
         QString m_eventName;
-        QDateTime m_startDate;
+        QDate m_startDate;
+        QTime m_startTime;
         QString m_location;
         QString m_streetAddress;
         QString m_addressLocality;

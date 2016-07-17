@@ -44,9 +44,14 @@ QString EventReservation::eventName() const
     return m_map.value("eventName").toString();
 }
 
-QDateTime EventReservation::startDate() const
+QString EventReservation::startDate() const
 {
-    return m_map.value("startDate").toDateTime();
+    return m_map.value("startDate").toString();
+}
+
+QString EventReservation::startTime() const
+{
+    return m_map.value("startTime").toString();
 }
 
 QString EventReservation::location() const

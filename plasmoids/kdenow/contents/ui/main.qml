@@ -57,6 +57,7 @@ ColumnLayout {
                 "name": reservation.name,
                 "eventName": reservation.eventName,
                 "startDate": reservation.startDate,
+                "startTime": reservation.startTime,
                 "location": reservation.location,
                 "streetAddress": reservation.streetAddress,
                 "addressLocality": reservation.addressLocality,

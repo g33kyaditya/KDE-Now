@@ -29,7 +29,8 @@ ColumnLayout {
     id: root
     property string reservationNumber: "ABC123"
     property string name: "John Smith"
-    property date startDate: "2017-03-06T19:30:00-08:00"
+    property string startDate: " "
+    property string startTime: " "
     property string eventName : "Coldplay"
     property string location: "AT&T Park"
     property string streetAddress: "24 Millie Ways Plaza"
@@ -120,11 +121,11 @@ ColumnLayout {
             level: 5
         }
         PlasmaExtras.Heading {
-            text: Qt.formatDate(startDate, "ddd d MMM yyyy")
+            text: startDate
             level: 5
         }
         PlasmaExtras.Heading {
-            text: Qt.formatDateTime(startDate, "h:m AP")
+            text: startTime
             level: 5
         }
         PlasmaExtras.Heading {

@@ -31,7 +31,8 @@ class EventReservation : public QObject
         Q_PROPERTY(QString reservationNumber READ reservationNumber)
         Q_PROPERTY(QString name READ name)
         Q_PROPERTY(QString eventName READ eventName)
-        Q_PROPERTY(QDateTime startDate READ startDate)
+        Q_PROPERTY(QString startDate READ startDate)
+        Q_PROPERTY(QString startTime READ startTime)
         Q_PROPERTY(QString location READ location)
         Q_PROPERTY(QString streetAddress READ streetAddress)
         Q_PROPERTY(QString addressLocality READ addressLocality)
@@ -41,7 +42,8 @@ class EventReservation : public QObject
         QString reservationNumber() const;
         QString name() const;
         QString eventName() const;
-        QDateTime startDate() const;
+        QString startDate() const;
+        QString startTime() const;
         QString location() const;
         QString streetAddress() const;
         QString addressLocality() const;
