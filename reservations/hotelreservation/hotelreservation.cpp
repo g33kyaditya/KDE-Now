@@ -44,7 +44,6 @@ HotelReservation::HotelReservation(QObject* parent, const QVariantList& args)
     m_pluginName = "hotelDataExtractor";
     connect(this, &HotelReservation::extractedData, this, &HotelReservation::cacheData);
     connect(this, &HotelReservation::addedToDatabase, this, &HotelReservation::setDBusData);
-    m_map = SingletonFactory::instanceFor<DataMap>()->map();
 }
 
 HotelReservation::~HotelReservation()
@@ -59,6 +58,7 @@ QString HotelReservation::plugin() const
 
 void HotelReservation::start()
 {
+    m_map = m_dataMap->map();
     if (m_map["@type"] == "LodgingReservation") {
         extract();
     }
