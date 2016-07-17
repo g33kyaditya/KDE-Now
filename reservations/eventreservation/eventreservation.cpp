@@ -94,12 +94,13 @@ void EventReservation::cacheData()
     }
 
     QSqlQuery updateQuery(m_db);
-    QString queryString = "insert into Event values (:id, :reservationNumber, :name, :eventName, :startDate, :location, :streetAddress, :addressLocality)";
+    QString queryString = "insert into Event values (:id, :reservationNumber, :name, :eventName, :startDate, :startTime, :location, :streetAddress, :addressLocality)";
     updateQuery.prepare(queryString);
     updateQuery.bindValue(":reservationNumber", m_reservationNumber);
     updateQuery.bindValue(":name", m_name);
     updateQuery.bindValue(":eventName", m_eventName);
     updateQuery.bindValue(":startDate", m_startDate.toString());
+    updateQuery.bindValue(":startTime", m_startTime.toString());
     updateQuery.bindValue(":location", m_location);
     updateQuery.bindValue(":streetAddress", m_streetAddress);
     updateQuery.bindValue(":addressLocality", m_addressLocality);
@@ -128,7 +129,7 @@ void EventReservation::initDatabase()
     }
 
     QSqlQuery addQuery(m_db);
-    QString queryString = "create table if not exists Event(id integer primary key autoincrement, reservationNumber varchar, name varchar, eventName varchar, startDate varchar, location varchar, streetAddress varchar, addressLocality varchar)";
+    QString queryString = "create table if not exists Event(id integer primary key autoincrement, reservationNumber varchar, name varchar, eventName varchar, startDate varchar, startTime varchar, location varchar, streetAddress varchar, addressLocality varchar)";
 
     if (!addQuery.exec(queryString)) {
         qWarning() << "Unable to create table";
