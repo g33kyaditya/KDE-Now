@@ -29,8 +29,8 @@ ColumnLayout {
     id: root
     property string reservationNumber: "ABC123"
     property string name: "John Smith"
-    property date checkinDate: "2017-03-06T19:30:00-08:00"
-    property date checkoutDate: "2017-03-08T19:30:00-08:00"
+    property string checkinDate: " "
+    property string checkoutDate: " "
     property string telephone: "(415) 771-1400"
     property string hotelName : "Le Gavroche"
     property string streetAddress: "333 O'Farrell St"
@@ -128,11 +128,11 @@ ColumnLayout {
             level: 5
         }
         PlasmaExtras.Heading {
-            text: Qt.formatDate(checkinDate, "ddd d MMM yyyy")
+            text: checkinDate
             level: 5
         }
         PlasmaExtras.Heading {
-            text: Qt.formatDateTime(checkoutDate, "ddd d MMM yyyy")
+            text: checkoutDate
             level: 5
         }
         PlasmaExtras.Heading {
