@@ -24,7 +24,7 @@ FlightReservation::FlightReservation(QObject* parent): QObject(parent)
 
 }
 
-void FlightReservation::setMap(QVariantMap& map)
+void FlightReservation::setMap(QVariantMap map)
 {
     m_map = map;
 }

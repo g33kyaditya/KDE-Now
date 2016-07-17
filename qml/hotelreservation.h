@@ -51,7 +51,7 @@ class HotelReservation : public QObject
         QString addressRegion() const;
 
     public Q_SLOTS:
-        void setMap(QVariantMap& map);
+        void setMap(QVariantMap map);
 
     private:
         QVariantMap m_map;

@@ -24,7 +24,7 @@ RestaurantReservation::RestaurantReservation(QObject* parent): QObject(parent)
 
 }
 
-void RestaurantReservation::setMap(QVariantMap& map)
+void RestaurantReservation::setMap(QVariantMap map)
 {
     m_map = map;
 }

@@ -24,7 +24,7 @@ HotelReservation::HotelReservation(QObject* parent) : QObject(parent)
 
 }
 
-void HotelReservation::setMap(QVariantMap& map)
+void HotelReservation::setMap(QVariantMap map)
 {
     m_map = map;
 }
