@@ -74,7 +74,9 @@ void RestaurantReservation::extract()
     m_name = m_map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = m_map["reservationFor"].toMap();
 
-    m_startTime = m_map["startTime"].toDateTime();
+    QDateTime startDateTime = m_map["startTime"].toDateTime();
+    m_startDate = startDateTime.date();
+    m_startTime = startDateTime.time();
     m_partySize = m_map["partySize"].toInt();
 
     QVariantMap addressMap = reservationForMap["address"].toMap();
@@ -143,6 +145,7 @@ void RestaurantReservation::setDBusData()
 {
     m_dbusData.insert("reservationNumber", m_reservationNumber);
     m_dbusData.insert("name", m_name);
+    m_dbusData.insert("startDate", m_startDate.toString());
     m_dbusData.insert("startTime", m_startTime.toString());
     m_dbusData.insert("partySize", m_partySize);
     m_dbusData.insert("restaurantName", m_restaurantName);

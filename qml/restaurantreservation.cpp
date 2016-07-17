@@ -39,9 +39,14 @@ QString RestaurantReservation::name() const
     return m_map.value("name").toString();
 }
 
-QDateTime RestaurantReservation::startTime() const
+QString RestaurantReservation::startDate() const
 {
-    return m_map.value("startTime").toDateTime();
+    return m_map.value("startDate").toString();
+}
+
+QString RestaurantReservation::startTime() const
+{
+    return m_map.value("startTime").toString();
 }
 
 int RestaurantReservation::partySize() const

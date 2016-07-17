@@ -30,7 +30,8 @@ class RestaurantReservation : public QObject
         Q_OBJECT
         Q_PROPERTY(QString reservationNumber READ reservationNumber)
         Q_PROPERTY(QString name READ name)
-        Q_PROPERTY(QDateTime startTime READ startTime)
+        Q_PROPERTY(QString startDate READ startDate)
+        Q_PROPERTY(QString startTime READ startTime)
         Q_PROPERTY(int partySize READ partySize)
         Q_PROPERTY(QString restaurantName READ restaurantName)
         Q_PROPERTY(QString streetAddress READ streetAddress)
@@ -41,7 +42,8 @@ class RestaurantReservation : public QObject
         explicit RestaurantReservation(QObject* parent = 0);
         QString reservationNumber() const;
         QString name() const;
-        QDateTime startTime() const;
+        QString startDate() const;
+        QString startTime() const;
         int partySize() const;
         QString restaurantName() const;
         QString streetAddress() const;

@@ -22,7 +22,8 @@
 
 #include "src/abstractreservationplugin.h"
 
-#include <QtCore/QDateTime>
+#include <QtCore/QDate>
+#include <QtCore/QTime>
 #include <QtSql/QSqlDatabase>
 
 class RestaurantReservation : public AbstractReservationPlugin
@@ -58,7 +59,8 @@ class RestaurantReservation : public AbstractReservationPlugin
 
         QString m_reservationNumber;
         QString m_name;
-        QDateTime m_startTime;
+        QDate m_startDate;
+        QTime m_startTime;
         int m_partySize;
         QString m_restaurantName;
         QString m_streetAddress;
