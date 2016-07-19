@@ -37,6 +37,11 @@ ColumnLayout {
     property string addressLocality: "San Francisco"
     property string addressRegion: "CA"
 
+    anchors {
+        left: parent.left
+        right: parent.right
+    }
+
     RowLayout {
         id: top
         anchors {

@@ -36,6 +36,11 @@ ColumnLayout {
     property string streetAddress: "24 Millie Ways Plaza"
     property string addressLocality: "San Francisco"
 
+    anchors {
+        left: parent.left
+        right: parent.right
+    }
+
     RowLayout {
         id: top
         anchors {

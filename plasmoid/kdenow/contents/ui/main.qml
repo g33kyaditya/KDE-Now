@@ -39,6 +39,7 @@ ColumnLayout {
         anchors.fill: parent
         ListView {
             anchors.fill: parent
+            anchors.centerIn: parent
             model: plasmoidModel
         }
     }
