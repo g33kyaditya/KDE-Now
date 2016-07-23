@@ -41,9 +41,8 @@ EventReservation::EventReservation(QObject* parent, const QVariantList& args)
     dbus.registerObject("/Event", this);
     dbus.registerService("org.kde.kdenow.event");
     m_pluginName = "eventDataExtractor";
-    //connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
+    connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
     connect(this, &EventReservation::extractedData, this, &EventReservation::setDBusData);
-    //connect(this, &EventReservation::addedToDatabase, this, &EventReservation::setDBusData);
 }
 
 EventReservation::~EventReservation()
@@ -111,7 +110,6 @@ void EventReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
-        emit addedToDatabase();
     }
 }
 

@@ -43,7 +43,7 @@ HotelReservation::HotelReservation(QObject* parent, const QVariantList& args)
     dbus.registerService("org.kde.kdenow.hotel");
     m_pluginName = "hotelDataExtractor";
     connect(this, &HotelReservation::extractedData, this, &HotelReservation::cacheData);
-    connect(this, &HotelReservation::addedToDatabase, this, &HotelReservation::setDBusData);
+    connect(this, &HotelReservation::extractedData, this, &HotelReservation::setDBusData);
 }
 
 HotelReservation::~HotelReservation()
@@ -114,7 +114,6 @@ void HotelReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
-        emit addedToDatabase();
     }
 }
 

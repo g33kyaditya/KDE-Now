@@ -43,7 +43,7 @@ RestaurantReservation::RestaurantReservation(QObject* parent, const QVariantList
     dbus.registerService("org.kde.kdenow.restaurant");
     m_pluginName = "restaurantDataExtractor";
     connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::cacheData);
-    connect(this, &RestaurantReservation::addedToDatabase, this, &RestaurantReservation::setDBusData);
+    connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::setDBusData);
 }
 
 RestaurantReservation::~RestaurantReservation()
@@ -112,7 +112,6 @@ void RestaurantReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
-        emit addedToDatabase();
     }
 }
 

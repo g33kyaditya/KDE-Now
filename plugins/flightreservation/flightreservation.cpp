@@ -45,7 +45,7 @@ FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
     dbus.registerService("org.kde.kdenow.flight");
     m_pluginName = "flightDataExtractor";
     connect(this, &FlightReservation::extractedData, this, &FlightReservation::cacheData);
-    connect(this, &FlightReservation::addedToDatabase, this, &FlightReservation::setDBusData);
+    connect(this, &FlightReservation::extractedData, this, &FlightReservation::setDBusData);
 }
 
 FlightReservation::~FlightReservation()
@@ -120,7 +120,6 @@ void FlightReservation::cacheData()
     }
     else {
         qDebug() << "Updated Table Successfully";
-        emit addedToDatabase();
     }
 }
 
