@@ -21,5 +21,7 @@ install (FILES EventInformation.qml
                HotelInformation.qml
                Hotel.jpg
                ph.png
+               RestaurantInformation.qml
+               Restaurant.jpg
          DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow
          )

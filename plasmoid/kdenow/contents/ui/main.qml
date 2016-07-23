@@ -107,14 +107,15 @@ ColumnLayout {
         plasmoidModel.append(card)
     }
 
-    /*function prepareRestaurantCard(map) {
+    function prepareRestaurantCard(map) {
         var reservation = restaurantReservationComponent.createObject(root)
         reservation.setMap(map)
 
-        var card = restaurantCardComponent(root,
+        var card = restaurantCardComponent.createObject(root,
             {
                 "reservationNumber": reservation.reservationNumber,
                 "name": reservation.name,
+                "startDate": reservation.startDate,
                 "startTime": reservation.startTime,
                 "partySize": reservation.partySize,
                 "restaurantName": reservation.restaurantName,
@@ -124,7 +125,7 @@ ColumnLayout {
             }
         )
         plasmoidModel.append(card)
-    }*/
+    }
 
     Component {
         id: eventReservationComponent
@@ -144,11 +145,11 @@ ColumnLayout {
         }
     }
 
-    /*Component {
+    Component {
         id: restaurantReservationComponent
         KDENow.RestaurantReservation {
         }
-    }*/
+    }
 
     Component {
         id: eventCardComponent
@@ -168,9 +169,9 @@ ColumnLayout {
         }
     }
 
-    /*Component {
+    Component {
         id: restaurantCardComponent
         KDENow.RestaurantInformation {
         }
-    }*/
+    }
 }   //End KDE Now
