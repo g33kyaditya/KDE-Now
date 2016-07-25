@@ -67,7 +67,7 @@ ColumnLayout {
         plasmoidModel.append(card)
     }
 
-    /*function prepareFlightCard(map) {
+    function prepareFlightCard(map) {
         var reservation = flightReservationComponent.createObject(root)
         reservation.setMap(map)
 
@@ -78,14 +78,16 @@ ColumnLayout {
                 "flight": reservation.flight,
                 "departureAirportName": reservation.departureAirportName,
                 "departureAirportCode": reservation.departureAirportCode,
+                "departureDate": reservation.departureDate,
                 "departureTime": reservation.departureTime,
                 "arrivalAirportName": reservation.arrivalAirportName,
                 "arrivalAirportCode": reservation.arrivalAirportCode,
+                "arrivalDate": reservation.arrivalDate,
                 "arrivalTime": reservation.arrivalTime,
             }
         )
         plasmoidModel.append(card)
-    }*/
+    }
 
     function prepareHotelCard(map) {
         var reservation = hotelReservationComponent.createObject(root)
@@ -133,11 +135,11 @@ ColumnLayout {
         }
     }
 
-    /*Component {
+    Component {
         id: flightReservationComponent
         KDENow.FlightReservation {
         }
-    }*/
+    }
 
     Component {
         id: hotelReservationComponent
@@ -157,11 +159,11 @@ ColumnLayout {
         }
     }
 
-    /*Component {
+    Component {
         id: flightCardComponent
         KDENow.FlightInformation {
         }
-    }*/
+    }
 
     Component {
         id: hotelCardComponent

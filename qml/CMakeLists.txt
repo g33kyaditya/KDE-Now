@@ -18,6 +18,8 @@ install (TARGETS kdenowqmlplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow)
 install (FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow)
 install (FILES EventInformation.qml
                Event.jpg
+               FlightInformation.qml
+               Flight.jpg
                HotelInformation.qml
                Hotel.jpg
                ph.png
