@@ -55,7 +55,7 @@ ColumnLayout {
                 left: parent.left
             }
             id: background
-            source: "Event.jpg"
+            source: "resources/Event.jpg"
             sourceSize.width: root.width
             PlasmaExtras.Heading {
                 text: "Event"

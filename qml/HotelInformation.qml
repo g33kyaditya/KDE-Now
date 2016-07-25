@@ -56,7 +56,7 @@ ColumnLayout {
                 left: parent.left
             }
             id: background
-            source: "Hotel.jpg"
+            source: "resources/Hotel.jpg"
             sourceSize.width: root.width
             PlasmaExtras.Heading {
                 text: "Hotel"
@@ -93,7 +93,7 @@ ColumnLayout {
                 RowLayout {
                     spacing: 3
                     Image {
-                        source: "ph.png"
+                        source: "resources/phone.png"
                     }
                     PlasmaExtras.Paragraph {
                         text: telephone

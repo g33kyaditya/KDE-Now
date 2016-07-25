@@ -57,7 +57,7 @@ ColumnLayout {
                 left: parent.left
             }
             id: background
-            source: "Flight.jpg"
+            source: "resources/Flight.jpg"
             sourceSize.width: root.width
             PlasmaExtras.Heading {
                 text: flight
