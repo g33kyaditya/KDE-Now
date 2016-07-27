@@ -23,6 +23,7 @@
 #include "restaurantadaptor.h"
 
 #include <QtCore/QDateTime>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QDebug>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
@@ -118,7 +119,8 @@ void RestaurantReservation::cacheData()
 void RestaurantReservation::initDatabase()
 {
     m_db = QSqlDatabase::addDatabase("QSQLITE", m_pluginName);
-    m_db.setDatabaseName("kdenowdb");
+    QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    m_db.setDatabaseName(path);
 
     if (!m_db.open()) {
         qWarning() << "Unable to open database";
