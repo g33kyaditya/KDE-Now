@@ -100,7 +100,7 @@ void EventReservation::cacheData()
     updateQuery.bindValue(":name", m_name);
     updateQuery.bindValue(":eventName", m_eventName);
     updateQuery.bindValue(":startDate", m_startDate.toString());
-    updateQuery.bindValue(":startTime", m_startTime.toString());
+    updateQuery.bindValue(":startTime", m_startTime.toString("h:mm AP"));
     updateQuery.bindValue(":location", m_location);
     updateQuery.bindValue(":streetAddress", m_streetAddress);
     updateQuery.bindValue(":addressLocality", m_addressLocality);
@@ -146,7 +146,7 @@ void EventReservation::setDBusData()
     m_dbusMap.insert("name", m_name);
     m_dbusMap.insert("eventName", m_eventName);
     m_dbusMap.insert("startDate", m_startDate.toString());
-    m_dbusMap.insert("startTime", m_startTime.toString());
+    m_dbusMap.insert("startTime", m_startTime.toString("h:mm AP"));
     m_dbusMap.insert("location", m_location);
     m_dbusMap.insert("streetAddress", m_streetAddress);
     m_dbusMap.insert("addressLocality", m_addressLocality);

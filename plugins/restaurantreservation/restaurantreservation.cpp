@@ -96,11 +96,12 @@ void RestaurantReservation::cacheData()
     }
 
     QSqlQuery updateQuery(m_db);
-    QString queryString = "insert into Restaurant values (:id, :reservationNumber, :name, :startTime, :partySize, :restaurantName, :streetAddress, :addressLocality, :addressRegion)";
+    QString queryString = "insert into Restaurant values (:id, :reservationNumber, :name, :startDate, :startTime, :partySize, :restaurantName, :streetAddress, :addressLocality, :addressRegion)";
     updateQuery.prepare(queryString);
     updateQuery.bindValue(":reservationNumber", m_reservationNumber);
     updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":startTime", m_startTime.toString());
+    updateQuery.bindValue(":startDate", m_startDate.toString());
+    updateQuery.bindValue(":startTime", m_startTime.toString("h:mm AP"));
     updateQuery.bindValue(":partySize", m_partySize);
     updateQuery.bindValue(":restaurantName", m_restaurantName);
     updateQuery.bindValue(":streetAddress", m_streetAddress);
@@ -131,7 +132,7 @@ void RestaurantReservation::initDatabase()
     }
 
     QSqlQuery addQuery(m_db);
-    QString queryString = "create table if not exists Restaurant(id integer primary key autoincrement, reservationNumber varchar, name varchar, startTime varchar, partySize integer, restaurantName varchar, streetAddress varchar, addressLocality varchar, addressRegion varchar)";
+    QString queryString = "create table if not exists Restaurant(id integer primary key autoincrement, reservationNumber varchar, name varchar, startDate varchar, startTime varchar, partySize integer, restaurantName varchar, streetAddress varchar, addressLocality varchar, addressRegion varchar)";
 
     if (!addQuery.exec(queryString)) {
         qWarning() << "Unable to create table";
@@ -147,7 +148,7 @@ void RestaurantReservation::setDBusData()
     m_dbusData.insert("reservationNumber", m_reservationNumber);
     m_dbusData.insert("name", m_name);
     m_dbusData.insert("startDate", m_startDate.toString());
-    m_dbusData.insert("startTime", m_startTime.toString());
+    m_dbusData.insert("startTime", m_startTime.toString("h:mm AP"));
     m_dbusData.insert("partySize", m_partySize);
     m_dbusData.insert("restaurantName", m_restaurantName);
     m_dbusData.insert("streetAddress", m_streetAddress);

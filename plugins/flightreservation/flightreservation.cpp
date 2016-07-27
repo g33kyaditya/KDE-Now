@@ -103,17 +103,19 @@ void FlightReservation::cacheData()
     }
 
     QSqlQuery updateQuery(m_db);
-    QString queryString = "insert into Flight values (:id, :reservationNumber, :name, :flight, :departureAirportName, :departureAirportCode, :departureTime, :arrivalAirportName, :arrivalAirportCode, :arrivalTime)";
+    QString queryString = "insert into Flight values (:id, :reservationNumber, :name, :flight, :departureAirportName, :departureAirportCode, :departureDate, :departureTime, :arrivalAirportName, :arrivalAirportCode, :arrivalDate, :arrivalTime)";
     updateQuery.prepare(queryString);
     updateQuery.bindValue(":reservationNumber", m_reservationNumber);
     updateQuery.bindValue(":name", m_name);
     updateQuery.bindValue(":flight", m_flight);
     updateQuery.bindValue(":departureAirportName", m_departureAirportName);
     updateQuery.bindValue(":departureAirportCode", m_departureAirportCode);
-    updateQuery.bindValue(":departureTime", m_departureTime.toString());
+    updateQuery.bindValue(":departureDate", m_departureDate.toString());
+    updateQuery.bindValue(":departureTime", m_departureTime.toString("h:mm AP"));
     updateQuery.bindValue(":arrivalAirportName", m_arrivalAirportName);
     updateQuery.bindValue(":arrivalAirportCode", m_arrivalAirportCode);
-    updateQuery.bindValue(":arrivalTime", m_arrivalTime.toString());
+    updateQuery.bindValue(":arrivalDate", m_arrivalDate.toString());
+    updateQuery.bindValue(":arrivalTime", m_arrivalTime.toString("h:mm AP"));
 
     if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Flight Table";
@@ -139,7 +141,7 @@ void FlightReservation::initDatabase()
     }
 
     QSqlQuery addQuery(m_db);
-    QString queryString = "create table if not exists Flight(id integer primary key autoincrement, reservationNumber varchar, name varchar, flight varchar, departureAirportName varchar, departureAirportCode varchar, departureTime varchar, arrivalAirportName varchar, arrivalAirportCode varchar, arrivalTime varchar)";
+    QString queryString = "create table if not exists Flight(id integer primary key autoincrement, reservationNumber varchar, name varchar, flight varchar, departureAirportName varchar, departureAirportCode varchar, departureDate varchar, departureTime varchar, arrivalAirportName varchar, arrivalAirportCode varchar, arrivalDate varchar, arrivalTime varchar)";
 
     if (!addQuery.exec(queryString)) {
         qWarning() << "Unable to create table";
@@ -158,11 +160,11 @@ void FlightReservation::setDBusData()
     m_dbusMap.insert("departureAirportName", m_departureAirportName);
     m_dbusMap.insert("departureAirportCode", m_departureAirportCode);
     m_dbusMap.insert("departureDate", m_departureDate.toString());
-    m_dbusMap.insert("departureTime", m_departureTime.toString());
+    m_dbusMap.insert("departureTime", m_departureTime.toString("h:mm AP"));
     m_dbusMap.insert("arrivalAirportName", m_arrivalAirportName);
     m_dbusMap.insert("arrivalAirportCode", m_arrivalAirportCode);
     m_dbusMap.insert("arrivalDate", m_arrivalDate.toString());
-    m_dbusMap.insert("arrivalTime", m_arrivalTime.toString());
+    m_dbusMap.insert("arrivalTime", m_arrivalTime.toString("h:mm AP"));
 
     emit update();
 }
