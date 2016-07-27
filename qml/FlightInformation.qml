@@ -80,22 +80,26 @@ ColumnLayout {
                     text: "Depart"
                     font.bold: true
                     level: 3
+                    color: "white"
                 }
                 RowLayout {
                     PlasmaExtras.Heading {
                         text: departureAirportName
                         level: 4
+                        color: "white"
                     }
                 }
                 RowLayout {
                     PlasmaExtras.Heading {
                         text: departureAirportCode
                         level: 2
+                        color: "white"
                         Layout.alignment: Qt.AlignTop
                     }
                     PlasmaExtras.Heading {
                         text: departureTime
                         level: 5
+                        color: "white"
                     }
                 }
             }
@@ -114,23 +118,27 @@ ColumnLayout {
                     text: "Arrive"
                     font.bold: true
                     level: 3
+                    color: "white"
                 }
                 RowLayout {
                     PlasmaExtras.Heading {
                         text: arrivalAirportName
                         level: 4
+                        color: "white"
                     }
                 }
                 RowLayout {
                     PlasmaExtras.Heading {
                         text: arrivalAirportCode
                         level: 2
+                        color: "white"
                         Layout.alignment: Qt.AlignTop
                     }
 
                 PlasmaExtras.Heading {
                     text: arrivalTime
                     level: 5
+                    color: "white"
                     }
                 }
             }
