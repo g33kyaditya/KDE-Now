@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015  Vishesh Handa <vhanda@kde.org>
+ * Copyright (C) 2016  Aditya Dev Sharma <aditya.sharma15696@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,48 +18,42 @@
  */
 
 #include <QtCore/QObject>
-#include <QtCore/QCoreApplication>
-
-#include <QCommandLineParser>
-#include <QCommandLineOption>
+#include <QtGui/QApplication>
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 
 #include "daemon.h"
+#include "credentialshandler.h"
 
 int main(int argc, char** argv)
 {
-    QCoreApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-    QCommandLineParser parser;
-    parser.addOption(QCommandLineOption("imapServer", "Imap server", "server"));
-    parser.addOption(QCommandLineOption("imapPort", "Imap port", "number"));
-    parser.addOption(QCommandLineOption("username", "Email", "email"));
-    parser.addOption(QCommandLineOption("password", "Email password", "password"));
-    parser.addHelpOption();
-    parser.process(app);
-
-    if (!parser.isSet("imapServer") || !parser.isSet("imapPort") || !parser.isSet("username")
-        || !parser.isSet("password")) {
-        parser.showHelp(1);
-    }
+    CredentialsHandler handler;
+    UserCredentials credentials;
 
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
     KConfigGroup generalGroup(config, "General");
     QString state = generalGroup.readEntry("STATE", QString());
+
     if (state != "Update") {
         qDebug() << "FirstRun";
         generalGroup.writeEntry("STATE", "FirstRun");
         generalGroup.config()->sync();
+
+        handler.showUserCredentialsPage();
+        credentials = handler.getUserCredentials();
+    }
+    else {
+        credentials = handler.getUserCredentialsFromKWallet();
     }
 
     Daemon* daemon = new Daemon;
-    daemon->setHostName(parser.value("imapServer"));
-    daemon->setUsername(parser.value("username"));
-    daemon->setPassword(parser.value("password"));
-    daemon->setPort(parser.value("imapPort").toUShort());
-
+    daemon->setHostName(credentials.imapServer);
+    daemon->setUsername(credentials.username);
+    daemon->setPassword(credentials.password);
+    daemon->setPort(credentials.imapPort.toUShort());
     return app.exec();
 }

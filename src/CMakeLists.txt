@@ -1,5 +1,6 @@
 add_executable(kdenowd
     main.cpp
+    credentialshandler.cpp
 )
 
 set(dbus_SRCS org.kde.kdenow.xml)
@@ -35,10 +36,14 @@ PUBLIC
     KF5::KIOCore
     KF5::CoreAddons
     KF5::Service
+    KF5::Wallet
 )
 
 target_link_libraries(kdenowd
     kdenowcore
+    Qt5::Quick
+    Qt5::Gui
+    Qt5::Widgets
 )
 
 generate_export_header(kdenowcore

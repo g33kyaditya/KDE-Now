@@ -30,3 +30,4 @@ install (FILES
             resources/Restaurant.jpg
         DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow/resources
         )
+#install(FILES UserCredentials.qml DESTINATION ${BIN_INSTALL_DIR})
