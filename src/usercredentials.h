@@ -17,33 +17,16 @@
  *
  */
 
-#ifndef CREDENTIALSHANDLER_H
-#define CREDENTIALSHANDLER_H
+#ifndef USERCREDENTIALS_H
+#define USERCREDENTIALS_H
 
-#include <QtQuick/QtQuick>
-#include <QtCore/QObject>
-#include <QtCore/QDebug>
+#include <QtCore/QString>
 
-#include "usercredentials.h"
-
-class CredentialsHandler : public QObject
-{
-        Q_OBJECT
-
-    public:
-        CredentialsHandler(QObject* parent = 0);
-        void showUserCredentialsPage();
-
-    Q_SIGNALS:
-        void gotUserCredentials(UserCredentials credentials);
-
-    public Q_SLOTS:
-        void onOkPressed(QString imapServer, QString imapPort, QString username, QString password);
-        void onCancelPressed();
-
-    private:
-        UserCredentials m_credentials;
-        QQuickView m_view;
+struct UserCredentials {
+    QString imapServer;
+    QString imapPort;
+    QString username;
+    QString password;
 };
 
-#endif //CREDENTIALSHANDLER_H
+#endif  //USERCREDENTIALS_H

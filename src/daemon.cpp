@@ -38,30 +38,19 @@ Daemon::Daemon(QObject* parent): QObject(parent)
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/KDENow", this);
     dbus.registerService("org.kde.kdenow");
-    QTimer::singleShot(0, this, &Daemon::start);
     connect(this, &Daemon::signalUpdateProcess, this, &Daemon::start);
     Processor *processor = SingletonFactory::instanceFor<Processor>();
     connect(this, &Daemon::fetchedEmail, processor, &Processor::process);
 }
 
-void Daemon::setHostName(const QString& hostName)
-{
-    m_hostName = hostName;
-}
+void Daemon::setCredentials(UserCredentials credentials) {
+    m_hostName = credentials.imapServer;
+    m_port = credentials.imapPort.toULongLong();
+    m_username = credentials.username;
+    m_password = credentials.password;
 
-void Daemon::setPort(qint64 port)
-{
-    m_port = port;
-}
-
-void Daemon::setUsername(const QString& username)
-{
-    m_username = username;
-}
-
-void Daemon::setPassword(const QString& password)
-{
-    m_password = password;
+    qDebug() << credentials.imapServer << " " << credentials.password;
+    QTimer::singleShot(0, this, &Daemon::start);
 }
 
 void Daemon::start()

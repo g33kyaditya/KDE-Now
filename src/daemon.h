@@ -21,6 +21,7 @@
 #define DAEMON_H
 
 #include "kdenowcore_export.h"
+#include "usercredentials.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
@@ -40,10 +41,6 @@ class KDENOWCORE_EXPORT Daemon : public QObject
 
     public:
         Daemon(QObject* parent = 0);
-        void setHostName(const QString& hostName);
-        void setPort(qint64 port);
-        void setUsername(const QString& username);
-        void setPassword(const QString& password);
 
         void login();
         bool validUids();
@@ -58,6 +55,7 @@ class KDENOWCORE_EXPORT Daemon : public QObject
 
     public Q_SLOTS:
         QString startDaemon();
+        void setCredentials(UserCredentials credentials);
 
     private Q_SLOTS:
         void onLoginJobFinished(KJob* job);

@@ -1,6 +1,7 @@
 add_executable(kdenowd
     main.cpp
     credentialshandler.cpp
+    walletmanager.cpp
 )
 
 set(dbus_SRCS org.kde.kdenow.xml)

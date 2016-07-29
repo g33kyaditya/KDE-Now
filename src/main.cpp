@@ -17,15 +17,18 @@
  *
  */
 
+#include "daemon.h"
+#include "credentialshandler.h"
+#include "usercredentials.h"
+#include "walletmanager.h"
+
 #include <QtCore/QObject>
+#include <QtCore/QFile>
 #include <QtGui/QApplication>
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-
-#include "daemon.h"
-#include "credentialshandler.h"
 
 int main(int argc, char** argv)
 {
@@ -33,27 +36,28 @@ int main(int argc, char** argv)
 
     CredentialsHandler handler;
     UserCredentials credentials;
+    WalletManager wallet;
+
+    QObject::connect(&handler, &CredentialsHandler::gotUserCredentials,
+            &wallet, &WalletManager::onUserCredentialsReceived);
+    QObject::connect(&wallet, &WalletManager::finished, &wallet, &WalletManager::addToWallet);
+    QObject::connect(&wallet, &WalletManager::addedToWallet, &wallet, &WalletManager::getCredentials);
 
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
     KConfigGroup generalGroup(config, "General");
     QString state = generalGroup.readEntry("STATE", QString());
 
+    Daemon* daemon = new Daemon;
+    QObject::connect(&wallet, &WalletManager::setDaemonData, daemon, &Daemon::setCredentials);
     if (state != "Update") {
         qDebug() << "FirstRun";
         generalGroup.writeEntry("STATE", "FirstRun");
         generalGroup.config()->sync();
 
         handler.showUserCredentialsPage();
-        credentials = handler.getUserCredentials();
     }
     else {
-        credentials = handler.getUserCredentialsFromKWallet();
+        wallet.getCredentials();
     }
-
-    Daemon* daemon = new Daemon;
-    daemon->setHostName(credentials.imapServer);
-    daemon->setUsername(credentials.username);
-    daemon->setPassword(credentials.password);
-    daemon->setPort(credentials.imapPort.toUShort());
     return app.exec();
 }

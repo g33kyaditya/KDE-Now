@@ -17,33 +17,35 @@
  *
  */
 
-#ifndef CREDENTIALSHANDLER_H
-#define CREDENTIALSHANDLER_H
-
-#include <QtQuick/QtQuick>
-#include <QtCore/QObject>
-#include <QtCore/QDebug>
+#ifndef WALLETMANAGER_H
+#define WALLETMANAGER_H
 
 #include "usercredentials.h"
 
-class CredentialsHandler : public QObject
+#include <QtCore/QObject>
+
+#include <KWallet/KWallet>
+
+class WalletManager : public QObject
 {
         Q_OBJECT
 
     public:
-        CredentialsHandler(QObject* parent = 0);
-        void showUserCredentialsPage();
+        explicit WalletManager(QObject* parent = 0);
+        void getCredentials();
 
     Q_SIGNALS:
-        void gotUserCredentials(UserCredentials credentials);
+        void finished();
+        void setDaemonData(UserCredentials credentials);
+        void addedToWallet();
 
     public Q_SLOTS:
-        void onOkPressed(QString imapServer, QString imapPort, QString username, QString password);
-        void onCancelPressed();
+        void onUserCredentialsReceived(UserCredentials credentials);
+        void addToWallet();
 
     private:
+        KWallet::Wallet* m_wallet;
         UserCredentials m_credentials;
-        QQuickView m_view;
 };
 
-#endif //CREDENTIALSHANDLER_H
+#endif //WALLETMANAGER_H
