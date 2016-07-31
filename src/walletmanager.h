@@ -35,13 +35,7 @@ class WalletManager : public QObject
         void getCredentials();
 
     Q_SIGNALS:
-        void finished();
         void setDaemonData(UserCredentials credentials);
-        void addedToWallet();
-
-    public Q_SLOTS:
-        void onUserCredentialsReceived(UserCredentials credentials);
-        void addToWallet();
 
     private:
         KWallet::Wallet* m_wallet;

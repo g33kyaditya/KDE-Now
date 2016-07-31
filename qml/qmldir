@@ -5,3 +5,4 @@ EventInformation 0.1 EventInformation.qml
 FlightInformation 0.1 FlightInformation.qml
 HotelInformation 0.1 HotelInformation.qml
 RestaurantInformation 0.1 RestaurantInformation.qml
+UserCredentials 0.1 UserCredentials.qml

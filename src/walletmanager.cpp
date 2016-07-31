@@ -27,18 +27,12 @@ WalletManager::WalletManager(QObject* parent): QObject(parent)
 
 }
 
-void WalletManager::onUserCredentialsReceived(UserCredentials credentials)
-{
-    m_credentials = credentials;
-    emit finished();
-}
-
 void WalletManager::getCredentials()
 {
     m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
-                                           0,
-                                           KWallet::Wallet::Synchronous
-                                           );
+                                            0,
+                                            KWallet::Wallet::Synchronous
+                                          );
     m_wallet->setFolder("KDENow");
     QMap<QString, QString> walletMap;
     m_wallet->readMap("KDENowKey", walletMap);
@@ -50,36 +44,4 @@ void WalletManager::getCredentials()
 
     KWallet::Wallet::closeWallet("KDENowWallet", true);
     emit setDaemonData(m_credentials);
-}
-
-void WalletManager::addToWallet()
-{
-    m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
-                                           0,
-                                           KWallet::Wallet::Synchronous
-                                           );
-    if (m_wallet->createFolder("KDENow") && m_wallet->setFolder("KDENow")) {
-        qDebug() << "Created and set the folder in KWallet";
-    }
-    else {
-        qDebug() << "Could not create or set the folder";
-        return;
-    }
-
-    QMap<QString, QString> walletMap;
-    walletMap.insert("imapServer", m_credentials.imapServer);
-    walletMap.insert("imapPort", m_credentials.imapPort);
-    walletMap.insert("username", m_credentials.username);
-    walletMap.insert("password", m_credentials.password);
-
-    int fail = m_wallet->writeMap("KDENowKey", walletMap);
-    if (fail) {
-        qDebug() << "Could not write map";
-        return;
-    }
-    else {
-        qDebug() << "Succesfully written map";
-    }
-    KWallet::Wallet::closeWallet("KDENowWallet", true);
-    emit addedToWallet();
 }

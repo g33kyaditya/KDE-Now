@@ -1,6 +1,5 @@
 add_executable(kdenowd
     main.cpp
-    credentialshandler.cpp
     walletmanager.cpp
 )
 

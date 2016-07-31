@@ -19,35 +19,28 @@
 
 #include "datahandler.h"
 
+#include <QtCore/QMap>
 #include <QtCore/QDebug>
 #include <QtDBus/QDBusReply>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusConnection>
 
-DataHandler::DataHandler(QObject* parent): QObject(parent)
-{
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/KDENow");
+DataHandler::DataHandler(QObject* parent): QObject(parent) {
 
-    //Call a method, to start the kdenowd daemon if it hasn't yet started
-    QDBusReply<QString> reply = interface->call("startDaemon");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /KDENow";
-        qDebug() << reply.value();
+    connect(this, &DataHandler::addedToWallet, this, &DataHandler::setDBusConnections);
+    connect(this, &DataHandler::showUserCredentialsPage, this,
+            &DataHandler::onShowUserCredentialsPage);
+    m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
+                                            0,
+                                            KWallet::Wallet::Synchronous
+                                          );
+    if (!m_wallet->hasFolder("KDENow")) {
+        emit showUserCredentialsPage();
     }
     else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /KDENow";
-        return;
+        emit addedToWallet();
     }
-
-    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
-                 "update", this, SLOT(onEventMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
-                 "update", this, SLOT(onFlightMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
-                 "update", this, SLOT(onHotelMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
-                 "update", this, SLOT(onRestaurantMapReceived()));
+    KWallet::Wallet::closeWallet("KDENowWallet", true);
 }
 
 void DataHandler::onEventMapReceived()
@@ -121,4 +114,74 @@ void DataHandler::onRestaurantMapReceived()
 QVariantMap DataHandler::getMap()
 {
     return m_map;
+}
+
+void DataHandler::onOkPressed(QString imapServer, QString imapPort, QString username,
+                              QString password)
+{
+    m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
+                                            0,
+                                            KWallet::Wallet::Synchronous
+                                          );
+    if (m_wallet->createFolder("KDENow") && m_wallet->setFolder("KDENow")) {
+        qDebug() << "Created and set the folder in KWallet";
+    }
+    else {
+        qDebug() << "Could not create or set the folder";
+        return;
+    }
+
+    QMap<QString, QString> walletMap;
+    walletMap.insert("imapServer", imapServer);
+    walletMap.insert("imapPort", imapPort);
+    walletMap.insert("username", username);
+    walletMap.insert("password", password);
+
+    m_view.close();
+    int fail = m_wallet->writeMap("KDENowKey", walletMap);
+    if (fail) {
+        qDebug() << "Could not write map";
+        return;
+    }
+    else {
+        qDebug() << "Succesfully written map";
+    }
+    KWallet::Wallet::closeWallet("KDENowWallet", true);
+    emit addedToWallet();
+}
+
+void DataHandler::setDBusConnections()
+{
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/KDENow");
+
+    //Call a method, to start the kdenowd daemon if it hasn't yet started
+    QDBusReply<QString> reply = interface->call("startDaemon");
+    if (reply.isValid()) {
+        qDebug() << "Valid Reply received from org.kde.kdenow /KDENow";
+        qDebug() << reply.value();
+    }
+    else {
+        qDebug() << "Did not receive a valid reply from org.kde.kdenow /KDENow";
+        return;
+    }
+
+    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
+                 "update", this, SLOT(onEventMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
+                 "update", this, SLOT(onFlightMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
+                 "update", this, SLOT(onHotelMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
+                 "update", this, SLOT(onRestaurantMapReceived()));
+}
+
+void DataHandler::onShowUserCredentialsPage()
+{
+    m_view.setSource(QUrl("qrc:/UserCredentials.qml"));
+    QObject* object = m_view.rootObject();
+    connect(object, SIGNAL(okSignal(QString, QString, QString, QString)),
+           this, SLOT(onOkPressed(QString, QString, QString, QString)));
+    //connect(object, SIGNAL(cancelSignal()), this, SLOT(onCancelPressed()));
+    m_view.show();
 }

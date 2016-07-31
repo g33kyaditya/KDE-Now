@@ -7,11 +7,15 @@ set (qml_plugins_SRCS
     restaurantreservation.cpp
 )
 
-add_library(kdenowqmlplugin SHARED ${qml_plugins_SRCS})
+qt5_add_resources(RCC_SOURCES resources.qrc)
+
+add_library(kdenowqmlplugin SHARED ${qml_plugins_SRCS} ${RCC_SOURCES})
 
 target_link_libraries(kdenowqmlplugin
     Qt5::Qml
     Qt5::DBus
+    KF5::Wallet
+    Qt5::Quick
 )
 
 install (TARGETS kdenowqmlplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow)
@@ -20,6 +24,7 @@ install (FILES EventInformation.qml
                FlightInformation.qml
                HotelInformation.qml
                RestaurantInformation.qml
+               UserCredentials.qml
          DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow
          )
 install (FILES
@@ -30,4 +35,3 @@ install (FILES
             resources/Restaurant.jpg
         DESTINATION ${QML_INSTALL_DIR}/org/kde/kdenow/resources
         )
-install(FILES UserCredentials.qml DESTINATION ${BIN_INSTALL_DIR})
