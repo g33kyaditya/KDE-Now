@@ -33,13 +33,7 @@ int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
 
-
-    UserCredentials credentials;
     WalletManager wallet;
-
-    KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
-    KConfigGroup generalGroup(config, "General");
-    QString state = generalGroup.readEntry("STATE", QString());
 
     Daemon* daemon = new Daemon;
     QObject::connect(&wallet, &WalletManager::setDaemonData, daemon, &Daemon::setCredentials);

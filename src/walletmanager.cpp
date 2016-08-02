@@ -34,14 +34,23 @@ void WalletManager::getCredentials()
                                             KWallet::Wallet::Synchronous
                                           );
     m_wallet->setFolder("KDENow");
+    QStringList keys = m_wallet->entryList();
     QMap<QString, QString> walletMap;
-    m_wallet->readMap("KDENowKey", walletMap);
-    qDebug() << "WalletMap = " << walletMap;
-    m_credentials.imapServer = walletMap.value("imapServer");
-    m_credentials.imapPort = walletMap.value("imapPort");
-    m_credentials.username = walletMap.value("username");
-    m_credentials.password = walletMap.value("password");
-
+    UserCredentials credentials;
+    foreach (QString key, keys) {
+        m_wallet->readMap(key, walletMap);
+        qDebug() << "WalletMap = " << walletMap;
+        credentials.imapServer = walletMap.value("imapServer");
+        credentials.imapPort = walletMap.value("imapPort");
+        credentials.username = walletMap.value("username");
+        credentials.password = walletMap.value("password");
+        m_credentialsList.append(credentials);
+    }
     KWallet::Wallet::closeWallet("KDENowWallet", true);
-    emit setDaemonData(m_credentials);
+    if (!m_credentialsList.isEmpty()) {
+        emit setDaemonData(m_credentialsList);
+    }
+    else {
+        qDebug() << "Credentials List is empty";
+    }
 }

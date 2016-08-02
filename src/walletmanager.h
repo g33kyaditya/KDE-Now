@@ -20,13 +20,15 @@
 #ifndef WALLETMANAGER_H
 #define WALLETMANAGER_H
 
+#include "kdenowcore_export.h"
 #include "usercredentials.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QList>
 
 #include <KWallet/KWallet>
 
-class WalletManager : public QObject
+class KDENOWCORE_EXPORT WalletManager : public QObject
 {
         Q_OBJECT
 
@@ -35,11 +37,11 @@ class WalletManager : public QObject
         void getCredentials();
 
     Q_SIGNALS:
-        void setDaemonData(UserCredentials credentials);
+        void setDaemonData(QList< UserCredentials >& credentialsList);
 
     private:
         KWallet::Wallet* m_wallet;
-        UserCredentials m_credentials;
+        QList< UserCredentials > m_credentialsList;
 };
 
 #endif //WALLETMANAGER_H

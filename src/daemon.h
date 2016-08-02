@@ -24,15 +24,6 @@
 #include "usercredentials.h"
 
 #include <QtCore/QObject>
-#include <QtCore/QTimer>
-#include <QtCore/QString>
-
-#include <KIMAP/Session>
-#include <KIMAP/LoginJob>
-#include <KIMAP/SelectJob>
-#include <KIMAP/FetchJob>
-#include <KIMAP/IdleJob>
-
 
 class KDENOWCORE_EXPORT Daemon : public QObject
 {
@@ -42,43 +33,9 @@ class KDENOWCORE_EXPORT Daemon : public QObject
     public:
         Daemon(QObject* parent = 0);
 
-        void login();
-        bool validUids();
-        void searchNewMessages();
-        void searchAllMessages();
-        void fetchEmails(KIMAP::SelectJob* job);
-        void startIdle();
-
-    Q_SIGNALS:
-        void fetchedEmail(KIMAP::MessagePtr message);
-        void signalUpdateProcess();
-
     public Q_SLOTS:
         QString startDaemon();
-        void setCredentials(UserCredentials credentials);
-
-    private Q_SLOTS:
-        void onLoginJobFinished(KJob* job);
-        void onSelectJobFinished(KJob* job);
-        void onSearchJobFinished(KJob* job);
-        void onFetchJobFinished(const QString &mailBox, const QMap<qint64, qint64> &uids,
-                              const QMap<qint64, KIMAP::MessagePtr> &messages);
-        void onIdleChanged(KIMAP::IdleJob *job, const QString &mailBox,
-                            int messageCount, int recentCount);
-        void start();
-        //void startIdle();
-
-    private:
-        KIMAP::Session* m_session;
-
-        QString m_hostName;
-        qint64 m_port;
-        QString m_username;
-        QString m_password;
-
-        qint64 m_nextUid;
-        qint64 m_uidValidity;
-        int m_messageCount;
+        void setCredentials(QList < UserCredentials >& credentialsList);
 };
 
 #endif //DAEMON_H
