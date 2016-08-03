@@ -32,11 +32,18 @@ Daemon::Daemon(QObject* parent): QObject(parent)
 }
 
 void Daemon::setCredentials(QList < UserCredentials >& credentialsList) {
-    Processor* processor = SingletonFactory::instanceFor< Processor >();
     foreach (UserCredentials credentials, credentialsList) {
         EmailManager manager;
-        connect(&manager, &EmailManager::fetchedEmail, processor, &Processor::process);
         manager.setCredentials(credentials);
+        m_emailManagersList.append(manager);
+    }
+}
+
+void Daemon::startEmailManagers()
+{
+    foreach(EmailManager manager, m_emailManagersList) {
+        Processor* processor = SingletonFactory::instanceFor< Processor >();
+        connect(&manager, &EmailManager::fetchedEmail, processor, &Processor::process);
         manager.start();
     }
 }

@@ -22,8 +22,10 @@
 
 #include "kdenowcore_export.h"
 #include "usercredentials.h"
+#include "emailmanager.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QList>
 
 class KDENOWCORE_EXPORT Daemon : public QObject
 {
@@ -32,10 +34,12 @@ class KDENOWCORE_EXPORT Daemon : public QObject
 
     public:
         Daemon(QObject* parent = 0);
+        void startEmailManagers();
 
     public Q_SLOTS:
         QString startDaemon();
         void setCredentials(QList < UserCredentials >& credentialsList);
+        QList < EmailManager > m_emailManagersList;
 };
 
 #endif //DAEMON_H
