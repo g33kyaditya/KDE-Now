@@ -27,7 +27,7 @@
 
 DataHandler::DataHandler(QObject* parent): QObject(parent) {
 
-    connect(this, &DataHandler::addedToWallet, this, &DataHandler::setDBusConnections);
+    connect(this, &DataHandler::credentialsInsideWallet, this, &DataHandler::setDBusConnections);
     connect(this, &DataHandler::showUserCredentialsPage, this,
             &DataHandler::onShowUserCredentialsPage);
     m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
@@ -38,7 +38,7 @@ DataHandler::DataHandler(QObject* parent): QObject(parent) {
         emit showUserCredentialsPage();
     }
     else {
-        emit addedToWallet();
+        emit credentialsInsideWallet();
     }
     KWallet::Wallet::closeWallet("KDENowWallet", true);
 }
@@ -116,9 +116,10 @@ QVariantMap DataHandler::getMap()
     return m_map;
 }
 
-void DataHandler::onOkPressed(QString imapServer, QString imapPort, QString username,
-                              QString password)
+void DataHandler::onCredentialsInput(QString imapServer, QString imapPort, QString username,
+                              QString password) //sdfsdfsdfsd name change
 {
+    m_view.close();
     m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
                                             0,
                                             KWallet::Wallet::Synchronous
@@ -137,8 +138,7 @@ void DataHandler::onOkPressed(QString imapServer, QString imapPort, QString user
     walletMap.insert("username", username);
     walletMap.insert("password", password);
 
-    m_view.close();
-    int fail = m_wallet->writeMap("KDENowKey", walletMap);
+    int fail = m_wallet->writeMap(username, walletMap);
     if (fail) {
         qDebug() << "Could not write map";
         return;
@@ -147,7 +147,7 @@ void DataHandler::onOkPressed(QString imapServer, QString imapPort, QString user
         qDebug() << "Succesfully written map";
     }
     KWallet::Wallet::closeWallet("KDENowWallet", true);
-    emit addedToWallet();
+    emit credentialsInsideWallet();
 }
 
 void DataHandler::setDBusConnections()
@@ -180,8 +180,8 @@ void DataHandler::onShowUserCredentialsPage()
 {
     m_view.setSource(QUrl("qrc:/UserCredentials.qml"));
     QObject* object = m_view.rootObject();
-    connect(object, SIGNAL(okSignal(QString, QString, QString, QString)),
-           this, SLOT(onOkPressed(QString, QString, QString, QString)));
+    connect(object, SIGNAL(credentialsInput(QString, QString, QString, QString)),
+           this, SLOT(onCredentialsInput(QString, QString, QString, QString)));
     //connect(object, SIGNAL(cancelSignal()), this, SLOT(onCancelPressed()));
     m_view.show();
 }

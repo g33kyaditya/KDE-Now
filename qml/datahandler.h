@@ -38,7 +38,7 @@ class DataHandler : public QObject
         void flightDataReceived();
         void hotelDataReceived();
         void restaurantDataReceived();
-        void addedToWallet();
+        void credentialsInsideWallet();
         void showUserCredentialsPage();
 
     public Q_SLOTS:
@@ -46,7 +46,7 @@ class DataHandler : public QObject
         void onFlightMapReceived();
         void onHotelMapReceived();
         void onRestaurantMapReceived();
-        void onOkPressed(QString, QString, QString, QString);
+        void onCredentialsInput(QString, QString, QString, QString);
         Q_INVOKABLE QVariantMap getMap();
         void setDBusConnections();
         void onShowUserCredentialsPage();

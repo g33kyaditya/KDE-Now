@@ -27,7 +27,7 @@ GridLayout {
     id: root
     columns: 2
 
-    signal okSignal(string imapServer, string imapPort, string username, string password)
+    signal credentialsInput(string imapServer, string imapPort, string username, string password)
     signal cancelSignal()
 
     Label {
@@ -69,7 +69,7 @@ GridLayout {
 
     Button {
         text: "OK"
-        onClicked: root.okSignal(imapServer.text, imapPort.text, username.text, password.text)
+        onClicked: root.credentialsInput(imapServer.text, imapPort.text, username.text, password.text)
     }
 
     Button {

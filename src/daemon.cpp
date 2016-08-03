@@ -23,6 +23,8 @@
 #include "emailmanager.h"
 #include "singletonfactory.h"
 
+#include <QtCore/QDebug>
+
 Daemon::Daemon(QObject* parent): QObject(parent)
 {
     new KdenowAdaptor(this);
@@ -37,6 +39,7 @@ void Daemon::setCredentials(QList < UserCredentials >& credentialsList) {
         manager->setCredentials(credentials);
         m_emailManagersList.append(manager);
     }
+    startEmailManagers();
 }
 
 void Daemon::startEmailManagers()
