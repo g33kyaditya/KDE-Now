@@ -19,7 +19,6 @@
 
 #include "restaurantreservation.h"
 #include "src/singletonfactory.h"
-#include "src/datamap.h"
 #include "restaurantadaptor.h"
 
 #include <QtCore/QDateTime>
@@ -59,26 +58,24 @@ QString RestaurantReservation::plugin() const
 
 void RestaurantReservation::start()
 {
-    m_map = m_dataMap->map();
-    if (m_map["@type"] == "FoodEstablishmentReservation") {
-        extract();
-    }
-    else {
-        qDebug() << "Not a Restaurant Reservation JSON";
-        return;
+    foreach(QVariantMap map, m_maps) {
+        if (map["@type"] == "FoodEstablishmentReservation") {
+            extract(map);
+            break;
+        }
     }
 }
 
-void RestaurantReservation::extract()
+void RestaurantReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = m_map["reservationNumber"].toString();
-    m_name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
+    m_reservationNumber = map["reservationNumber"].toString();
+    m_name = map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = map["reservationFor"].toMap();
 
-    QDateTime startDateTime = m_map["startTime"].toDateTime();
+    QDateTime startDateTime = map["startTime"].toDateTime();
     m_startDate = startDateTime.date();
     m_startTime = startDateTime.time();
-    m_partySize = m_map["partySize"].toInt();
+    m_partySize = map["partySize"].toInt();
 
     QVariantMap addressMap = reservationForMap["address"].toMap();
     m_restaurantName = reservationForMap["name"].toString();

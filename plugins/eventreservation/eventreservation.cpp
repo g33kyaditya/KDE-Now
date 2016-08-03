@@ -18,7 +18,6 @@
  */
 
 #include "eventreservation.h"
-#include "src/datamap.h"
 #include "eventadaptor.h"
 
 #include <QtCore/QDateTime>
@@ -58,21 +57,19 @@ QString EventReservation::plugin() const
 
 void EventReservation::start()
 {
-    m_map = m_dataMap->map();
-    if (m_map["@type"] == "EventReservation") {
-        extract();
-    }
-    else {
-        qDebug() << "Not an Event Reservation JSON";
-        return;
+    foreach(QVariantMap map, m_maps) {
+        if (map["@type"] == "EventReservation") {
+            extract(map);
+            break;
+        }
     }
 }
 
-void EventReservation::extract()
+void EventReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = m_map["reservationNumber"].toString();
-    m_name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
+    m_reservationNumber = map["reservationNumber"].toString();
+    m_name = map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = map["reservationFor"].toMap();
 
     m_eventName = reservationForMap["name"].toString();
     QDateTime startDateTime = reservationForMap["startDate"].toDateTime();

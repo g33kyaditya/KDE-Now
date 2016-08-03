@@ -19,7 +19,6 @@
 
 #include "hotelreservation.h"
 #include "src/singletonfactory.h"
-#include "src/datamap.h"
 #include "hoteladaptor.h"
 
 #include <QtCore/QDateTime>
@@ -59,25 +58,23 @@ QString HotelReservation::plugin() const
 
 void HotelReservation::start()
 {
-    m_map = m_dataMap->map();
-    if (m_map["@type"] == "LodgingReservation") {
-        extract();
-    }
-    else {
-        qDebug() << "Not a Hotel Reservation JSON";
-        return;
+    foreach(QVariantMap map, m_maps) {
+        if (map["@type"] == "LodgingReservation") {
+            extract(map);
+            break;
+        }
     }
 }
 
-void HotelReservation::extract()
+void HotelReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = m_map["reservationNumber"].toString();
-    m_name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
+    m_reservationNumber = map["reservationNumber"].toString();
+    m_name = map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = map["reservationFor"].toMap();
 
-    QDateTime checkinDateTime = m_map["checkinDate"].toDateTime();
+    QDateTime checkinDateTime = map["checkinDate"].toDateTime();
     m_checkinDate = checkinDateTime.date();
-    QDateTime checkoutDateTime = m_map["checkoutDate"].toDateTime();
+    QDateTime checkoutDateTime = map["checkoutDate"].toDateTime();
     m_checkoutDate = checkoutDateTime.date();
 
     m_telephone = reservationForMap["telephone"].toString();

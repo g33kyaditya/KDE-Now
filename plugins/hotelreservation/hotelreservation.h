@@ -34,7 +34,7 @@ class HotelReservation : public AbstractReservationPlugin
         ~HotelReservation();
         void start();
         QString plugin() const;
-        void extract();
+        void extract(QVariantMap& map);
         void initDatabase();
 
     Q_SIGNALS:
@@ -50,7 +50,6 @@ class HotelReservation : public AbstractReservationPlugin
 
     private:
         QString m_pluginName;
-        QVariantMap m_map;
 
         QSqlDatabase m_db;
 

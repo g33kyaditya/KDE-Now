@@ -19,7 +19,6 @@
 
 #include "flightreservation.h"
 #include "src/singletonfactory.h"
-#include "src/datamap.h"
 #include "flightadaptor.h"
 
 #include <QtCore/QDateTime>
@@ -61,21 +60,19 @@ QString FlightReservation::plugin() const
 
 void FlightReservation::start()
 {
-    m_map = m_dataMap->map();
-    if (m_map["@type"] == "FlightReservation") {
-        extract();
-    }
-    else {
-        qDebug() << "Not a Flight Reservation JSON";
-        return;
+    foreach(QVariantMap map, m_maps) {
+        if (map["@type"] == "FlightReservation") {
+            extract(map);
+            break;
+        }
     }
 }
 
-void FlightReservation::extract()
+void FlightReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = m_map["reservationNumber"].toString();
-    m_name = m_map["underName"].toMap().value("name").toString();
-    QVariantMap reservationForMap = m_map["reservationFor"].toMap();
+    m_reservationNumber = map["reservationNumber"].toString();
+    m_name = map["underName"].toMap().value("name").toString();
+    QVariantMap reservationForMap = map["reservationFor"].toMap();
 
     QString flightNameCode = reservationForMap["airline"].toMap().value("iataCode").toString();
     QString flightNumber = reservationForMap["flightNumber"].toString();
@@ -166,7 +163,7 @@ void FlightReservation::setDBusData()
     m_dbusMap.insert("arrivalDate", m_arrivalDate.toString());
     m_dbusMap.insert("arrivalTime", m_arrivalTime.toString("h:mm AP"));
 
-    emit update();
+    emit update();  //pass parameter here
 }
 
 QVariantMap FlightReservation::getMap()

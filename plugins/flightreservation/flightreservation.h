@@ -36,7 +36,7 @@ class FlightReservation : public AbstractReservationPlugin
         ~FlightReservation();
         void start();
         QString plugin() const;
-        void extract();
+        void extract(QVariantMap& map);
         void initDatabase();
 
     Q_SIGNALS:
@@ -52,7 +52,6 @@ class FlightReservation : public AbstractReservationPlugin
 
     private:
         QString m_pluginName;
-        QVariantMap m_map;
 
         QSqlDatabase m_db;
 
