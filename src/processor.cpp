@@ -19,7 +19,6 @@
 
 #include "processor.h"
 #include "parser.h"
-#include "datamap.h"
 #include "pluginsloader.h"
 #include "singletonfactory.h"
 
@@ -34,42 +33,7 @@ Processor::Processor(QObject* parent): QObject(parent)
 
 void Processor::process(KIMAP::MessagePtr messagePtr)
 {
-    m_messagePtr = messagePtr;
-
-    /*if(isAlreadyDownloaded()) {
-        //  TODO
-        //  Either check from DB, or from a hash table of emails (preferable) since
-        //  it minimises work
-        //return;
-    }*/
-    extract();
-}
-
-bool Processor::isIdentifiedSchema(QList<QVariantMap>& listOfMap)
-{
-    QList<QVariantMap>::iterator it;
-    QVariantMap map;
-    for (it = listOfMap.begin(); it != listOfMap.end(); ++it) {
-        map = *it;
-        qDebug() << "Map in list = " << map;
-        QString type = map["@type"].toString();
-        if (!(type == "FlightReservation" || type == "EventReservation" ||
-           type == "LodgingReservation" || type == "FoodEstablishmentReservation")) {
-               it = listOfMap.erase(it);          //Remove all those, that are not needed
-               it--;
-        }
-    }
-
-    if (listOfMap.count() == 1)          //One valid Reservation JSON Data
-        return true;
-
-    return false;
-}
-
-
-void Processor::extract()
-{
-    KMime::Content *bodyContent = m_messagePtr->mainBodyPart("text/html");
+    KMime::Content *bodyContent = messagePtr->mainBodyPart("text/html");
     if (!bodyContent) {
         qDebug() << "Could not find text/html in mainBodyPart";
         return;
@@ -83,7 +47,7 @@ void Processor::extract()
     QByteArray htmlDoc = bodyContent->decodedContent();
     //qDebug() << htmlDoc;
     Parser parser;
-    QList<QVariantMap> listOfMap;
+    QList< QVariantMap > listOfMap;
     listOfMap = parser.parse(htmlDoc);
     //qDebug() << "\n\nlistOfMap = " << listOfMap;
     if (listOfMap.isEmpty()) {
@@ -91,28 +55,18 @@ void Processor::extract()
         return;
     }
 
-    if (!isIdentifiedSchema(listOfMap)) {
-        //qDebug() << "Not a recognized schema (Flight, Hotel, Event, Food)Reservation";
-        return;
-    }
-
-    m_map = listOfMap.at(0);
-    //qDebug() << m_map;
-    //Extracting all needed data from QVariantMap
-    extractNeededData();
+    extractNeededData(listOfMap);
 }
 
-void Processor::extractNeededData()
+void Processor::extractNeededData(QList < QVariantMap >& listOfMap)
 {
-    DataMap* map = SingletonFactory::instanceFor<DataMap>();
-    map->setMap(m_map);
     if (!pluginsLoaded) {
         PluginsLoader loader;
         m_pluginList = loader.load();
         pluginsLoaded = true;
     }
     foreach (AbstractReservationPlugin* plugin, m_pluginList) {
-        plugin->setDataMap(map);
+        plugin->setMap(listOfMap);
         plugin->start();
     }
 }

@@ -34,21 +34,18 @@ class KDENOWCORE_EXPORT Processor : public QObject
     public:
         explicit Processor(QObject* parent = 0);
         bool isAlreadyDownloaded();
-        bool isIdentifiedSchema(QList<QVariantMap>& listOfMap);
 
     public Q_SLOTS:
-        void process(KIMAP::MessagePtr);
-        void extract();
+        void process(KIMAP::MessagePtr messagePtr);
 
     private:
-        void extractNeededData();
+        void extractNeededData(QList < QVariantMap >& listOfMap);
         void extractFlightData();
         void extractEventData();
         void extractHotelData();
         void extractRestaurantData();
 
         KIMAP::MessagePtr m_messagePtr;
-        QVariantMap m_map;
         QList< AbstractReservationPlugin* > m_pluginList;
         bool pluginsLoaded;
 };

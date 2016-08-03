@@ -1,6 +1,5 @@
 add_executable(kdenowd
     main.cpp
-    walletmanager.cpp
 )
 
 set(dbus_SRCS org.kde.kdenow.xml)
@@ -18,12 +17,13 @@ qt5_add_dbus_adaptor(dbus_SRCS
 
 add_library(kdenowcore
     daemon.cpp
+    emailmanager.cpp
     processor.cpp
     parser.cpp
     abstractreservationplugin.cpp
     pluginsloader.cpp
     singletonfactory.cpp
-    datamap.cpp
+    walletmanager.cpp
     ${dbus_SRCS}
 )
 
@@ -41,9 +41,6 @@ PUBLIC
 
 target_link_libraries(kdenowd
     kdenowcore
-    Qt5::Quick
-    Qt5::Gui
-    Qt5::Widgets
 )
 
 generate_export_header(kdenowcore

@@ -30,7 +30,7 @@ AbstractReservationPlugin::~AbstractReservationPlugin()
 
 }
 
-void AbstractReservationPlugin::setDataMap(DataMap* map)
+void AbstractReservationPlugin::setMap(QList< QVariantMap > maps)
 {
-    m_dataMap = map;
+    m_maps = maps;
 }
