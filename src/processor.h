@@ -41,9 +41,6 @@ class KDENOWCORE_EXPORT Processor : public QObject
     private:
         void extractNeededData(QList < QVariantMap >& listOfMap);
         void extractFlightData();
-        void extractEventData();
-        void extractHotelData();
-        void extractRestaurantData();
 
         KIMAP::MessagePtr m_messagePtr;
         QList< AbstractReservationPlugin* > m_pluginList;
