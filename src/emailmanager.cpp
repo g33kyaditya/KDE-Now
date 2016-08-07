@@ -54,8 +54,8 @@ bool EmailManager::validUids()
 {
 
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
-    KConfigGroup generalGroup(config, "General");
-    QString uidValidity = generalGroup.readEntry("UIDVALIDITY", QString());
+    KConfigGroup group(config, m_username);
+    QString uidValidity = group.readEntry("UIDVALIDITY", QString());
     if (uidValidity.toLongLong() == m_uidValidity) {
         //UID's are all valid. Also, not a first run
         return true;
@@ -129,11 +129,11 @@ void EmailManager::fetchEmails(KIMAP::SelectJob* selectJob)
 void EmailManager::searchAllMessages()
 {
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
-    KConfigGroup generalGroup(config, "General");
-    generalGroup.writeEntry("UIDVALIDITY", QString::number(m_uidValidity));
-    generalGroup.writeEntry("UIDNEXT", QString::number(m_nextUid));
-    generalGroup.writeEntry("MESSAGE_COUNT", QString::number(m_messageCount));
-    generalGroup.config()->sync();
+    KConfigGroup group(config, m_username);
+    group.writeEntry("UIDVALIDITY", QString::number(m_uidValidity));
+    group.writeEntry("UIDNEXT", QString::number(m_nextUid));
+    group.writeEntry("MESSAGE_COUNT", QString::number(m_messageCount));
+    group.config()->sync();
 
     KIMAP::Term term(KIMAP::Term::Since, QDate::currentDate().addMonths(-1));
     KIMAP::SearchJob* searchJob = new KIMAP::SearchJob(m_session);
@@ -145,12 +145,12 @@ void EmailManager::searchAllMessages()
 void EmailManager::searchNewMessages()
 {
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
-    KConfigGroup generalGroup(config, "General");
-    QString uidName = generalGroup.readEntry("UIDNEXT", QString());
+    KConfigGroup group(config, m_username);
+    QString uidName = group.readEntry("UIDNEXT", QString());
     qint64 uidNext = uidName.toULongLong();
-    generalGroup.writeEntry("UIDNEXT", QString::number(m_nextUid));
-    generalGroup.writeEntry("MESSAGE_COUNT", QString::number(m_messageCount));
-    generalGroup.config()->sync();
+    group.writeEntry("UIDNEXT", QString::number(m_nextUid));
+    group.writeEntry("MESSAGE_COUNT", QString::number(m_messageCount));
+    group.config()->sync();
 
     KIMAP::ImapInterval interval(uidNext);
     KIMAP::ImapSet set;
@@ -203,11 +203,6 @@ void EmailManager::onFetchJobFinished(const QString& mailBox, const QMap< qint64
         emit fetchedEmail(it.value());
     }
 
-    KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
-    KConfigGroup generalGroup(config, "General");
-    generalGroup.writeEntry("STATE", "Update");
-    generalGroup.config()->sync();
-
     startIdle();
 }
 
@@ -227,19 +222,19 @@ void EmailManager::onIdleChanged(KIMAP::IdleJob* job, const QString& mailBox,
     qDebug() << "Update !";
 
     KSharedConfigPtr config = KSharedConfig::openConfig("kdenowrc");
-    KConfigGroup generalGroup(config, "General");
-    qint64 currentMessageCount = generalGroup.readEntry("MESSAGE_COUNT", QString()).toULongLong();
+    KConfigGroup group(config, m_username);
+    qint64 currentMessageCount = group.readEntry("MESSAGE_COUNT", QString()).toULongLong();
 
     if (messageCount < currentMessageCount) {
         qDebug() << "User has deleted an email. Return";
-        generalGroup.writeEntry("MESSAGE_COUNT", QString::number(messageCount));
-        generalGroup.config()->sync();
+        group.writeEntry("MESSAGE_COUNT", QString::number(messageCount));
+        group.config()->sync();
         return;
     }
     else {
         qDebug() << "New email has arrived, so fetch it";
-        generalGroup.writeEntry("MESSAGE_COUNT", QString::number(messageCount));
-        generalGroup.config()->sync();
+        group.writeEntry("MESSAGE_COUNT", QString::number(messageCount));
+        group.config()->sync();
         job->stop();
         m_session->close();
         emit signalUpdateProcess();
