@@ -106,7 +106,7 @@ QVariantMap DataHandler::getMap()
 }
 
 void DataHandler::onCredentialsInput(QString imapServer, QString imapPort, QString username,
-                              QString password) //sdfsdfsdfsd name change
+                              QString password)
 {
     m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
                                             0,
