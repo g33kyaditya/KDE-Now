@@ -20,6 +20,7 @@
 #include "eventreservation.h"
 #include "eventadaptor.h"
 
+#include <QtCore/QList>
 #include <QtCore/QDateTime>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDebug>
@@ -43,6 +44,8 @@ EventReservation::EventReservation(QObject* parent, const QVariantList& args)
     m_pluginName = "eventDataExtractor";
     connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
     connect(this, &EventReservation::extractedData, this, &EventReservation::setDBusData);
+    initDatabase();
+    getDataFromDatabase();
 }
 
 EventReservation::~EventReservation()
@@ -150,6 +153,49 @@ void EventReservation::setDBusData()
 
     emit update();
 }
+
+void EventReservation::getDataFromDatabase()
+{
+    QSqlQuery dataQuery(m_db);
+    QString queryString = "select * from Event";
+    dataQuery.prepare(queryString);
+
+    if (!dataQuery.exec()) {
+        qWarning() << "Unable to fetch existing records from database";
+        qWarning() << dataQuery.lastError();
+    }
+    else {
+        qDebug() << "Fetched Records from Table Successfully";
+    }
+
+    QList<QVariantMap> listOfMapsInDatabase;
+    while(dataQuery.next()) {
+        QVariantMap map;
+        map.insert("reservationNumber", dataQuery.value(1).toString());
+        map.insert("name", dataQuery.value(2).toString());
+        map.insert("eventName", dataQuery.value(3).toString());
+        map.insert("startDate", dataQuery.value(4).toString());
+        map.insert("startTime", dataQuery.value(5).toString());
+        map.insert("location", dataQuery.value(6).toString());
+        map.insert("streetAddress", dataQuery.value(7).toString());
+        map.insert("addressLocality", dataQuery.value(8).toString());
+        listOfMapsInDatabase.append(map);
+    }
+    qDebug() << listOfMapsInDatabase << "\n";
+
+    foreach(QVariantMap map, listOfMapsInDatabase) {
+        m_reservationNumber = map["reservationNumber"].toString();
+        m_name = map["name"].toString();
+        m_eventName = map["eventName"].toString();
+        m_startDate = map["startDate"].toDate();
+        m_startTime = map["startTime"].toTime();
+        m_location = map["location"].toString();
+        m_streetAddress = map["streetAddress"].toString();
+        m_addressLocality = map["addressLocality"].toString();
+        setDBusData();
+    }
+}
+
 
 QVariantMap EventReservation::getMap()
 {
