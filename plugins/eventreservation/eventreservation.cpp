@@ -63,7 +63,6 @@ void EventReservation::start()
     foreach(QVariantMap map, m_maps) {
         if (map["@type"] == "EventReservation") {
             extract(map);
-            break;
         }
     }
 }
@@ -76,8 +75,8 @@ void EventReservation::extract(QVariantMap& map)
 
     m_eventName = reservationForMap["name"].toString();
     QDateTime startDateTime = reservationForMap["startDate"].toDateTime();
-    m_startDate = startDateTime.date();
-    m_startTime = startDateTime.time();
+    m_startDate = startDateTime.date().toString();
+    m_startTime = startDateTime.time().toString("h:mm AP");
 
     QVariantMap addressMap = reservationForMap["location"].toMap().value("address").toMap();
     m_location = reservationForMap["location"].toMap().value("name").toString();
@@ -99,8 +98,8 @@ void EventReservation::cacheData()
     updateQuery.bindValue(":reservationNumber", m_reservationNumber);
     updateQuery.bindValue(":name", m_name);
     updateQuery.bindValue(":eventName", m_eventName);
-    updateQuery.bindValue(":startDate", m_startDate.toString());
-    updateQuery.bindValue(":startTime", m_startTime.toString("h:mm AP"));
+    updateQuery.bindValue(":startDate", m_startDate);
+    updateQuery.bindValue(":startTime", m_startTime);
     updateQuery.bindValue(":location", m_location);
     updateQuery.bindValue(":streetAddress", m_streetAddress);
     updateQuery.bindValue(":addressLocality", m_addressLocality);
@@ -145,8 +144,8 @@ void EventReservation::setDBusData()
     m_dbusMap.insert("reservationNumber", m_reservationNumber);
     m_dbusMap.insert("name", m_name);
     m_dbusMap.insert("eventName", m_eventName);
-    m_dbusMap.insert("startDate", m_startDate.toString());
-    m_dbusMap.insert("startTime", m_startTime.toString("h:mm AP"));
+    m_dbusMap.insert("startDate", m_startDate);
+    m_dbusMap.insert("startTime", m_startTime);
     m_dbusMap.insert("location", m_location);
     m_dbusMap.insert("streetAddress", m_streetAddress);
     m_dbusMap.insert("addressLocality", m_addressLocality);
@@ -165,10 +164,10 @@ void EventReservation::getDataFromDatabase()
         qWarning() << dataQuery.lastError();
     }
     else {
-        qDebug() << "Fetched Records from Table Successfully";
+        qDebug() << "Fetched Records from Table Event Successfully";
     }
 
-    QList<QVariantMap> listOfMapsInDatabase;
+    QList< QVariantMap > listOfMapsInDatabase;
     while(dataQuery.next()) {
         QVariantMap map;
         map.insert("reservationNumber", dataQuery.value(1).toString());
@@ -181,14 +180,13 @@ void EventReservation::getDataFromDatabase()
         map.insert("addressLocality", dataQuery.value(8).toString());
         listOfMapsInDatabase.append(map);
     }
-    qDebug() << listOfMapsInDatabase << "\n";
 
     foreach(QVariantMap map, listOfMapsInDatabase) {
         m_reservationNumber = map["reservationNumber"].toString();
         m_name = map["name"].toString();
         m_eventName = map["eventName"].toString();
-        m_startDate = map["startDate"].toDate();
-        m_startTime = map["startTime"].toTime();
+        m_startDate = map["startDate"].toString();
+        m_startTime = map["startTime"].toString();
         m_location = map["location"].toString();
         m_streetAddress = map["streetAddress"].toString();
         m_addressLocality = map["addressLocality"].toString();
