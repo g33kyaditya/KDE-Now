@@ -38,6 +38,7 @@ class FlightReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
+        void getDataFromDatabase();
 
     Q_SIGNALS:
         void extractedData();
@@ -60,12 +61,12 @@ class FlightReservation : public AbstractReservationPlugin
         QString m_flight;
         QString m_departureAirportName;
         QString m_departureAirportCode;
-        QDate m_departureDate;
-        QTime m_departureTime;
+        QString m_departureDate;
+        QString m_departureTime;
         QString m_arrivalAirportName;
         QString m_arrivalAirportCode;
-        QDate m_arrivalDate;
-        QTime m_arrivalTime;
+        QString m_arrivalDate;
+        QString m_arrivalTime;
 
         QVariantMap m_dbusMap;
 };
