@@ -38,13 +38,11 @@ class RestaurantReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
+        void getDataFromDatabase();
 
     Q_SIGNALS:
         void extractedData();
-        Q_SCRIPTABLE void update();
-
-    public Q_SLOTS:
-        QVariantMap getMap();
+        void update(QVariantMap map);
 
     private Q_SLOTS:
         void cacheData();
@@ -57,8 +55,8 @@ class RestaurantReservation : public AbstractReservationPlugin
 
         QString m_reservationNumber;
         QString m_name;
-        QDate m_startDate;
-        QTime m_startTime;
+        QString m_startDate;
+        QString m_startTime;
         int m_partySize;
         QString m_restaurantName;
         QString m_streetAddress;
