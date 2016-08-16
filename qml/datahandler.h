@@ -20,7 +20,6 @@
 #ifndef DATAHANDLER_H
 #define DATAHANDLER_H
 
-#include <QtQuick/QtQuick>
 #include <QtCore/QVariantMap>
 
 #include <KWallet/KWallet>
@@ -39,9 +38,10 @@ class DataHandler : public QObject
         void hotelDataReceived();
         void restaurantDataReceived();
         void credentialsInsideWallet();
-        void showUserCredentialsPage();
+        void credentialsInput();
 
     public Q_SLOTS:
+        void checkWallet();
         void onEventMapReceived();
         void onFlightMapReceived();
         void onHotelMapReceived();
@@ -49,11 +49,9 @@ class DataHandler : public QObject
         void onCredentialsInput(QString, QString, QString, QString);
         Q_INVOKABLE QVariantMap getMap();
         void setDBusConnections();
-        void onShowUserCredentialsPage();
 
     private:
         QVariantMap m_map;
-        QQuickView m_view;
         KWallet::Wallet* m_wallet;
 };
 

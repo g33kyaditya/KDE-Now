@@ -38,6 +38,7 @@ class EventReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
+        void getDataFromDatabase();
 
     Q_SIGNALS:
         void extractedData();
@@ -58,8 +59,8 @@ class EventReservation : public AbstractReservationPlugin
         QString m_reservationNumber;
         QString m_name;
         QString m_eventName;
-        QDate m_startDate;
-        QTime m_startTime;
+        QString m_startDate;
+        QString m_startTime;
         QString m_location;
         QString m_streetAddress;
         QString m_addressLocality;

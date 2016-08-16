@@ -17,6 +17,10 @@ ColumnLayout {
 
     KDENow.DataHandler {
         id: dataHandler
+        onCredentialsInput: {
+            var page = credentialsCardComponent.createObject(root)
+            plasmoidModel.append(page)
+        }
         onEventDataReceived: {
             var map = dataHandler.getMap()
             prepareEventCard(map)
@@ -174,6 +178,20 @@ ColumnLayout {
     Component {
         id: restaurantCardComponent
         KDENow.RestaurantInformation {
+        }
+    }
+
+    Component {
+        id: credentialsCardComponent
+        KDENow.UserCredentials {
+            id: userCredentialsCard
+            onCredentialsInput: {
+                plasmoidModel.remove(0)
+                dataHandler.onCredentialsInput(imapServer, imapPort, username, password)
+            }
+            onCancelSignal: {
+                plasmoidModel.remove(0)
+            }
         }
     }
 }   //End KDE Now

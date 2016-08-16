@@ -22,25 +22,14 @@
 #include <QtCore/QMap>
 #include <QtCore/QDebug>
 #include <QtDBus/QDBusReply>
+#include <QtCore/QMetaObject>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusConnection>
 
 DataHandler::DataHandler(QObject* parent): QObject(parent) {
 
     connect(this, &DataHandler::credentialsInsideWallet, this, &DataHandler::setDBusConnections);
-    connect(this, &DataHandler::showUserCredentialsPage, this,
-            &DataHandler::onShowUserCredentialsPage);
-    m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
-                                            0,
-                                            KWallet::Wallet::Synchronous
-                                          );
-    if (!m_wallet->hasFolder("KDENow")) {
-        emit showUserCredentialsPage();
-    }
-    else {
-        emit credentialsInsideWallet();
-    }
-    KWallet::Wallet::closeWallet("KDENowWallet", true);
+    QMetaObject::invokeMethod(this, "checkWallet", Qt::QueuedConnection);
 }
 
 void DataHandler::onEventMapReceived()
@@ -117,9 +106,8 @@ QVariantMap DataHandler::getMap()
 }
 
 void DataHandler::onCredentialsInput(QString imapServer, QString imapPort, QString username,
-                              QString password) //sdfsdfsdfsd name change
+                              QString password)
 {
-    m_view.close();
     m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
                                             0,
                                             KWallet::Wallet::Synchronous
@@ -176,12 +164,18 @@ void DataHandler::setDBusConnections()
                  "update", this, SLOT(onRestaurantMapReceived()));
 }
 
-void DataHandler::onShowUserCredentialsPage()
+void DataHandler::checkWallet()
 {
-    m_view.setSource(QUrl("qrc:/UserCredentials.qml"));
-    QObject* object = m_view.rootObject();
-    connect(object, SIGNAL(credentialsInput(QString, QString, QString, QString)),
-           this, SLOT(onCredentialsInput(QString, QString, QString, QString)));
-    //connect(object, SIGNAL(cancelSignal()), this, SLOT(onCancelPressed()));
-    m_view.show();
+    m_wallet = KWallet::Wallet::openWallet("KDENowWallet",
+                                            0,
+                                            KWallet::Wallet::Synchronous
+                                          );
+    if (!m_wallet->hasFolder("KDENow")) {
+        emit credentialsInput();
+    }
+    else {
+        emit credentialsInsideWallet();
+    }
+    KWallet::Wallet::closeWallet("KDENowWallet", true);
 }
+

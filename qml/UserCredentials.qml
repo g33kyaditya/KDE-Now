@@ -23,15 +23,24 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 
+import org.kde.plasma.extras 2.0 as PlasmaExtras
+
 GridLayout {
     id: root
     columns: 2
-
-    signal credentialsInput(string imapServer, string imapPort, string username, string password)
+    property alias imapServer: imapServer.text
+    property alias imapPort: imapPort.text
+    property alias username: username.text
+    property alias password: password.text
+    signal credentialsInput()
     signal cancelSignal()
 
-    Label {
-        color: "black"
+    anchors {
+        left: parent.left
+        right: parent.right
+    }
+
+    PlasmaExtras.Paragraph {
         text: "IMAP"
     }
     TextField {
@@ -39,8 +48,7 @@ GridLayout {
         placeholderText: qsTr("IMAP Server")
     }
 
-    Label {
-        color: "black"
+    PlasmaExtras.Paragraph {
         text: "Port"
     }
     TextField {
@@ -48,17 +56,15 @@ GridLayout {
         placeholderText: qsTr("Port Number")
     }
 
-    Label {
-        color: "black"
+    PlasmaExtras.Paragraph {
         text: "Username"
-     }
+    }
     TextField {
         id: username
         placeholderText: qsTr("Username")
     }
 
-    Label {
-        color: "black"
+    PlasmaExtras.Paragraph {
         text: "Password"
     }
     TextField {
@@ -69,12 +75,15 @@ GridLayout {
 
     Button {
         text: "OK"
-        onClicked: root.credentialsInput(imapServer.text, imapPort.text, username.text, password.text)
+        onClicked: root.credentialsInput()
     }
 
     Button {
         text: "Cancel"
         onClicked: root.cancelSignal()
     }
-}   //End UserCredentials
 
+    Keys.onReturnPressed: {
+        root.credentialsInput()
+    }
+}   //End UserCredentials

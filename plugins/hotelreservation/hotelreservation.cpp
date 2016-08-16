@@ -44,6 +44,8 @@ HotelReservation::HotelReservation(QObject* parent, const QVariantList& args)
     m_pluginName = "hotelDataExtractor";
     connect(this, &HotelReservation::extractedData, this, &HotelReservation::cacheData);
     connect(this, &HotelReservation::extractedData, this, &HotelReservation::setDBusData);
+    initDatabase();
+    getDataFromDatabase();
 }
 
 HotelReservation::~HotelReservation()
@@ -61,7 +63,6 @@ void HotelReservation::start()
     foreach(QVariantMap map, m_maps) {
         if (map["@type"] == "LodgingReservation") {
             extract(map);
-            break;
         }
     }
 }
@@ -73,9 +74,9 @@ void HotelReservation::extract(QVariantMap& map)
     QVariantMap reservationForMap = map["reservationFor"].toMap();
 
     QDateTime checkinDateTime = map["checkinDate"].toDateTime();
-    m_checkinDate = checkinDateTime.date();
+    m_checkinDate = checkinDateTime.date().toString();
     QDateTime checkoutDateTime = map["checkoutDate"].toDateTime();
-    m_checkoutDate = checkoutDateTime.date();
+    m_checkoutDate = checkoutDateTime.date().toString();
 
     m_telephone = reservationForMap["telephone"].toString();
     QVariantMap addressMap = reservationForMap["address"].toMap();
@@ -98,8 +99,8 @@ void HotelReservation::cacheData()
     updateQuery.prepare(queryString);
     updateQuery.bindValue(":reservationNumber", m_reservationNumber);
     updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":checkinDate", m_checkinDate.toString());
-    updateQuery.bindValue(":checkoutDate", m_checkoutDate.toString());
+    updateQuery.bindValue(":checkinDate", m_checkinDate);
+    updateQuery.bindValue(":checkoutDate", m_checkoutDate);
     updateQuery.bindValue(":telephone", m_telephone);
     updateQuery.bindValue(":hotelName", m_hotelName);
     updateQuery.bindValue(":streetAddress", m_streetAddress);
@@ -145,8 +146,8 @@ void HotelReservation::setDBusData()
 {
     m_dbusMap.insert("reservationNumber", m_reservationNumber);
     m_dbusMap.insert("name", m_name);
-    m_dbusMap.insert("checkinDate", m_checkinDate.toString());
-    m_dbusMap.insert("checkoutDate", m_checkoutDate.toString());
+    m_dbusMap.insert("checkinDate", m_checkinDate);
+    m_dbusMap.insert("checkoutDate", m_checkoutDate);
     m_dbusMap.insert("telephone", m_telephone);
     m_dbusMap.insert("hotelName", m_hotelName);
     m_dbusMap.insert("streetAddress", m_streetAddress);
@@ -154,6 +155,49 @@ void HotelReservation::setDBusData()
     m_dbusMap.insert("addressRegion", m_addressRegion);
 
     emit update();
+}
+
+void HotelReservation::getDataFromDatabase()
+{
+    QSqlQuery dataQuery(m_db);
+    QString queryString = "select * from Hotel";
+    dataQuery.prepare(queryString);
+
+    if (!dataQuery.exec()) {
+        qWarning() << "Unable to fetch existing records from database";
+        qWarning() << dataQuery.lastError();
+    }
+    else {
+        qDebug() << "Fetched Records from Table Hotel Successfully";
+    }
+
+    QList< QVariantMap > listOfMapsInDatabase;
+    while(dataQuery.next()) {
+        QVariantMap map;
+        map.insert("reservationNumber", dataQuery.value(1).toString());
+        map.insert("name", dataQuery.value(2).toString());
+        map.insert("checkinDate", dataQuery.value(3).toString());
+        map.insert("checkoutDate", dataQuery.value(4).toString());
+        map.insert("telephone", dataQuery.value(5).toString());
+        map.insert("hotelName", dataQuery.value(6).toString());
+        map.insert("streetAddress", dataQuery.value(7).toString());
+        map.insert("addressLocality", dataQuery.value(8).toString());
+        map.insert("addressRegion", dataQuery.value(9).toString());
+        listOfMapsInDatabase.append(map);
+    }
+
+    foreach(QVariantMap map, listOfMapsInDatabase) {
+        m_reservationNumber = map["reservationNumber"].toString();
+        m_name = map["name"].toString();
+        m_checkinDate = map["checkinDate"].toString();
+        m_checkoutDate = map["checkoutDate"].toString();
+        m_telephone = map["telephone"].toString();
+        m_hotelName = map["hotelName"].toString();
+        m_streetAddress = map["streetAddress"].toString();
+        m_addressLocality = map["addressLocality"].toString();
+        m_addressRegion = map["addressRegion"].toString();
+        setDBusData();
+    }
 }
 
 QVariantMap HotelReservation::getMap()

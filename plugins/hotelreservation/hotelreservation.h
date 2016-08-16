@@ -36,6 +36,7 @@ class HotelReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
+        void getDataFromDatabase();
 
     Q_SIGNALS:
         void extractedData();
@@ -55,8 +56,8 @@ class HotelReservation : public AbstractReservationPlugin
 
         QString m_reservationNumber;
         QString m_name;
-        QDate m_checkinDate;
-        QDate m_checkoutDate;
+        QString m_checkinDate;
+        QString m_checkoutDate;
         QString m_telephone;
         QString m_hotelName;
         QString m_streetAddress;
