@@ -83,20 +83,17 @@ void DataHandler::onHotelMapReceived()
     emit hotelDataReceived();
 }
 
-void DataHandler::onRestaurantMapReceived()
+void DataHandler::onRestaurantMapReceived(QStringList keys, QStringList values)
 {
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Restaurant");
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Restaurant getMap";
-        qDebug() << reply.value();
-    }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Restaurant getMap";
-        return;
-    }
 
-    m_map = reply.value();
+    QStringList::iterator keysIter = keys.begin();
+    QStringList::iterator valuesIter = values.begin();
+    while (keysIter != keys.end()) {
+        m_map.insert((*keysIter), (*valuesIter));
+        keysIter++;
+        valuesIter++;
+    }
+    qDebug() << m_map << "\n";
     emit restaurantDataReceived();
 }
 
@@ -161,7 +158,7 @@ void DataHandler::setDBusConnections()
     dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
                  "update", this, SLOT(onHotelMapReceived()));
     dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
-                 "update", this, SLOT(onRestaurantMapReceived()));
+                 "update", this, SLOT(onRestaurantMapReceived(QStringList, QStringList)));
 }
 
 void DataHandler::checkWallet()

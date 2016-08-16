@@ -45,7 +45,7 @@ class DataHandler : public QObject
         void onEventMapReceived();
         void onFlightMapReceived();
         void onHotelMapReceived();
-        void onRestaurantMapReceived();
+        void onRestaurantMapReceived(QStringList keys, QStringList values);
         void onCredentialsInput(QString, QString, QString, QString);
         Q_INVOKABLE QVariantMap getMap();
         void setDBusConnections();

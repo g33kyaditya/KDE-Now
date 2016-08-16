@@ -24,6 +24,7 @@
 
 #include <QtCore/QDate>
 #include <QtCore/QTime>
+#include <QtCore/QStringList>
 #include <QtSql/QSqlDatabase>
 
 class RestaurantReservation : public AbstractReservationPlugin
@@ -42,10 +43,7 @@ class RestaurantReservation : public AbstractReservationPlugin
 
     Q_SIGNALS:
         void extractedData();
-        void update();
-
-    public Q_SLOTS:
-        QVariantMap getMap();
+        Q_SCRIPTABLE void update(QStringList keys, QStringList values);
 
     private Q_SLOTS:
         void cacheData();
@@ -65,8 +63,6 @@ class RestaurantReservation : public AbstractReservationPlugin
         QString m_streetAddress;
         QString m_addressLocality;
         QString m_addressRegion;
-
-        QVariantMap m_dbusData;
 };
 
 #endif //RESTAURANTRESERVATION_H

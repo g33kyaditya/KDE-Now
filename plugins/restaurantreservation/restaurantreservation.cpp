@@ -143,17 +143,30 @@ void RestaurantReservation::initDatabase()
 
 void RestaurantReservation::setDBusData()
 {
-    m_dbusData.insert("reservationNumber", m_reservationNumber);
-    m_dbusData.insert("name", m_name);
-    m_dbusData.insert("startDate", m_startDate);
-    m_dbusData.insert("startTime", m_startTime);
-    m_dbusData.insert("partySize", m_partySize);
-    m_dbusData.insert("restaurantName", m_restaurantName);
-    m_dbusData.insert("streetAddress", m_streetAddress);
-    m_dbusData.insert("addressLocality", m_addressLocality);
-    m_dbusData.insert("addressRegion", m_addressRegion);
+    QStringList keys, values;   // QTBUG-21577 : qdbusxml2cpp fails to parse QVariantMap parameter
+                                //               for D-Bus signal
 
-    emit update(m_dbusData);
+    keys.append("reservationNumber");
+    keys.append("name");
+    keys.append("startDate");
+    keys.append("startTime");
+    keys.append("partySize");
+    keys.append("restaurantName");
+    keys.append("streetAddress");
+    keys.append("addressLocality");
+    keys.append("addressRegion");
+
+    values.append(m_reservationNumber);
+    values.append(m_name);
+    values.append(m_startDate);
+    values.append(m_startTime);
+    values.append(QString::number(m_partySize));
+    values.append(m_restaurantName);
+    values.append(m_streetAddress);
+    values.append(m_addressLocality);
+    values.append(m_addressRegion);
+
+    emit update(keys, values);
 }
 
 void RestaurantReservation::getDataFromDatabase()
