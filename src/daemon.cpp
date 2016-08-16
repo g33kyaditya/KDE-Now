@@ -47,6 +47,7 @@ void Daemon::startEmailManagers()
     foreach(EmailManager* manager, m_emailManagersList) {
         Processor* processor = SingletonFactory::instanceFor< Processor >();
         connect(manager, &EmailManager::fetchedEmail, processor, &Processor::process);
+        connect(manager, &EmailManager::fetchEmailsFromDatabase, processor, &Processor::loadPlugins);
         manager->start();
     }
 }

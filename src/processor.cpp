@@ -61,12 +61,21 @@ void Processor::process(KIMAP::MessagePtr messagePtr)
 void Processor::extractNeededData(QList < QVariantMap >& listOfMap)
 {
     if (!pluginsLoaded) {
-        PluginsLoader loader;
-        m_pluginList = loader.load();
-        pluginsLoaded = true;
+        loadPlugins();
     }
+
     foreach (AbstractReservationPlugin* plugin, m_pluginList) {
         plugin->setMap(listOfMap);
         plugin->start();
     }
 }
+
+void Processor::loadPlugins()
+{
+    if (!pluginsLoaded) {
+        PluginsLoader loader;
+        m_pluginList = loader.load();
+        pluginsLoaded = true;
+    }
+}
+

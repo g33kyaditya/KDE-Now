@@ -33,14 +33,13 @@ class KDENOWCORE_EXPORT Processor : public QObject
 
     public:
         explicit Processor(QObject* parent = 0);
-        bool isAlreadyDownloaded();
+        void loadPlugins();
 
     public Q_SLOTS:
         void process(KIMAP::MessagePtr messagePtr);
 
     private:
         void extractNeededData(QList < QVariantMap >& listOfMap);
-        void extractFlightData();
 
         KIMAP::MessagePtr m_messagePtr;
         QList< AbstractReservationPlugin* > m_pluginList;

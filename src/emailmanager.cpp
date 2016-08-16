@@ -152,6 +152,11 @@ void EmailManager::searchNewMessages()
     group.writeEntry("MESSAGE_COUNT", QString::number(m_messageCount));
     group.config()->sync();
 
+    if (m_nextUid == uidNext) {
+        qDebug() << "Already downloaded top email\n";
+        emit fetchEmailsFromDatabase();
+        startIdle();
+    }
     KIMAP::ImapInterval interval(uidNext);
     KIMAP::ImapSet set;
     set.add(interval);

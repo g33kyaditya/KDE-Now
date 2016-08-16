@@ -50,6 +50,7 @@ class KDENOWCORE_EXPORT EmailManager : public QObject
     Q_SIGNALS:
         void fetchedEmail(KIMAP::MessagePtr message);
         void signalUpdateProcess();
+        void fetchEmailsFromDatabase();
 
     public Q_SLOTS:
         void start();
