@@ -43,9 +43,9 @@ EventReservation::EventReservation(QObject* parent, const QVariantList& args)
     dbus.registerService("org.kde.kdenow.event");
     m_pluginName = "eventDataExtractor";
     connect(this, &EventReservation::extractedData, this, &EventReservation::cacheData);
-    connect(this, &EventReservation::extractedData, this, &EventReservation::setDBusData);
+    connect(this, &EventReservation::extractedData, this, &EventReservation::sendDataOverDBus);
     initDatabase();
-    getDataFromDatabase();
+    recordsInDatabase();
 }
 
 EventReservation::~EventReservation()
@@ -69,24 +69,34 @@ void EventReservation::start()
 
 void EventReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = map["reservationNumber"].toString();
-    m_name = map["underName"].toMap().value("name").toString();
+    QString reservationNumber = map["reservationNumber"].toString();
+    QString name = map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = map["reservationFor"].toMap();
 
-    m_eventName = reservationForMap["name"].toString();
+    QString eventName = reservationForMap["name"].toString();
     QDateTime startDateTime = reservationForMap["startDate"].toDateTime();
-    m_startDate = startDateTime.date().toString();
-    m_startTime = startDateTime.time().toString("h:mm AP");
+    QString startDate = startDateTime.date().toString();
+    QString startTime = startDateTime.time().toString("h:mm AP");
 
     QVariantMap addressMap = reservationForMap["location"].toMap().value("address").toMap();
-    m_location = reservationForMap["location"].toMap().value("name").toString();
-    m_streetAddress = addressMap["streetAddress"].toString();
-    m_addressLocality = addressMap["addressLocality"].toString();
+    QString location = reservationForMap["location"].toMap().value("name").toString();
+    QString streetAddress = addressMap["streetAddress"].toString();
+    QString addressLocality = addressMap["addressLocality"].toString();
 
-    emit extractedData();
+    QVariantMap requiredMap;
+    requiredMap.insert("reservationNumber", reservationNumber);
+    requiredMap.insert("name", name);
+    requiredMap.insert("eventName", eventName);
+    requiredMap.insert("startDate", startDate);
+    requiredMap.insert("startTime", startTime);
+    requiredMap.insert("location", location);
+    requiredMap.insert("streetAddress", streetAddress);
+    requiredMap.insert("addressLocality", addressLocality);
+
+    emit extractedData(requiredMap);
 }
 
-void EventReservation::cacheData()
+void EventReservation::cacheData(QVariantMap& map)
 {
     if (m_db.connectionName().isEmpty()) {
         initDatabase();
@@ -95,14 +105,14 @@ void EventReservation::cacheData()
     QSqlQuery updateQuery(m_db);
     QString queryString = "insert into Event values (:id, :reservationNumber, :name, :eventName, :startDate, :startTime, :location, :streetAddress, :addressLocality)";
     updateQuery.prepare(queryString);
-    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
-    updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":eventName", m_eventName);
-    updateQuery.bindValue(":startDate", m_startDate);
-    updateQuery.bindValue(":startTime", m_startTime);
-    updateQuery.bindValue(":location", m_location);
-    updateQuery.bindValue(":streetAddress", m_streetAddress);
-    updateQuery.bindValue(":addressLocality", m_addressLocality);
+    updateQuery.bindValue(":reservationNumber", map["reservationNumber"].toString());
+    updateQuery.bindValue(":name", map["name"].toString());
+    updateQuery.bindValue(":eventName", map["eventName"].toString());
+    updateQuery.bindValue(":startDate", map["startDate"].toString());
+    updateQuery.bindValue(":startTime", map["startTime"].toString());
+    updateQuery.bindValue(":location", map["location"].toString());
+    updateQuery.bindValue(":streetAddress", map["streetAddress"].toString());
+    updateQuery.bindValue(":addressLocality", map["addressLocality"].toString());
 
     if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Event Table";
@@ -139,21 +149,32 @@ void EventReservation::initDatabase()
     }
 }
 
-void EventReservation::setDBusData()
+void EventReservation::sendDataOverDBus(QVariantMap& map)
 {
-    m_dbusMap.insert("reservationNumber", m_reservationNumber);
-    m_dbusMap.insert("name", m_name);
-    m_dbusMap.insert("eventName", m_eventName);
-    m_dbusMap.insert("startDate", m_startDate);
-    m_dbusMap.insert("startTime", m_startTime);
-    m_dbusMap.insert("location", m_location);
-    m_dbusMap.insert("streetAddress", m_streetAddress);
-    m_dbusMap.insert("addressLocality", m_addressLocality);
+    QStringList keys, values;   // QTBUG-21577 : qdbusxml2cpp fails to parse QVariantMap parameter
+                                //               for D-Bus signal
 
-    emit update();
+    keys.append("reservationNumber");
+    keys.append("name");
+    keys.append("eventName");
+    keys.append("startDate");
+    keys.append("startTime");
+    keys.append("location");
+    keys.append("streetAddress");
+    keys.append("addressLocality");
+
+    values.append(map["reservationNumber"].toString());
+    values.append(map["name"].toString());
+    values.append(map["eventName"].toString());
+    values.append(map["startDate"].toString());
+    values.append(map["startTime"].toString());
+    values.append(map["streetAddress"].toString());
+    values.append(map["addressLocality"].toString());
+
+    emit update(keys, values);
 }
 
-void EventReservation::getDataFromDatabase()
+void EventReservation::recordsInDatabase()
 {
     QSqlQuery dataQuery(m_db);
     QString queryString = "select * from Event";
@@ -167,7 +188,6 @@ void EventReservation::getDataFromDatabase()
         qDebug() << "Fetched Records from Table Event Successfully";
     }
 
-    QList< QVariantMap > listOfMapsInDatabase;
     while(dataQuery.next()) {
         QVariantMap map;
         map.insert("reservationNumber", dataQuery.value(1).toString());
@@ -178,26 +198,17 @@ void EventReservation::getDataFromDatabase()
         map.insert("location", dataQuery.value(6).toString());
         map.insert("streetAddress", dataQuery.value(7).toString());
         map.insert("addressLocality", dataQuery.value(8).toString());
-        listOfMapsInDatabase.append(map);
+        m_listOfMapsInDatabase.append(map);
     }
-
-    foreach(QVariantMap map, listOfMapsInDatabase) {
-        m_reservationNumber = map["reservationNumber"].toString();
-        m_name = map["name"].toString();
-        m_eventName = map["eventName"].toString();
-        m_startDate = map["startDate"].toString();
-        m_startTime = map["startTime"].toString();
-        m_location = map["location"].toString();
-        m_streetAddress = map["streetAddress"].toString();
-        m_addressLocality = map["addressLocality"].toString();
-        setDBusData();
-    }
+    emit loadedEventPlugin();
 }
 
-
-QVariantMap EventReservation::getMap()
+void EventReservation::getDatabaseRecordsOverDBus()
 {
-    return m_dbusMap;
+    foreach(QVariantMap map, m_listOfMapsInDatabase) {
+        sendDataOverDBus(map);
+    }
 }
+
 
 #include "eventreservation.moc"

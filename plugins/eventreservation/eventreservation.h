@@ -24,6 +24,7 @@
 
 #include <QtCore/QDate>
 #include <QtCore/QTime>
+#include <QtCore/QStringList>
 #include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
@@ -38,34 +39,24 @@ class EventReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
-        void getDataFromDatabase();
+        void recordsInDatabase();
 
     Q_SIGNALS:
-        void extractedData();
-        Q_SCRIPTABLE void update();
+        void extractedData(QVariantMap& map);
+        Q_SCRIPTABLE void update(QStringList keys, QStringList values);
+        Q_SCRIPTABLE void loadedEventPlugin();
 
     public Q_SLOTS:
-        QVariantMap getMap();
+        Q_SCRIPTABLE void getDatabaseRecordsOverDBus();
 
     private Q_SLOTS:
-        void cacheData();
-        void setDBusData();
+        void cacheData(QVariantMap& map);
+        void sendDataOverDBus(QVariantMap& map);
 
     private:
         QString m_pluginName;
-
         QSqlDatabase m_db;
-
-        QString m_reservationNumber;
-        QString m_name;
-        QString m_eventName;
-        QString m_startDate;
-        QString m_startTime;
-        QString m_location;
-        QString m_streetAddress;
-        QString m_addressLocality;
-
-        QVariantMap m_dbusMap;
+        QList < QVariantMap > m_listOfMapsInDatabase;
 };
 
 #endif //EVENTRESERVATION_H

@@ -30,26 +30,32 @@ class DataHandler : public QObject
 
     public:
         explicit DataHandler(QObject* parent = 0);
+        void convertStringListsToMap(QStringList keys, QStringList values);
 
     Q_SIGNALS:
         //These signals will be seen by Plasmoid's signal handler
+        void credentialsInsideWallet();
+        void credentialsInput();
+
         void eventDataReceived();
         void flightDataReceived();
         void hotelDataReceived();
         void restaurantDataReceived();
-        void credentialsInsideWallet();
-        void credentialsInput();
 
     public Q_SLOTS:
+        void startDaemon();
         void checkWallet();
-        void onEventMapReceived();
+
+        void onLoadedEventPlugin();
+        void onLoadedRestaurantPlugin();
+
+        void onEventMapReceived(QStringList keys, QStringList values);
         void onFlightMapReceived();
         void onHotelMapReceived();
         void onRestaurantMapReceived(QStringList keys, QStringList values);
+
         void onCredentialsInput(QString, QString, QString, QString);
         Q_INVOKABLE QVariantMap getMap();
-        void startDaemon();
-        void onLoadedRestaurantPlugin();
 
     private:
         QVariantMap m_map;

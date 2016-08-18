@@ -32,32 +32,39 @@ DataHandler::DataHandler(QObject* parent): QObject(parent) {
     QMetaObject::invokeMethod(this, "checkWallet", Qt::QueuedConnection);
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
+
     dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
-                 "update", this, SLOT(onEventMapReceived()));
+                 "update", this, SLOT(onEventMapReceived(QStringList, QStringList)));
+    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
+                 "loadedEventPlugin", this, SLOT(onLoadedEventPlugin()));
+
     dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
                  "update", this, SLOT(onFlightMapReceived()));
     dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
                  "update", this, SLOT(onHotelMapReceived()));
+
     dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
                  "update", this, SLOT(onRestaurantMapReceived(QStringList, QStringList)));
     dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
                  "loadedRestaurantPlugin", this, SLOT(onLoadedRestaurantPlugin()));
 }
 
-void DataHandler::onEventMapReceived()
+void DataHandler::convertStringListsToMap(QStringList keys, QStringList values)
 {
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Event");
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Event getMap";
-        qDebug() << reply.value();
+    QStringList::iterator keysIter = keys.begin();
+    QStringList::iterator valuesIter = values.begin();
+    while (keysIter != keys.end()) {
+        m_map.insert((*keysIter), (*valuesIter));
+        keysIter++;
+        valuesIter++;
     }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Event getMap";
-        return;
-    }
+    qDebug() << m_map << "\n";
+}
 
-    m_map = reply.value();
+
+void DataHandler::onEventMapReceived(QStringList keys, QStringList values)
+{
+    convertStringListsToMap(keys, values);
     emit eventDataReceived();
 }
 
@@ -67,7 +74,7 @@ void DataHandler::onFlightMapReceived()
     QDBusReply<QVariantMap> reply = interface->call("getMap");
     if (reply.isValid()) {
         qDebug() << "Valid Reply received from org.kde.kdenow /Flight getMap";
-        qDebug() << reply.value();
+        qDebug() << reply.value() << "\n";
     }
     else {
         qDebug() << "Did not receive a valid reply from org.kde.kdenow /Flight getMap";
@@ -84,7 +91,7 @@ void DataHandler::onHotelMapReceived()
     QDBusReply<QVariantMap> reply = interface->call("getMap");
     if (reply.isValid()) {
         qDebug() << "Valid Reply received from org.kde.kdenow /Hotel getMap";
-        qDebug() << reply.value();
+        qDebug() << reply.value() << "\n";
     }
     else {
         qDebug() << "Did not receive a valid reply from org.kde.kdenow /Hotel getMap";
@@ -98,14 +105,7 @@ void DataHandler::onHotelMapReceived()
 void DataHandler::onRestaurantMapReceived(QStringList keys, QStringList values)
 {
 
-    QStringList::iterator keysIter = keys.begin();
-    QStringList::iterator valuesIter = values.begin();
-    while (keysIter != keys.end()) {
-        m_map.insert((*keysIter), (*valuesIter));
-        keysIter++;
-        valuesIter++;
-    }
-    qDebug() << m_map << "\n";
+    convertStringListsToMap(keys, values);
     emit restaurantDataReceived();
 }
 
@@ -176,6 +176,12 @@ void DataHandler::checkWallet()
         emit credentialsInsideWallet();
     }
     KWallet::Wallet::closeWallet("KDENowWallet", true);
+}
+
+void DataHandler::onLoadedEventPlugin()
+{
+    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Event");
+    QDBusReply< void > reply = interface->call("getDatabaseRecordsOverDBus");
 }
 
 void DataHandler::onLoadedRestaurantPlugin()
