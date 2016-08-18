@@ -24,6 +24,7 @@
 
 #include <QtCore/QDate>
 #include <QtCore/QTime>
+#include <QtCore/QStringList>
 #include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
@@ -38,37 +39,24 @@ class FlightReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
-        void getDataFromDatabase();
+        void recordsInDatabase();
 
     Q_SIGNALS:
-        void extractedData();
-        Q_SCRIPTABLE void update();
+        void extractedData(QVariantMap& map);
+        Q_SCRIPTABLE void update(QStringList keys, QStringList values);
+        Q_SCRIPTABLE void loadedFlightPlugin();
 
     public Q_SLOTS:
-        QVariantMap getMap();
+        Q_SCRIPTABLE void getDatabaseRecordsOverDBus();
 
     private Q_SLOTS:
-         void cacheData();
-         void setDBusData();
+        void cacheData(QVariantMap& map);
+        void sendDataOverDBus(QVariantMap& map);
 
     private:
         QString m_pluginName;
-
         QSqlDatabase m_db;
-
-        QString m_reservationNumber;
-        QString m_name;
-        QString m_flight;
-        QString m_departureAirportName;
-        QString m_departureAirportCode;
-        QString m_departureDate;
-        QString m_departureTime;
-        QString m_arrivalAirportName;
-        QString m_arrivalAirportCode;
-        QString m_arrivalDate;
-        QString m_arrivalTime;
-
-        QVariantMap m_dbusMap;
+        QList < QVariantMap > m_listOfMapsInDatabase;
 };
 
 #endif //FLIGHTRESERVATION_H

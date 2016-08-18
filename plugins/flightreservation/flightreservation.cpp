@@ -45,9 +45,9 @@ FlightReservation::FlightReservation(QObject* parent, const QVariantList& args)
     dbus.registerService("org.kde.kdenow.flight");
     m_pluginName = "flightDataExtractor";
     connect(this, &FlightReservation::extractedData, this, &FlightReservation::cacheData);
-    connect(this, &FlightReservation::extractedData, this, &FlightReservation::setDBusData);
+    connect(this, &FlightReservation::extractedData, this, &FlightReservation::sendDataOverDBus);
     initDatabase();
-    getDataFromDatabase();
+    recordsInDatabase();
 }
 
 FlightReservation::~FlightReservation()
@@ -71,30 +71,43 @@ void FlightReservation::start()
 
 void FlightReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = map["reservationNumber"].toString();
-    m_name = map["underName"].toMap().value("name").toString();
+    QString reservationNumber = map["reservationNumber"].toString();
+    QString name = map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = map["reservationFor"].toMap();
 
     QString flightNameCode = reservationForMap["airline"].toMap().value("iataCode").toString();
     QString flightNumber = reservationForMap["flightNumber"].toString();
-    m_flight = flightNameCode + flightNumber;
+    QString flight = flightNameCode + flightNumber;
 
-    m_departureAirportName = reservationForMap["departureAirport"].toMap().value("name").toString();
-    m_departureAirportCode = reservationForMap["departureAirport"].toMap().value("iataCode").toString();
+    QString departureAirportName = reservationForMap["departureAirport"].toMap().value("name").toString();
+    QString departureAirportCode = reservationForMap["departureAirport"].toMap().value("iataCode").toString();
     QDateTime departureDateTime = reservationForMap["departureTime"].toDateTime();
-    m_departureDate = departureDateTime.date().toString();
-    m_departureTime = departureDateTime.time().toString("h:mm AP");
+    QString departureDate = departureDateTime.date().toString();
+    QString departureTime = departureDateTime.time().toString("h:mm AP");
 
-    m_arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
-    m_arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
+    QString arrivalAirportName = reservationForMap["arrivalAirport"].toMap().value("name").toString();
+    QString arrivalAirportCode = reservationForMap["arrivalAirport"].toMap().value("iataCode").toString();
     QDateTime arrivalDateTime = reservationForMap["arrivalTime"].toDateTime();
-    m_arrivalDate = arrivalDateTime.date().toString();
-    m_arrivalTime = arrivalDateTime.time().toString("h:mm AP");
+    QString arrivalDate = arrivalDateTime.date().toString();
+    QString arrivalTime = arrivalDateTime.time().toString("h:mm AP");
 
-    emit extractedData();
+    QVariantMap requiredMap;
+    requiredMap.insert("reservationNumber", reservationNumber);
+    requiredMap.insert("name", name);
+    requiredMap.insert("flight", flight);
+    requiredMap.insert("departureAirportName", departureAirportName);
+    requiredMap.insert("departureAirportCode", departureAirportCode);
+    requiredMap.insert("departureDate", departureDate);
+    requiredMap.insert("departureTime", departureTime);
+    requiredMap.insert("arrivalAirportName", arrivalAirportName);
+    requiredMap.insert("arrivalAirportCode", arrivalAirportCode);
+    requiredMap.insert("arrivalDate", arrivalDate);
+    requiredMap.insert("arrivalTime", arrivalTime);
+
+    emit extractedData(requiredMap);
 }
 
-void FlightReservation::cacheData()
+void FlightReservation::cacheData(QVariantMap& map)
 {
     if (m_db.connectionName().isEmpty()) {
         initDatabase();
@@ -103,17 +116,17 @@ void FlightReservation::cacheData()
     QSqlQuery updateQuery(m_db);
     QString queryString = "insert into Flight values (:id, :reservationNumber, :name, :flight, :departureAirportName, :departureAirportCode, :departureDate, :departureTime, :arrivalAirportName, :arrivalAirportCode, :arrivalDate, :arrivalTime)";
     updateQuery.prepare(queryString);
-    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
-    updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":flight", m_flight);
-    updateQuery.bindValue(":departureAirportName", m_departureAirportName);
-    updateQuery.bindValue(":departureAirportCode", m_departureAirportCode);
-    updateQuery.bindValue(":departureDate", m_departureDate);
-    updateQuery.bindValue(":departureTime", m_departureTime);
-    updateQuery.bindValue(":arrivalAirportName", m_arrivalAirportName);
-    updateQuery.bindValue(":arrivalAirportCode", m_arrivalAirportCode);
-    updateQuery.bindValue(":arrivalDate", m_arrivalDate);
-    updateQuery.bindValue(":arrivalTime", m_arrivalTime);
+    updateQuery.bindValue(":reservationNumber", map["reservationNumber"].toString());
+    updateQuery.bindValue(":name", map["name"].toString());
+    updateQuery.bindValue(":flight", map["flight"].toString());
+    updateQuery.bindValue(":departureAirportName", map["departureAirportName"].toString());
+    updateQuery.bindValue(":departureAirportCode", map["departureAirportCode"].toString());
+    updateQuery.bindValue(":departureDate", map["departureDate"].toString());
+    updateQuery.bindValue(":departureTime", map["departureTime"].toString());
+    updateQuery.bindValue(":arrivalAirportName", map["arrivalAirportName"].toString());
+    updateQuery.bindValue(":arrivalAirportCode", map["arrivalAirportCode"].toString());
+    updateQuery.bindValue(":arrivalDate", map["arrivalDate"].toString());
+    updateQuery.bindValue(":arrivalTime", map["arrivalTime"].toString());
 
     if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Flight Table";
@@ -150,24 +163,39 @@ void FlightReservation::initDatabase()
     }
 }
 
-void FlightReservation::setDBusData()
+void FlightReservation::sendDataOverDBus(QVariantMap& map)
 {
-    m_dbusMap.insert("reservationNumber", m_reservationNumber);
-    m_dbusMap.insert("name", m_name);
-    m_dbusMap.insert("flight", m_flight);
-    m_dbusMap.insert("departureAirportName", m_departureAirportName);
-    m_dbusMap.insert("departureAirportCode", m_departureAirportCode);
-    m_dbusMap.insert("departureDate", m_departureDate);
-    m_dbusMap.insert("departureTime", m_departureTime);
-    m_dbusMap.insert("arrivalAirportName", m_arrivalAirportName);
-    m_dbusMap.insert("arrivalAirportCode", m_arrivalAirportCode);
-    m_dbusMap.insert("arrivalDate", m_arrivalDate);
-    m_dbusMap.insert("arrivalTime", m_arrivalTime);
+    QStringList keys, values;   // QTBUG-21577 : qdbusxml2cpp fails to parse QVariantMap parameter
+                                //               for D-Bus signal
 
-    emit update();
+    keys.append("reservationNumber");
+    keys.append("name");
+    keys.append("flight");
+    keys.append("departureAirportName");
+    keys.append("departureAirportCode");
+    keys.append("departureDate");
+    keys.append("departureTime");
+    keys.append("arrivalAirportName");
+    keys.append("arrivalAirportCode");
+    keys.append("arrivalDate");
+    keys.append("arrivalTime");
+
+    values.append(map["reservationNumber"].toString());
+    values.append(map["name"].toString());
+    values.append(map["flight"].toString());
+    values.append(map["departureAirportName"].toString());
+    values.append(map["departureAirportCode"].toString());
+    values.append(map["departureDate"].toString());
+    values.append(map["departureTime"].toString());
+    values.append(map["arrivalAirportName"].toString());
+    values.append(map["arrivalAirportCode"].toString());
+    values.append(map["arrivalDate"].toString());
+    values.append(map["arrivalTime"].toString());
+
+    emit update(keys, values);
 }
 
-void FlightReservation::getDataFromDatabase()
+void FlightReservation::recordsInDatabase()
 {
     QSqlQuery dataQuery(m_db);
     QString queryString = "select * from Flight";
@@ -181,7 +209,6 @@ void FlightReservation::getDataFromDatabase()
         qDebug() << "Fetched Records from Table Flight Successfully";
     }
 
-    QList< QVariantMap > listOfMapsInDatabase;
     while(dataQuery.next()) {
         QVariantMap map;
         map.insert("reservationNumber", dataQuery.value(1).toString());
@@ -195,29 +222,16 @@ void FlightReservation::getDataFromDatabase()
         map.insert("arrivalAirportCode", dataQuery.value(9).toString());
         map.insert("arrivalDate", dataQuery.value(10).toString());
         map.insert("arrivalTime", dataQuery.value(11).toString());
-        listOfMapsInDatabase.append(map);
+        m_listOfMapsInDatabase.append(map);
     }
-
-    foreach(QVariantMap map, listOfMapsInDatabase) {
-        m_reservationNumber = map["reservationNumber"].toString();
-        m_name = map["name"].toString();
-        m_flight = map["flight"].toString();
-        m_departureAirportName = map["departureAirportName"].toString();
-        m_departureAirportCode = map["departureAirportCode"].toString();
-        m_departureDate = map["departureDate"].toString();
-        m_departureTime = map["departureTime"].toString();
-        m_arrivalAirportName = map["arrivalAirportName"].toString();
-        m_arrivalAirportCode = map["arrivalAirportCode"].toString();
-        m_arrivalDate = map["arrivalDate"].toString();
-        m_arrivalTime = map["arrivalTime"].toString();
-        setDBusData();
-    }
+    emit loadedFlightPlugin();
 }
 
-QVariantMap FlightReservation::getMap()
+void FlightReservation::getDatabaseRecordsOverDBus()
 {
-    return m_dbusMap;
+    foreach(QVariantMap map, m_listOfMapsInDatabase) {
+        sendDataOverDBus(map);
+    }
 }
-
 
 #include "flightreservation.moc"

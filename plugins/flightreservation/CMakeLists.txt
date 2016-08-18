@@ -6,7 +6,7 @@ set(dbus_SRCS org.kde.kdenow.flight.xml)
 
 qt5_generate_dbus_interface(flightreservation.h
                             org.kde.kdenow.flight.xml
-                            OPTIONS -M -s
+                            OPTIONS -m -s
                             )
 
 qt5_add_dbus_adaptor(dbus_SRCS
