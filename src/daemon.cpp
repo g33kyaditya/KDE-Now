@@ -32,8 +32,7 @@ Daemon::Daemon(QObject* parent): QObject(parent)
     dbus.registerObject("/KDENow", this);
     dbus.registerService("org.kde.kdenow");
     Processor * processor = SingletonFactory::instanceFor< Processor >();
-    connect(this, &Daemon::fetchRecordsFromDatabase, processor, &Processor::loadPlugins);
-    emit fetchRecordsFromDatabase();
+    processor->loadPlugins();
 }
 
 void Daemon::setCredentials(QList < UserCredentials >& credentialsList) {
