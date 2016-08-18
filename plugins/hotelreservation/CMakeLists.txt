@@ -6,7 +6,7 @@ set(dbus_SRCS org.kde.kdenow.hotel.xml)
 
 qt5_generate_dbus_interface(hotelreservation.h
                             org.kde.kdenow.hotel.xml
-                            OPTIONS -M -s
+                            OPTIONS -m -s
                             )
 
 qt5_add_dbus_adaptor(dbus_SRCS

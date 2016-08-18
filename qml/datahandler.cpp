@@ -41,10 +41,12 @@ DataHandler::DataHandler(QObject* parent): QObject(parent) {
     dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
                  "update", this, SLOT(onFlightMapReceived(QStringList, QStringList)));
     dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
-                 "loadedEventPlugin", this, SLOT(onLoadedFlightPlugin()));
+                 "loadedFlightPlugin", this, SLOT(onLoadedFlightPlugin()));
 
     dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
-                 "update", this, SLOT(onHotelMapReceived()));
+                 "update", this, SLOT(onHotelMapReceived(QStringList, QStringList)));
+    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
+                 "loadedHotelPlugin", this, SLOT(onLoadedHotelPlugin()));
 
     dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
                  "update", this, SLOT(onRestaurantMapReceived(QStringList, QStringList)));
@@ -78,20 +80,16 @@ void DataHandler::onFlightMapReceived(QStringList keys, QStringList values)
     emit flightDataReceived();
 }
 
-void DataHandler::onHotelMapReceived()
+void DataHandler::onHotelMapReceived(QStringList keys, QStringList values)
 {
-    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Hotel");
-    QDBusReply<QVariantMap> reply = interface->call("getMap");
-    if (reply.isValid()) {
-        qDebug() << "Valid Reply received from org.kde.kdenow /Hotel getMap";
-        //qDebug() << reply.value() << "\n";
+    QStringList::iterator keysIter = keys.begin();
+    QStringList::iterator valuesIter = values.begin();
+    while (keysIter != keys.end()) {
+        m_map.insert((*keysIter), (*valuesIter));
+        keysIter++;
+        valuesIter++;
     }
-    else {
-        qDebug() << "Did not receive a valid reply from org.kde.kdenow /Hotel getMap";
-        return;
-    }
-
-    m_map = reply.value();
+    qDebug() << m_map << "\n";
     emit hotelDataReceived();
 }
 
@@ -187,6 +185,12 @@ void DataHandler::onLoadedEventPlugin()
 void DataHandler::onLoadedFlightPlugin()
 {
     QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Flight");
+    QDBusReply< void > reply = interface->call("getDatabaseRecordsOverDBus");
+}
+
+void DataHandler::onLoadedHotelPlugin()
+{
+    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Hotel");
     QDBusReply< void > reply = interface->call("getDatabaseRecordsOverDBus");
 }
 

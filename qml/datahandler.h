@@ -47,11 +47,12 @@ class DataHandler : public QObject
 
         void onLoadedEventPlugin();
         void onLoadedFlightPlugin();
+        void onLoadedHotelPlugin();
         void onLoadedRestaurantPlugin();
 
         void onEventMapReceived(QStringList keys, QStringList values);
         void onFlightMapReceived(QStringList keys, QStringList values);
-        void onHotelMapReceived();
+        void onHotelMapReceived(QStringList keys, QStringList values);
         void onRestaurantMapReceived(QStringList keys, QStringList values);
 
         void onCredentialsInput(QString, QString, QString, QString);

@@ -36,35 +36,24 @@ class HotelReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
-        void getDataFromDatabase();
+        void recordsInDatabase();
 
     Q_SIGNALS:
-        void extractedData();
-        Q_SCRIPTABLE void update();
+        void extractedData(QVariantMap& map);
+        Q_SCRIPTABLE void update(QStringList keys, QStringList values);
+        Q_SCRIPTABLE void loadedHotelPlugin();
 
     public Q_SLOTS:
-        QVariantMap getMap();
+        Q_SCRIPTABLE void getDatabaseRecordsOverDBus();
 
     private Q_SLOTS:
-        void cacheData();
-        void setDBusData();
+        void cacheData(QVariantMap& map);
+        void sendDataOverDBus(QVariantMap& map);
 
     private:
         QString m_pluginName;
-
         QSqlDatabase m_db;
-
-        QString m_reservationNumber;
-        QString m_name;
-        QString m_checkinDate;
-        QString m_checkoutDate;
-        QString m_telephone;
-        QString m_hotelName;
-        QString m_streetAddress;
-        QString m_addressLocality;
-        QString m_addressRegion;
-
-        QVariantMap m_dbusMap;
+        QList < QVariantMap > m_listOfMapsInDatabase;
 };
 
 #endif //HOTELRESERVATION_H
