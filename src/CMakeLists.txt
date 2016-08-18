@@ -6,7 +6,7 @@ set(dbus_SRCS org.kde.kdenow.xml)
 
 qt5_generate_dbus_interface(daemon.h
                             org.kde.kdenow.xml
-                            OPTIONS -M
+                            OPTIONS -m
                             )
 
 qt5_add_dbus_adaptor(dbus_SRCS

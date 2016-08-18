@@ -48,7 +48,8 @@ class DataHandler : public QObject
         void onRestaurantMapReceived(QStringList keys, QStringList values);
         void onCredentialsInput(QString, QString, QString, QString);
         Q_INVOKABLE QVariantMap getMap();
-        void setDBusConnections();
+        void startDaemon();
+        void onLoadedRestaurantPlugin();
 
     private:
         QVariantMap m_map;

@@ -33,10 +33,10 @@ class KDENOWCORE_EXPORT Processor : public QObject
 
     public:
         explicit Processor(QObject* parent = 0);
-        void loadPlugins();
 
     public Q_SLOTS:
         void process(KIMAP::MessagePtr messagePtr);
+        void loadPlugins();
 
     private:
         void extractNeededData(QList < QVariantMap >& listOfMap);

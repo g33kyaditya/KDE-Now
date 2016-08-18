@@ -39,30 +39,24 @@ class RestaurantReservation : public AbstractReservationPlugin
         QString plugin() const;
         void extract(QVariantMap& map);
         void initDatabase();
-        void getDataFromDatabase();
+        void recordsInDatabase();
 
     Q_SIGNALS:
-        void extractedData();
+        void extractedData(QVariantMap& map);
         Q_SCRIPTABLE void update(QStringList keys, QStringList values);
+        Q_SCRIPTABLE void loadedRestaurantPlugin();
+
+    public Q_SLOTS:
+        Q_SCRIPTABLE void getDatabaseRecordsOverDBus();
 
     private Q_SLOTS:
-        void cacheData();
-        void setDBusData();
+        void cacheData(QVariantMap& map);
+        void sendDataOverDBus(QVariantMap& map);
 
     private:
         QString m_pluginName;
-
         QSqlDatabase m_db;
-
-        QString m_reservationNumber;
-        QString m_name;
-        QString m_startDate;
-        QString m_startTime;
-        int m_partySize;
-        QString m_restaurantName;
-        QString m_streetAddress;
-        QString m_addressLocality;
-        QString m_addressRegion;
+        QList < QVariantMap > m_listOfMapsInDatabase;
 };
 
 #endif //RESTAURANTRESERVATION_H

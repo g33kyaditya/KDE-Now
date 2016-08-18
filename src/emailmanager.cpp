@@ -19,6 +19,8 @@
 
 #include "emailmanager.h"
 #include "kdenowadaptor.h"
+#include "singletonfactory.h"
+#include "processor.h"
 
 #include <QtCore/QString>
 #include <QtDBus/QDBusConnection>
@@ -154,7 +156,6 @@ void EmailManager::searchNewMessages()
 
     if (m_nextUid == uidNext) {
         qDebug() << "Already downloaded top email\n";
-        emit fetchEmailsFromDatabase();
         startIdle();
     }
     KIMAP::ImapInterval interval(uidNext);

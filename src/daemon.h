@@ -36,8 +36,11 @@ class KDENOWCORE_EXPORT Daemon : public QObject
         Daemon(QObject* parent = 0);
         void startEmailManagers();
 
+    Q_SIGNALS:
+        void fetchRecordsFromDatabase();
+
     public Q_SLOTS:
-        QString startDaemon();
+        Q_SCRIPTABLE QString startDaemon();
         void setCredentials(QList < UserCredentials >& credentialsList);
 
     private:

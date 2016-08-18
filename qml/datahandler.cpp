@@ -28,8 +28,20 @@
 
 DataHandler::DataHandler(QObject* parent): QObject(parent) {
 
-    connect(this, &DataHandler::credentialsInsideWallet, this, &DataHandler::setDBusConnections);
+    connect(this, &DataHandler::credentialsInsideWallet, this, &DataHandler::startDaemon);
     QMetaObject::invokeMethod(this, "checkWallet", Qt::QueuedConnection);
+
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
+                 "update", this, SLOT(onEventMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
+                 "update", this, SLOT(onFlightMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
+                 "update", this, SLOT(onHotelMapReceived()));
+    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
+                 "update", this, SLOT(onRestaurantMapReceived(QStringList, QStringList)));
+    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
+                 "loadedRestaurantPlugin", this, SLOT(onLoadedRestaurantPlugin()));
 }
 
 void DataHandler::onEventMapReceived()
@@ -135,13 +147,12 @@ void DataHandler::onCredentialsInput(QString imapServer, QString imapPort, QStri
     emit credentialsInsideWallet();
 }
 
-void DataHandler::setDBusConnections()
+void DataHandler::startDaemon()
 {
-    QDBusConnection dbus = QDBusConnection::sessionBus();
     QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/KDENow");
 
     //Call a method, to start the kdenowd daemon if it hasn't yet started
-    QDBusReply<QString> reply = interface->call("startDaemon");
+    QDBusReply< QString > reply = interface->call("startDaemon");
     if (reply.isValid()) {
         qDebug() << "Valid Reply received from org.kde.kdenow /KDENow";
         qDebug() << reply.value();
@@ -150,15 +161,6 @@ void DataHandler::setDBusConnections()
         qDebug() << "Did not receive a valid reply from org.kde.kdenow /KDENow";
         return;
     }
-
-    dbus.connect("org.kde.kdenow", "/Event", "org.kde.kdenow.event",
-                 "update", this, SLOT(onEventMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Flight", "org.kde.kdenow.flight",
-                 "update", this, SLOT(onFlightMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Hotel", "org.kde.kdenow.hotel",
-                 "update", this, SLOT(onHotelMapReceived()));
-    dbus.connect("org.kde.kdenow", "/Restaurant", "org.kde.kdenow.restaurant",
-                 "update", this, SLOT(onRestaurantMapReceived(QStringList, QStringList)));
 }
 
 void DataHandler::checkWallet()
@@ -176,3 +178,8 @@ void DataHandler::checkWallet()
     KWallet::Wallet::closeWallet("KDENowWallet", true);
 }
 
+void DataHandler::onLoadedRestaurantPlugin()
+{
+    QDBusInterface* interface = new QDBusInterface("org.kde.kdenow", "/Restaurant");
+    QDBusReply< void > reply = interface->call("getDatabaseRecordsOverDBus");
+}

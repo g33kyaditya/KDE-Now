@@ -31,6 +31,9 @@ Daemon::Daemon(QObject* parent): QObject(parent)
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/KDENow", this);
     dbus.registerService("org.kde.kdenow");
+    Processor * processor = SingletonFactory::instanceFor< Processor >();
+    connect(this, &Daemon::fetchRecordsFromDatabase, processor, &Processor::loadPlugins);
+    emit fetchRecordsFromDatabase();
 }
 
 void Daemon::setCredentials(QList < UserCredentials >& credentialsList) {
@@ -47,7 +50,6 @@ void Daemon::startEmailManagers()
     foreach(EmailManager* manager, m_emailManagersList) {
         Processor* processor = SingletonFactory::instanceFor< Processor >();
         connect(manager, &EmailManager::fetchedEmail, processor, &Processor::process);
-        connect(manager, &EmailManager::fetchEmailsFromDatabase, processor, &Processor::loadPlugins);
         manager->start();
     }
 }

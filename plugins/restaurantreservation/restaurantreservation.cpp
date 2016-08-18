@@ -43,9 +43,9 @@ RestaurantReservation::RestaurantReservation(QObject* parent, const QVariantList
     dbus.registerService("org.kde.kdenow.restaurant");
     m_pluginName = "restaurantDataExtractor";
     connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::cacheData);
-    connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::setDBusData);
+    connect(this, &RestaurantReservation::extractedData, this, &RestaurantReservation::sendDataOverDBus);
     initDatabase();
-    getDataFromDatabase();
+    recordsInDatabase();
 }
 
 RestaurantReservation::~RestaurantReservation()
@@ -69,25 +69,36 @@ void RestaurantReservation::start()
 
 void RestaurantReservation::extract(QVariantMap& map)
 {
-    m_reservationNumber = map["reservationNumber"].toString();
-    m_name = map["underName"].toMap().value("name").toString();
+    QString reservationNumber = map["reservationNumber"].toString();
+    QString name = map["underName"].toMap().value("name").toString();
     QVariantMap reservationForMap = map["reservationFor"].toMap();
 
     QDateTime startDateTime = map["startTime"].toDateTime();
-    m_startDate = startDateTime.date().toString();
-    m_startTime = startDateTime.time().toString("h:mm AP");
-    m_partySize = map["partySize"].toInt();
+    QString startDate = startDateTime.date().toString();
+    QString startTime = startDateTime.time().toString("h:mm AP");
+    int partySize = map["partySize"].toInt();
 
     QVariantMap addressMap = reservationForMap["address"].toMap();
-    m_restaurantName = reservationForMap["name"].toString();
-    m_streetAddress = addressMap["streetAddress"].toString();
-    m_addressLocality = addressMap["addressLocality"].toString();
-    m_addressRegion = addressMap["addressRegion"].toString();
+    QString restaurantName = reservationForMap["name"].toString();
+    QString streetAddress = addressMap["streetAddress"].toString();
+    QString addressLocality = addressMap["addressLocality"].toString();
+    QString addressRegion = addressMap["addressRegion"].toString();
 
-    emit extractedData();
+    QVariantMap requiredMap;
+    requiredMap.insert("reservationNumber", reservationNumber);
+    requiredMap.insert("name", name);
+    requiredMap.insert("startDate", startDate);
+    requiredMap.insert("startTime", startTime);
+    requiredMap.insert("partySize", partySize);
+    requiredMap.insert("restaurantName", restaurantName);
+    requiredMap.insert("streetAddress", streetAddress);
+    requiredMap.insert("addressLocality", addressLocality);
+    requiredMap.insert("addressRegion", addressRegion);
+
+    emit extractedData(requiredMap);
 }
 
-void RestaurantReservation::cacheData()
+void RestaurantReservation::cacheData(QVariantMap& map)
 {
     if (m_db.connectionName().isEmpty()) {
         initDatabase();
@@ -96,15 +107,15 @@ void RestaurantReservation::cacheData()
     QSqlQuery updateQuery(m_db);
     QString queryString = "insert into Restaurant values (:id, :reservationNumber, :name, :startDate, :startTime, :partySize, :restaurantName, :streetAddress, :addressLocality, :addressRegion)";
     updateQuery.prepare(queryString);
-    updateQuery.bindValue(":reservationNumber", m_reservationNumber);
-    updateQuery.bindValue(":name", m_name);
-    updateQuery.bindValue(":startDate", m_startDate);
-    updateQuery.bindValue(":startTime", m_startTime);
-    updateQuery.bindValue(":partySize", m_partySize);
-    updateQuery.bindValue(":restaurantName", m_restaurantName);
-    updateQuery.bindValue(":streetAddress", m_streetAddress);
-    updateQuery.bindValue(":addressLocality", m_addressLocality);
-    updateQuery.bindValue(":addressRegion", m_addressRegion);
+    updateQuery.bindValue(":reservationNumber", map["reservationNumber"].toString());
+    updateQuery.bindValue(":name", map["name"].toString());
+    updateQuery.bindValue(":startDate", map["startDate"].toString());
+    updateQuery.bindValue(":startTime", map["startTime"].toString());
+    updateQuery.bindValue(":partySize", map["partySize"].toInt());
+    updateQuery.bindValue(":restaurantName", map["restaurantName"].toString());
+    updateQuery.bindValue(":streetAddress", map["streetAddress"].toString());
+    updateQuery.bindValue(":addressLocality", map["addressLocality"].toString());
+    updateQuery.bindValue(":addressRegion", map["addressRegion"].toString());
 
     if (!updateQuery.exec()) {
         qWarning() << "Unable to add entries into Database for Restaurant Table";
@@ -141,7 +152,7 @@ void RestaurantReservation::initDatabase()
     }
 }
 
-void RestaurantReservation::setDBusData()
+void RestaurantReservation::sendDataOverDBus(QVariantMap& map)
 {
     QStringList keys, values;   // QTBUG-21577 : qdbusxml2cpp fails to parse QVariantMap parameter
                                 //               for D-Bus signal
@@ -156,20 +167,20 @@ void RestaurantReservation::setDBusData()
     keys.append("addressLocality");
     keys.append("addressRegion");
 
-    values.append(m_reservationNumber);
-    values.append(m_name);
-    values.append(m_startDate);
-    values.append(m_startTime);
-    values.append(QString::number(m_partySize));
-    values.append(m_restaurantName);
-    values.append(m_streetAddress);
-    values.append(m_addressLocality);
-    values.append(m_addressRegion);
+    values.append(map["reservationNumber"].toString());
+    values.append(map["name"].toString());
+    values.append(map["startDate"].toString());
+    values.append(map["startTime"].toString());
+    values.append(map["partySize"].toString());
+    values.append(map["restaurantName"].toString());
+    values.append(map["streetAddress"].toString());
+    values.append(map["addressLocality"].toString());
+    values.append(map["addressRegion"].toString());
 
     emit update(keys, values);
 }
 
-void RestaurantReservation::getDataFromDatabase()
+void RestaurantReservation::recordsInDatabase()
 {
     QSqlQuery dataQuery(m_db);
     QString queryString = "select * from Restaurant";
@@ -183,7 +194,6 @@ void RestaurantReservation::getDataFromDatabase()
         qDebug() << "Fetched Records from Table Restaurant Successfully";
     }
 
-    QList< QVariantMap > listOfMapsInDatabase;
     while(dataQuery.next()) {
         QVariantMap map;
         map.insert("reservationNumber", dataQuery.value(1).toString());
@@ -195,20 +205,15 @@ void RestaurantReservation::getDataFromDatabase()
         map.insert("streetAddress", dataQuery.value(7).toString());
         map.insert("addressLocality", dataQuery.value(8).toString());
         map.insert("addressRegion", dataQuery.value(9).toString());
-        listOfMapsInDatabase.append(map);
+        m_listOfMapsInDatabase.append(map);
     }
-    qDebug() << listOfMapsInDatabase << "\n";
-    foreach(QVariantMap map, listOfMapsInDatabase) {
-        m_reservationNumber = map["reservationNumber"].toString();
-        m_name = map["name"].toString();
-        m_startDate = map["startDate"].toString();
-        m_startTime = map["startTime"].toString();
-        m_partySize = map["partySize"].toInt();
-        m_restaurantName = map["restaurantName"].toString();
-        m_streetAddress = map["streetAddress"].toString();
-        m_addressLocality = map["addressLocality"].toString();
-        m_addressRegion = map["addressRegion"].toString();
-        setDBusData();
+    emit loadedRestaurantPlugin();
+}
+
+void RestaurantReservation::getDatabaseRecordsOverDBus()
+{
+    foreach(QVariantMap map, m_listOfMapsInDatabase) {
+        sendDataOverDBus(map);
     }
 }
 
