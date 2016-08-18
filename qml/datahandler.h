@@ -30,7 +30,6 @@ class DataHandler : public QObject
 
     public:
         explicit DataHandler(QObject* parent = 0);
-        void convertStringListsToMap(QStringList keys, QStringList values);
 
     Q_SIGNALS:
         //These signals will be seen by Plasmoid's signal handler

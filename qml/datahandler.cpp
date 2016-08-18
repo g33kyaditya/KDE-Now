@@ -52,7 +52,7 @@ DataHandler::DataHandler(QObject* parent): QObject(parent) {
                  "loadedRestaurantPlugin", this, SLOT(onLoadedRestaurantPlugin()));
 }
 
-void DataHandler::convertStringListsToMap(QStringList keys, QStringList values)
+void DataHandler::onEventMapReceived(QStringList keys, QStringList values)
 {
     QStringList::iterator keysIter = keys.begin();
     QStringList::iterator valuesIter = values.begin();
@@ -62,18 +62,19 @@ void DataHandler::convertStringListsToMap(QStringList keys, QStringList values)
         valuesIter++;
     }
     qDebug() << m_map << "\n";
-}
-
-
-void DataHandler::onEventMapReceived(QStringList keys, QStringList values)
-{
-    convertStringListsToMap(keys, values);
     emit eventDataReceived();
 }
 
 void DataHandler::onFlightMapReceived(QStringList keys, QStringList values)
 {
-    convertStringListsToMap(keys, values);
+    QStringList::iterator keysIter = keys.begin();
+    QStringList::iterator valuesIter = values.begin();
+    while (keysIter != keys.end()) {
+        m_map.insert((*keysIter), (*valuesIter));
+        keysIter++;
+        valuesIter++;
+    }
+    qDebug() << m_map << "\n";
     emit flightDataReceived();
 }
 
@@ -97,7 +98,14 @@ void DataHandler::onHotelMapReceived()
 void DataHandler::onRestaurantMapReceived(QStringList keys, QStringList values)
 {
 
-    convertStringListsToMap(keys, values);
+    QStringList::iterator keysIter = keys.begin();
+    QStringList::iterator valuesIter = values.begin();
+    while (keysIter != keys.end()) {
+        m_map.insert((*keysIter), (*valuesIter));
+        keysIter++;
+        valuesIter++;
+    }
+    qDebug() << m_map << "\n";
     emit restaurantDataReceived();
 }
 
