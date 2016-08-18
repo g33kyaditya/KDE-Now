@@ -22,19 +22,15 @@ ColumnLayout {
             plasmoidModel.append(page)
         }
         onEventDataReceived: {
-            var map = dataHandler.getMap()
             prepareEventCard(map)
         }
         onFlightDataReceived: {
-            var map = dataHandler.getMap()
             prepareFlightCard(map)
         }
         onHotelDataReceived: {
-            var map = dataHandler.getMap()
             prepareHotelCard(map)
         }
         onRestaurantDataReceived: {
-            var map = dataHandler.getMap()
             prepareRestaurantCard(map)
         }
     }

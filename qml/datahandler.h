@@ -36,10 +36,10 @@ class DataHandler : public QObject
         void credentialsInsideWallet();
         void credentialsInput();
 
-        void eventDataReceived();
-        void flightDataReceived();
-        void hotelDataReceived();
-        void restaurantDataReceived();
+        void eventDataReceived(QVariantMap map);
+        void flightDataReceived(QVariantMap map);
+        void hotelDataReceived(QVariantMap map);
+        void restaurantDataReceived(QVariantMap map);
 
     public Q_SLOTS:
         void startDaemon();
@@ -56,10 +56,8 @@ class DataHandler : public QObject
         void onRestaurantMapReceived(QStringList keys, QStringList values);
 
         void onCredentialsInput(QString, QString, QString, QString);
-        Q_INVOKABLE QVariantMap getMap();
 
     private:
-        QVariantMap m_map;
         KWallet::Wallet* m_wallet;
 };
 

@@ -56,60 +56,58 @@ DataHandler::DataHandler(QObject* parent): QObject(parent) {
 
 void DataHandler::onEventMapReceived(QStringList keys, QStringList values)
 {
+    QVariantMap map;
     QStringList::iterator keysIter = keys.begin();
     QStringList::iterator valuesIter = values.begin();
     while (keysIter != keys.end()) {
-        m_map.insert((*keysIter), (*valuesIter));
+        map.insert((*keysIter), (*valuesIter));
         keysIter++;
         valuesIter++;
     }
-    qDebug() << m_map << "\n";
-    emit eventDataReceived();
+    qDebug() << map << "\n";
+    emit eventDataReceived(map);
 }
 
 void DataHandler::onFlightMapReceived(QStringList keys, QStringList values)
 {
+    QVariantMap map;
     QStringList::iterator keysIter = keys.begin();
     QStringList::iterator valuesIter = values.begin();
     while (keysIter != keys.end()) {
-        m_map.insert((*keysIter), (*valuesIter));
+        map.insert((*keysIter), (*valuesIter));
         keysIter++;
         valuesIter++;
     }
-    qDebug() << m_map << "\n";
-    emit flightDataReceived();
+    qDebug() << map << "\n";
+    emit flightDataReceived(map);
 }
 
 void DataHandler::onHotelMapReceived(QStringList keys, QStringList values)
 {
+    QVariantMap map;
     QStringList::iterator keysIter = keys.begin();
     QStringList::iterator valuesIter = values.begin();
     while (keysIter != keys.end()) {
-        m_map.insert((*keysIter), (*valuesIter));
+        map.insert((*keysIter), (*valuesIter));
         keysIter++;
         valuesIter++;
     }
-    qDebug() << m_map << "\n";
-    emit hotelDataReceived();
+    qDebug() << map << "\n";
+    emit hotelDataReceived(map);
 }
 
 void DataHandler::onRestaurantMapReceived(QStringList keys, QStringList values)
 {
-
+    QVariantMap map;
     QStringList::iterator keysIter = keys.begin();
     QStringList::iterator valuesIter = values.begin();
     while (keysIter != keys.end()) {
-        m_map.insert((*keysIter), (*valuesIter));
+        map.insert((*keysIter), (*valuesIter));
         keysIter++;
         valuesIter++;
     }
-    qDebug() << m_map << "\n";
-    emit restaurantDataReceived();
-}
-
-QVariantMap DataHandler::getMap()
-{
-    return m_map;
+    qDebug() << map << "\n";
+    emit restaurantDataReceived(map);
 }
 
 void DataHandler::onCredentialsInput(QString imapServer, QString imapPort, QString username,
