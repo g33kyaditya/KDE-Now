@@ -25,7 +25,7 @@ Installing:
 
 
 Running:
-- As can be seen from the Demo Video, place a the widget called "KDE Now" on your Desktop
+- As can be seen from the Demo Video, place the widget called "KDE Now" on your Desktop
 - Input your EMail id's credentials (IMAP Address, IMAP port, username and password)
 - Provide permissions (click yes) to store these credentials to wallet
 - Depending on the number of emails in your mailbox the daemon will download all emails and check them for valid card info.
