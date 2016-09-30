@@ -1,6 +1,6 @@
 KDE Now is a Google Now alternative for the KDE Plasma Desktop. It offers valuable information in the form of cards after an e-mail confirming your Event, Flight, Restaurant or Hotel Reservation.
 
-It has a plasmoid front-end for displaying cards and a daemon like backend which fetches emails from your mail continuosly. This daemon runs on IMAP protocol so your e-mail provider must support that with IDLE fetaure of IMAP.
+It has a plasmoid front-end for displaying cards and a daemon like backend which fetches emails from your mail continuously. This daemon runs on IMAP protocol so your e-mail provider must support that with IDLE fetaure of IMAP.
 
 Check out the demo on: https://www.youtube.com/watch?v=a5bJdDuQRIQ
 
@@ -10,7 +10,7 @@ Requirements:
 -   CMake >= 2.8
 -   ECM >= 0.0.9
 -   A compiler, Gcc or Clang (preferably Gcc)
--   The following KDE Frameworks 5 are essential for building it :- Plasma, Declarative, KIMAP, KMime,              KIO, KWallet, Config, CoreAddons, Service
+-   The following KDE Frameworks 5 are essential for building it :- Plasma, Declarative, KIMAP, KMime, KIO, KWallet, Config, CoreAddons, Service
 
 Building:
 - Clone the source code. (It's available on github as well as KDE quickgit repos)
