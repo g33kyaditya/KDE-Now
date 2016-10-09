@@ -30,3 +30,6 @@ Running:
 - Provide permissions (click yes) to store these credentials to wallet
 - Depending on the number of emails in your mailbox the daemon will download all emails and check them for valid card info.
 - If valid info found, the relevant card will appear on the plasmoid
+
+For contributing:
+This is a READ-ONLY mirror. All pull requests should be sent on Review Board. The original repo is at https://quickgit.kde.org/?p=kde-now.git
