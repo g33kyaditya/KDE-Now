@@ -2,7 +2,7 @@ KDE Now is a Google Now alternative for the KDE Plasma Desktop. It offers valuab
 
 It has a plasmoid front-end for displaying cards and a daemon like backend which fetches emails from your mail continuously. This daemon runs on IMAP protocol so your e-mail provider must support that with IDLE fetaure of IMAP.
 
-Check out the demo on: https://www.youtube.com/watch?v=a5bJdDuQRIQ
+Check out the demo at: https://www.youtube.com/watch?v=a5bJdDuQRIQ
 
 Requirements:
 -   KDE Desktop running Plasma 5
