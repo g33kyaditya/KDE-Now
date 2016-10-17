@@ -17,7 +17,7 @@ Building:
 - cd <cloned directory>
 - mkdir build
 - cd build
-- cmake -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=lib[or lib64] -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
+- cmake -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=lib[or lib64] -DKDE_INSTALL_USE_QT_SYS_PATHS=ON ..
 - sudo make -j<n> (n : number of cores on CPU + 1 for maximum speed during building)
 
 Installing:
