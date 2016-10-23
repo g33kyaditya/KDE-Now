@@ -28,7 +28,8 @@
 
 #include <KWallet/KWallet>
 
-/** A manager for the KDE System Wallet (KWallet5) that stores the remote IMAP
+/**
+ *  A manager for the KDE System Wallet (KWallet5) that stores the remote IMAP
  *  account credentials. Each group of credentials has 4 key:value pairs for
  *  IMAP Address, IMAP Port, USername and Password.
  *  There could be multiple number of such groups for each of the remote IMAP
@@ -42,14 +43,16 @@ class KDENOWCORE_EXPORT WalletManager : public QObject
     public:
         explicit WalletManager(QObject* parent = 0);
         
-        /** Opens the KDE System Wallet (KWallet5) and fetches all the groups of
+        /**
+         *  Opens the KDE System Wallet (KWallet5) and fetches all the groups of
          *  credentials stored in it for KDE Now. Then saves them into a QList of
          *  UserCredentials.
          */
         void getCredentials();
 
     Q_SIGNALS:
-        /** A signal that is emitted when the WalletManager has finished with fetching the
+        /**
+         *  A signal that is emitted when the WalletManager has finished with fetching the
          *  credentials and saving them into a QList
          *  @param credentialsList List of UserCredentials that the WalletManager has
          */

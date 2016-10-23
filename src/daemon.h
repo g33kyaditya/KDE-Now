@@ -27,7 +27,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QList>
 
-/** A Daemon that runs continuously and manages logging into remote IMAP account,
+/** 
+ *  A Daemon that runs continuously and manages logging into remote IMAP account,
  *  downloading emails, parsing and extracting data and finally sending the data
  *  to plasmoid over D-Bus. The Daemon does this by using various other components
  *  like EmailManager, Processor and Plugins and uses each of the said components'
@@ -51,10 +52,13 @@ class KDENOWCORE_EXPORT Daemon : public QObject
 
     public Q_SLOTS:
         
-        /** A D-Bus method which is called by the Plasmoid to start the daemon */
+        /** 
+         *  A D-Bus method which is called by the Plasmoid to start the daemon
+         */
         Q_SCRIPTABLE QString startDaemon();
         
-        /** Set the proper credentials: IMAP Address, Port, Username and Password
+        /**
+         *  Set the proper credentials: IMAP Address, Port, Username and Password
          *  for each of the email EmailManagers
          *  @param credentialsList List of UserCredentials stored for KDE Now in KWallet
          */ 
