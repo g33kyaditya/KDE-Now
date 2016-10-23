@@ -22,6 +22,8 @@
 
 #include <QtCore/QString>
 
+/** A structure that wraps an IMAP account credentials data */
+
 struct UserCredentials {
     QString imapServer;
     QString imapPort;
